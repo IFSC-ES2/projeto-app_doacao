@@ -23,17 +23,15 @@ A aplicação será voltada para uso administrativo, permitindo que os responsá
 
 ---
 
-### Problema que o sistema pretende resolver
+## Visão do Produto
+
+### O Problema
 
 Muitas organizações que recebem doações de alimentos não possuem um sistema estruturado para registrar e controlar esses recursos. Esse processo muitas vezes é feito manualmente, o que pode gerar dificuldades no controle de estoque, na organização das doações e na distribuição para as entidades que necessitam desses alimentos.
 
 A falta de controle adequado pode resultar em desperdício, desorganização e dificuldade na prestação de contas das doações recebidas.
 
----
-
-### Quem são os usuários
-
-Os principais usuários do sistema serão:
+### Usuários
 
 - Gestores ou administradores da ONG
 - Funcionários responsáveis pelo controle das doações
@@ -41,38 +39,48 @@ Os principais usuários do sistema serão:
 
 Esses usuários utilizarão o sistema para registrar produtos doados, controlar o estoque e organizar a distribuição das doações.
 
----
-
-### Proposta do sistema
+### Proposta de valor
 
 O sistema tem como objetivo centralizar e organizar as informações relacionadas às doações recebidas pela ONG.
 
 A plataforma permitirá registrar produtos doados, acompanhar a quantidade disponível em estoque, cadastrar entidades filantrópicas e gerar relatórios sobre as doações recebidas. Dessa forma, a ONG poderá ter maior controle e transparência sobre os recursos recebidos e distribuídos.
 
+### Objetivos para este semestre
+
+- Cadastro de produtos e doações funcionando
+- Controle de estoque com histórico de entradas e saídas
+- Cadastro de entidades e registro de distribuições
+- Relatório básico de doações
+
+### Premissas, restrições e limitações
+
+- Os usuários têm acesso à internet e inserem os dados manualmente
+- A rastreabilidade das doações depende do correto preenchimento manual feito pelos usuários
+- Infraestrutura baseada em serviços gratuitos
+- Integrações externas, app móvel e relatórios avançados ficam fora do escopo atual
+- Funcionalidades como controle de validade automático e geração de rotas ficam fora do escopo atual
+
 ---
 
-# MVP (Produto Mínimo Viável)
+# MVP
 
-## O que o MVP fará
+## Objetivo do MVP
 
 A primeira versão do sistema terá como objetivo disponibilizar funcionalidades básicas que permitam o registro e controle das doações de alimentos.
 
 O sistema permitirá cadastrar produtos doados, registrar a quantidade recebida, visualizar o estoque atual e manter um cadastro das entidades filantrópicas que poderão receber as doações.
 
----
-
-## Funcionalidades principais
+## Funcionalidades essenciais
 
 As principais funcionalidades do MVP serão:
 
-- Cadastro de produtos doados
+- Autenticação de usuários
+- Cadastro de produtos
 - Registro de doações recebidas
-- Controle básico de estoque de alimentos
+- Controle básico de estoque
 - Cadastro de entidades filantrópicas
-- Visualização da lista de doações registradas
-- Geração de relatório simples de doações
-
----
+- Registro de distribuições para entidades
+- Listagem e consulta de doações
 
 ## Fora do escopo do MVP
 
@@ -85,3 +93,14 @@ Entre elas:
 - integração com outros sistemas
 - relatórios avançados e análises estatísticas
 - automação da montagem de cestas básicas
+
+### Viabilidade para o semestre
+
+As funcionalidades do MVP possuem escopo bem delimitado e complexidade compatível com o prazo disponível. O recorte foi pensado para cobrir o fluxo essencial do sistema: entrada, estoque e saída de doações. 
+
+### Critérios de priorização
+
+- Relevância, ou seja, sem a funcionalidade o produto não resolve o problema central
+- Viabilidade técnica
+- Independência de integrações externas
+- Utilidade percebida, ou seja, o usuário consegue benefício concreto já no MVP
