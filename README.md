@@ -1,3 +1,15 @@
+# Sistema de Gestão de Doações
+
+## Navegação
+
+- [Visão do Produto](#visão-do-produto)
+- [Escopo do MVP](#mvp)
+- [Board e Backlog](https://github.com/orgs/IFSC-ES2/projects/28)
+- [Definition of Done](docs/dod.md)
+- [ADRs](docs/adrs/)
+
+---
+
 # Equipe
 
 - Haydeé Murara  
