@@ -7,6 +7,9 @@
 - [Board e Backlog](https://github.com/orgs/IFSC-ES2/projects/28)
 - [Definition of Done](docs/dod.md)
 - [ADRs](docs/adrs/)
+- [Estimativas](docs/estimativas.md)
+- [Métricas](docs/metricas.md)
+- [Baseline](docs/baseline.md)
 
 ---
 

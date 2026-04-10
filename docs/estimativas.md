@@ -50,3 +50,18 @@ Durante o processo de estimativa, foram identificadas algumas limitações:
 - Dependência de fatores externos ainda não definidos  
 
 Esses fatores podem impactar a precisão das estimativas e deverão ser reavaliados nas próximas etapas do projeto.
+
+---
+
+## Hipóteses Assumidas
+
+As hipóteses a seguir foram utilizadas como premissas para a construção do planejamento e das estimativas. Caso alguma delas mude, as estimativas e a previsão deverão ser reavaliadas.
+
+- Todos os 4 integrantes da equipe permanecerão ativos até o próximo marco do projeto.
+- Cada integrante terá disponibilidade mínima de 2 horas semanais para o projeto, conforme declarado na capacidade planejada.
+- O escopo do MVP não sofrerá mudanças significativas até a próxima entrega, mantendo as funcionalidades priorizadas no backlog atual.
+- A stack definida nos ADRs (Java + Spring Boot, React + Vite, PostgreSQL) será mantida sem alterações.
+- O backlog atual está suficientemente refinado para permitir estimativas iniciais, mesmo que alguns itens ainda precisem de detalhamento.
+- Eventuais dificuldades técnicas com as tecnologias adotadas serão absorvidas pela equipe sem necessidade de mudança de stack.
+- A infraestrutura escolhida estará disponível e estável durante todo o período de desenvolvimento.
+- Não haverá dependências externas críticas que bloqueiem o avanço do projeto.
