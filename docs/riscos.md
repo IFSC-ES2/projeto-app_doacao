@@ -115,3 +115,22 @@
 **Monitoramento:** O Scrum Master verifica se a equipe está com dificuldades crescentes para evoluir o código.  
 
 ---
+## Análise e Priorização dos Riscos
+
+Critérios:
+
+* **Probabilidade:** Frequência com que o evento pode ocorrer.
+* **Impacto:** Grau de prejuízo para o sucesso do MVP.
+
+### Matriz de Riscos
+
+| Probabilidade \ Impacto | Baixo | Médio | Alto |
+| :--- | :---: | :---: | :---: |
+| **Alta** | - | R3 | R1, R2 |
+| **Média** | - | - | R4, R5 |
+| **Baixa** | - | - | - |
+
+### Justificativa de Prioridade
+Os riscos **R1 e R2** foram classificados com a prioridade mais alta por estarem no quadrante de probabilidade Alta e impacto Alto. O **R1** é o mais crítico no momento, pois qualquer falha na definição do que deve ser construído compromete todas as fases seguintes de desenvolvimento e arquitetura. 
+
+Os riscos **R4 e R5**, embora tenham um impacto Alto na integridade do software, foram mantidos com probabilidade Média, uma vez que a definição prévia da stack tecnológica e dos padrões de arquitetura ajuda a mitigar a ocorrência de problemas técnicos graves.
