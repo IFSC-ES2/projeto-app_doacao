@@ -133,3 +133,17 @@ Esses pontos vão ajudar a equipe a:
 - acompanhar bugs
 - descobrir problemas mais cedo
 - decidir o que precisa de mais atenção nas próximas sprints
+
+---
+
+## Relação entre Riscos e Atributos de Qualidade
+
+| Risco | Atributo de Qualidade Afetado | Justificativa Técnica |
+| :--- | :--- | :--- |
+| **R5 - Código mal estruturado** | Manutenibilidade | O desrespeito pelos padrões de camadas gera dívida técnica e dificulta evoluções. |
+| **R4 - Dificuldade técnica** | Confiabilidade | Falhas na integração de tecnologias  podem causar instabilidade nas funções centrais de doação. |
+| **R2 - Atraso nas entregas** | Manutenibilidade | A pressão por prazos pode levar à remoção de revisões de código, afetando a qualidade interna. |
+| **R1 - Requisitos mal definidos** | Usabilidade | Requisitos incertos resultam em interfaces que não atendem às necessidades reais dos gestores da ONG. |
+
+### Proteção dos Atributos
+As ações de mitigação propostas, especialmente a revisão obrigatória em Pull Requests e a definição de critérios de aceitação claros, funcionam como garantias arquiteturais para preservar a manutenibilidade e a segurança do sistema ao longo das sprints.
