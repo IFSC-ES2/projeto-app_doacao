@@ -10,6 +10,9 @@
 - [Estimativas](docs/estimativas.md)
 - [Métricas](docs/metricas.md)
 - [Baseline](docs/baseline.md)
+- [Registro de Riscos](docs/riscos.md)
+- [Critérios de Qualidade](docs/qualidade.md)
+- [Fluxo de Trabalho](docs/fluxo-de-trabalho.md)
 
 ---
 

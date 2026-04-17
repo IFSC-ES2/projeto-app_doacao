@@ -28,10 +28,12 @@ Closes #1
 
 ## Checklist
 
-- [ ] O código compila corretamente
-- [ ] O código foi testado
+- [ ] A branch está atualizada com a `main`
+- [ ] O código compila sem erros
+- [ ] A funcionalidade foi testada manualmente
 - [ ] A documentação foi atualizada (quando necessário)
-- [ ] A alteração foi revisada por outro membro da equipe
+- [ ] Nenhuma funcionalidade existente foi quebrada
+- [ ] O PR foi revisado por outro membro da equipe
 
 ---
 
