@@ -21,7 +21,7 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody Map<String, String> body) {
 
 
-        String loginOuEmail = body.get("login"); /
+        String loginOuEmail = body.get("login"); 
         String senha = body.get("senha");
 
         if (loginOuEmail == null || senha == null) {
