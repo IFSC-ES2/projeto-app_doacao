@@ -16,6 +16,28 @@
 
 ---
 
+## Como rodar o projeto
+
+### Back-end
+1. Ter o Java 17+ e Maven instalados
+2. Entrar na pasta backend/
+3. Rodar: ./mvnw spring-boot:run
+4. O servidor roda em: http://localhost:8080
+
+### Front-end
+1. Ter o Node.js instalado
+2. Entrar na pasta onde está o front
+3. Rodar: npm install e depois npm run dev
+4. O front roda em: http://localhost:5173
+
+### Endpoint de login
+- POST: http://localhost:8080/login
+- Body JSON: { "email": "...", "senha": "..." }
+- Sucesso: 200 com "Login bem-sucedido"
+- Falha: 401 com "Email ou senha inválidos"
+
+---
+
 # Equipe
 
 - Haydeé Murara  
