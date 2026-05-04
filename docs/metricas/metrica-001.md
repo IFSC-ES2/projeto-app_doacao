@@ -1,7 +1,7 @@
 # Percentual de Conclusão do MVP (Feature Completion Rate)
 
-- **Data do acompanhamento:** ___/___/____
-- **Valor coletado:** ______ %
+- **Data do acompanhamento:** 04/05/2026
+- **Valor coletado:** 14,28 %
 
 ## Classificação
 Produto
