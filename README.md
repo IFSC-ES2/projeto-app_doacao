@@ -24,6 +24,10 @@
 3. Rodar: ./mvnw spring-boot:run
 4. O servidor roda em: http://localhost:8080
 
+### Testes (back-end)
+1. Entrar na pasta backend/
+2. Rodar: ./mvnw test
+
 ### Front-end
 1. Ter o Node.js instalado
 2. Entrar na pasta onde está o front
@@ -32,9 +36,9 @@
 
 ### Endpoint de login
 - POST: http://localhost:8080/login
-- Body JSON: { "email": "...", "senha": "..." }
+- Body JSON: { "login": "...", "senha": "..." }
 - Sucesso: 200 com "Login bem-sucedido"
-- Falha: 401 com "Email ou senha inválidos"
+- Falha: 401 com "Login/email ou senha inválidos"
 
 ---
 
