@@ -1,16 +1,21 @@
 # Definition of Done (DoD)
 
-Conjunto de condições mínimas para que um item do backlog seja considerado como concluído pela equipe.
+Para considerar uma tarefa como concluída, a equipe definiu que deve atender aos seguintes pontos:
+
+- [x] Código desenvolvido em branch separada
+- [x] Código rodando localmente sem erros
+- [x] Testes automatizados criados e passando (JUnit/Mockito)
+- [x] Funcionalidade funcionando e testável (endpoint /login e /register)
+- [x] Validações implementadas (email válido, senha forte, login/email únicos)
+- [x] Código revisado via Pull Request
+- [x] Commits com mensagens descritivas
+- [x] Integração com banco de dados funcionando (H2)
+- [x] Estrutura organizada (Controller, Service, Repository)
+- [x] Documentação atualizada (README e docs)
 
 ---
 
-## Condições obrigatórias
+## Observação
 
-- Existe uma issue criada para o item, com critérios de aceitação definidos
-- O desenvolvimento foi feito em uma branch separada
-- Todos os critérios de aceitação da issue foram atendidos e verificados manualmente pelo autor
-- Código commitado no repositório remoto com mensagem descritiva, referenciando a issue (ex: `feat: cadastro de entidade filantrópica`)
-- Alteração submetida via pull request para a branch `main`, seguindo o template do projeto e sem conflitos
-- Pull request revisado e aprovado por pelo menos um outro membro da equipe
-- Projeto executa localmente sem erros após as alterações
-- Documentação atualizada quando a entrega impactar o escopo, arquitetura ou funcionamento do sistema
+Uma tarefa só é considerada finalizada quando todos os itens acima estiverem atendidos.  
+Isso garante que o sistema esteja funcionando corretamente, testado e organizado.

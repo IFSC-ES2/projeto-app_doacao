@@ -13,6 +13,9 @@ public class Usuario {
     private Long id;
 
     @Column(nullable = false, unique = true)
+    private String login;
+
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
