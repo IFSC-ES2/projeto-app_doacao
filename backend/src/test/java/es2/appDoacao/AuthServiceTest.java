@@ -25,7 +25,7 @@ class AuthServiceTest {
 
         AuthService service = new AuthService(repo);
 
-        boolean resultado = service.registrar("lucas", "teste@email.com", "Senha123");
+        boolean resultado = service.registrar("lucas", "teste@email.com", "Senha123!");
 
         assertTrue(resultado);
     }
@@ -42,7 +42,7 @@ class AuthServiceTest {
 
         AuthService service = new AuthService(repo);
 
-        boolean resultado = service.registrar("lucas", "teste@email.com", "Senha123");
+        boolean resultado = service.registrar("lucas", "teste@email.com", "Senha123!");
 
         assertFalse(resultado);
     }
@@ -59,7 +59,7 @@ class AuthServiceTest {
 
         AuthService service = new AuthService(repo);
 
-        boolean resultado = service.registrar("lucas", "outro@email.com", "Senha123");
+        boolean resultado = service.registrar("lucas", "outro@email.com", "Senha123!");
 
         assertFalse(resultado);
     }
@@ -70,7 +70,7 @@ class AuthServiceTest {
 
         AuthService service = new AuthService(repo);
 
-        boolean resultado = service.registrar("lucas", "emailerrado", "Senha123");
+        boolean resultado = service.registrar("lucas", "emailerrado", "Senha123!");
 
         assertFalse(resultado);
     }
@@ -87,21 +87,20 @@ class AuthServiceTest {
     }
 
 
-
     @Test
     void loginComEmail() {
         UsuarioRepository repo = Mockito.mock(UsuarioRepository.class);
 
         Usuario user = new Usuario();
         user.setEmail("teste@email.com");
-        user.setSenha("Senha123");
+        user.setSenha("Senha123!");
 
         Mockito.when(repo.findByEmail("teste@email.com"))
                 .thenReturn(Optional.of(user));
 
         AuthService service = new AuthService(repo);
 
-        assertTrue(service.autenticar("teste@email.com", "Senha123"));
+        assertTrue(service.autenticar("teste@email.com", "Senha123!"));
     }
 
     @Test
@@ -110,14 +109,14 @@ class AuthServiceTest {
 
         Usuario user = new Usuario();
         user.setLogin("lucas");
-        user.setSenha("Senha123");
+        user.setSenha("Senha123!");
 
         Mockito.when(repo.findByLogin("lucas"))
                 .thenReturn(Optional.of(user));
 
         AuthService service = new AuthService(repo);
 
-        assertTrue(service.autenticar("lucas", "Senha123"));
+        assertTrue(service.autenticar("lucas", "Senha123!"));
     }
 
     @Test
@@ -126,7 +125,7 @@ class AuthServiceTest {
 
         Usuario user = new Usuario();
         user.setLogin("lucas");
-        user.setSenha("Senha123");
+        user.setSenha("Senha123!");
 
         Mockito.when(repo.findByLogin("lucas"))
                 .thenReturn(Optional.of(user));
@@ -145,7 +144,7 @@ class AuthServiceTest {
 
         AuthService service = new AuthService(repo);
 
-        assertFalse(service.autenticar("lucas", "Senha123"));
+        assertFalse(service.autenticar("lucas", "Senha123!"));
     }
 
     @Test
@@ -154,6 +153,17 @@ class AuthServiceTest {
 
         AuthService service = new AuthService(repo);
 
-        assertFalse(service.autenticar("Senha123", "teste@email.com"));
+        assertFalse(service.autenticar("Senha123!", "teste@email.com"));
+    }
+
+    @Test
+    void naoDeveAceitarSenhaSemCaracterEspecial() {
+        UsuarioRepository repo = Mockito.mock(UsuarioRepository.class);
+
+        AuthService service = new AuthService(repo);
+
+        boolean resultado = service.registrar("lucas", "teste@email.com", "Senha123");
+
+        assertFalse(resultado);
     }
 }

@@ -11,19 +11,19 @@ public class AuthService {
 
     private final UsuarioRepository usuarioRepository;
 
-    // Injeção por construtor (melhor prática)
+
     public AuthService(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
 
     public boolean autenticar(String loginOuEmail, String senha) {
 
-        // valida senha
+
         if (!senhaValida(senha)) return false;
 
         Optional<Usuario> usuario;
 
-        // verifica se é email ou login
+
         if (loginOuEmail.contains("@")) {
 
             if (!emailValido(loginOuEmail)) return false;
@@ -34,24 +34,25 @@ public class AuthService {
             usuario = usuarioRepository.findByLogin(loginOuEmail);
         }
 
-        // valida usuário e senha
+
         return usuario.isPresent() && usuario.get().getSenha().equals(senha);
     }
 
-    // valida email
+
     private boolean emailValido(String email) {
         return email != null && email.contains("@") && email.contains(".");
     }
 
-    // valida senha forte
+
     private boolean senhaValida(String senha) {
         if (senha == null || senha.length() < 6) return false;
 
         boolean temMaiuscula = senha.matches(".*[A-Z].*");
         boolean temMinuscula = senha.matches(".*[a-z].*");
         boolean temNumero = senha.matches(".*[0-9].*");
+        boolean temEspecial = senha.matches(".*[^a-zA-Z0-9].*");
 
-        return temMaiuscula && temMinuscula && temNumero;
+        return temMaiuscula && temMinuscula && temNumero && temEspecial;
     }
     public boolean registrar(String login, String email, String senha) {
 

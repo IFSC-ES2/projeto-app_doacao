@@ -12,7 +12,7 @@ public class AuthController {
 
     private final AuthService authService;
 
-    // injeção por construtor (melhor que @Autowired)
+
     public AuthController(AuthService authService) {
         this.authService = authService;
     }
@@ -20,8 +20,8 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> body) {
 
-        // agora aceita login OU email
-        String loginOuEmail = body.get("login"); // pode ser login ou email
+
+        String loginOuEmail = body.get("login"); /
         String senha = body.get("senha");
 
         if (loginOuEmail == null || senha == null) {
