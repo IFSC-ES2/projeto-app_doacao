@@ -5,8 +5,9 @@
 | 1       | aeb77c0 | 16/03/26 | 20/03/26 | 10   | 2    |
 | 2       | a5f6c6c | 27/03/26 | 29/03/26 | 9,2  | 2    |
 | 3       | 772ad96 | 09/04/26 | 22/04/26 | 9,5  | 3    |
+| 4       | 61b6433 | 16/04/26 | 09/05/26 | 8,8  | 3    |
 
-**nota parcial:** 9,5
+**nota parcial:** 9,3
 
 ## Comentários
 
@@ -21,7 +22,7 @@
 
 1. Visão do produto: atendido
 2. Definição do MVP: atendido
-3. Backlog inicial com critérios de aceitação: parcialmente atendido
+3. Backlog inicial com critérios de aceitação: parcial
    - Há sete funcionalidades definidas no MVP, mas apenas quatro delas estão no backlog/board.
    - Não foram definidas prioridades para as funcionalidades.
    - Não foi utilizado o formato: Como [`tipo de usuário`], quero [`funcionalidade`], para [`benefício`].
@@ -33,12 +34,12 @@
 
 ### Entrega 3
 
-1. Planejamento inicial e baseline: parcialmente atendido
+1. Planejamento inicial e baseline: parcial
    - Informar a data de registro do baseline
 2. Registro da abordagem de estimativa: atendido
 3. Capacidade planejada da equipe: atendido
 4. Definição das métricas que serão acompanhadas: atendido
-5. Ficha de cada métrica: parcialmente atendido
+5. Ficha de cada métrica: parcial
    - Separar as fichas de cada métrica em arquivos diferentes
      - Em cada uma adicionar data do acompanhamento e valor coletado
    - Utilzar nomes mais consagrados para melhor reconhecimento das métricas:
@@ -51,3 +52,16 @@
      - #7 - Capacidade da Equipe (_Team Capacity_)
      - #8 - Variação Planejado vs. Realizado (_Planned vs. Completed Variance_)
      - #9 - Taxa de Tarefas Atrasadas (_Overdue Task Rate_)
+
+### Entrega 4
+
+1. Registro inicial de riscos do projeto: atendido
+2. Análise e priorização dos riscos: atendido
+3. Plano de resposta aos riscos: atendido
+4. Consolidação do fluxo de trabalho no repositório: não atendido
+   - A equipe apenas definiu algumas regras de proteção da ramificação principal que ainda não estão em vigor, apesar da comunicação na entrega 1.
+   - As definições em `fluxo-de-trabalho.md` não foram implementadas no repositório.
+5. Definição inicial de critérios de qualidade do projeto: atendido
+6. Relação entre riscos e qualidade: atendido
+7. Definição preliminar de avaliação da qualidade: atendido
+8. Atualização da documentação do projeto: atendido
