@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - dev
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Instalar dependências do backend
+        run: ./mvnw dependency:resolve -f backend/pom.xml
+
+      - name: Verificar build do backend
+        run: ./mvnw compile -f backend/pom.xml
+
+      - name: Executar testes automatizados
+        run: ./mvnw test -f backend/pom.xml
+
+      - name: Validar arquivos YAML do repositório
+        run: |
+          pip install yamllint
+          yamllint .github/workflows/
+
+      - name: Verificar existência de arquivos obrigatórios
+        run: |
+          test -f README.md || (echo "README.md não encontrado" && exit 1)
+          test -f docs/riscos.md || (echo "docs/riscos.md não encontrado" && exit 1)
+          test -f .github/PULL_REQUEST_TEMPLATE.md || (echo "PR template não encontrado" && exit 1)
+          test -d .github/workflows || (echo "Diretório .github/workflows não encontrado" && exit 1)
+          echo "Todos os arquivos obrigatórios encontrados."
