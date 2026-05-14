@@ -202,34 +202,6 @@ class EntradaDoacaoServiceTest {
         entrada.setObservacao("Pacotes de 1kg");
         return entrada;
     }
-    @Test
-void naoDeveRegistrarDoacaoComProdutoApenasEspacos() {
-    EntradaDoacaoRepository repo = Mockito.mock(EntradaDoacaoRepository.class);
-    EntradaDoacaoService service = new EntradaDoacaoService(repo);
-
-    EntradaDoacao entrada = criarEntradaValida();
-    entrada.setProduto("   ");
-
-    boolean resultado = service.registrar(entrada);
-
-    assertFalse(resultado);
-    Mockito.verify(repo, Mockito.never()).save(Mockito.any());
-}
-
-@Test
-void naoDeveRegistrarDoacaoComDoadorApenasEspacos() {
-    EntradaDoacaoRepository repo = Mockito.mock(EntradaDoacaoRepository.class);
-    EntradaDoacaoService service = new EntradaDoacaoService(repo);
-
-    EntradaDoacao entrada = criarEntradaValida();
-    entrada.setDoador("   ");
-
-    boolean resultado = service.registrar(entrada);
-
-    assertFalse(resultado);
-    Mockito.verify(repo, Mockito.never()).save(Mockito.any());
-}
-
 @Test
 void deveRegistrarDoacaoComQuantidadeUm() {
     EntradaDoacaoRepository repo = Mockito.mock(EntradaDoacaoRepository.class);

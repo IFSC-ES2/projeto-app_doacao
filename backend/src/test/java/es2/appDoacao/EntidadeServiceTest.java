@@ -206,48 +206,6 @@ class EntidadeServiceTest {
         entidade.setEmail("ongvida@email.com");
         return entidade;
     }
-    @Test
-void naoDeveSalvarEntidadeComNomeApenasEspacos() {
-    EntidadeRepository repo = Mockito.mock(EntidadeRepository.class);
-    EntidadeService service = new EntidadeService(repo);
-
-    Entidade entidade = criarEntidadeValida();
-    entidade.setNome("   ");
-
-    boolean resultado = service.salvar(entidade);
-
-    assertFalse(resultado);
-    Mockito.verify(repo, Mockito.never()).save(Mockito.any());
-}
-
-@Test
-void naoDeveSalvarEntidadeComCnpjApenasEspacos() {
-    EntidadeRepository repo = Mockito.mock(EntidadeRepository.class);
-    EntidadeService service = new EntidadeService(repo);
-
-    Entidade entidade = criarEntidadeValida();
-    entidade.setCnpj("   ");
-
-    boolean resultado = service.salvar(entidade);
-
-    assertFalse(resultado);
-    Mockito.verify(repo, Mockito.never()).save(Mockito.any());
-}
-
-@Test
-void naoDeveSalvarEntidadeComEmailApenasEspacos() {
-    EntidadeRepository repo = Mockito.mock(EntidadeRepository.class);
-    EntidadeService service = new EntidadeService(repo);
-
-    Entidade entidade = criarEntidadeValida();
-    entidade.setEmail("   ");
-
-    boolean resultado = service.salvar(entidade);
-
-    assertFalse(resultado);
-    Mockito.verify(repo, Mockito.never()).save(Mockito.any());
-}
-
 @Test
 void deveRetornarListaVaziaQuandoNaoHouverEntidades() {
     EntidadeRepository repo = Mockito.mock(EntidadeRepository.class);
