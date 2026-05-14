@@ -24,13 +24,13 @@ jobs:
           distribution: 'temurin'
 
       - name: Instalar dependências do backend
-        run: mvnw dependency:resolve -f backend/pom.xml
+        run: mvn dependency:resolve -f backend/pom.xml
 
       - name: Verificar build do backend
-        run: mvnw compile -f backend/pom.xml
+        run: mvn compile -f backend/pom.xml
 
       - name: Executar testes automatizados
-        run: mvnw test -f backend/pom.xml
+        run: mvn test -f backend/pom.xml
 
       - name: Validar arquivos YAML do repositório
         run: |
