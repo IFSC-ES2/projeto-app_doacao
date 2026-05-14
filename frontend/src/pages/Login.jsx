@@ -3,24 +3,23 @@ import './Login.css';
 
 const API_URL = 'http://localhost:8080';
 
-export function Login({ onSuccess }) {
+export function Login() {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
   const [error, setError] = useState('');
-  
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage('');
     setError('');
     setLoading(true);
 
     try {
-        if (isLogin) {
+      if (isLogin) {
         const response = await fetch(`${API_URL}/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -30,10 +29,9 @@ export function Login({ onSuccess }) {
         const data = await response.json();
 
         if (response.ok) {
+          setMessage('Login bem-sucedido!');
           localStorage.setItem('token', data.token || 'logado');
-          if (onSuccess) {
-            onSuccess();
-          }
+          setTimeout(() => window.location.href = '/', 2000);
         } else {
           setError(data.mensagem || 'Erro ao fazer login');
         }
@@ -57,8 +55,8 @@ export function Login({ onSuccess }) {
         const data = await response.json();
 
         if (response.ok) {
-          // Registro OK: volta para a aba de login sem mensagem de sucesso
-          setIsLogin(true);
+          setMessage('Cadastro feito com sucesso! Faça login agora.');
+          setTimeout(() => setIsLogin(true), 2000);
         } else {
           setError(data.mensagem || 'Erro ao cadastrar');
         }
@@ -86,7 +84,7 @@ export function Login({ onSuccess }) {
                 />
               </svg>
             </div>
-            <h1 className="login-title">Onganizer</h1>
+            <h1 className="login-title">DoaOps</h1>
             <p className="login-subtitle">
               {isLogin ? 'Bem-vindo de volta' : 'Crie sua conta'}
             </p>
@@ -129,36 +127,15 @@ export function Login({ onSuccess }) {
               <label htmlFor="password" className="login-label">
                 Senha
               </label>
-              <div className="input-with-icon">
-                <input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="login-input"
-                  placeholder="********"
-                  required
-                />
-                <button
-                  type="button"
-                  className="password-toggle"
-                  onClick={() => setShowPassword((s) => !s)}
-                  aria-label={showPassword ? 'Esconder senha' : 'Mostrar senha'}
-                >
-                  {showPassword ? (
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                      <path d="M3 3l18 18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M9.88 9.88a3 3 0 004.24 4.24" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M10.94 5.06C12.23 4.76 13.57 4.75 14.86 5.06c4 1 7 5.02 7 6.94 0 .54-.2 1.2-.47 1.8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  ) : (
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                      <path d="M2.99 12.02C4.99 7.99 8.99 5 12 5c3.01 0 7.01 2.99 9.01 7.02-2 4.03-6 7.98-9.01 7.98-3.02 0-7.02-3.95-9.01-7.98z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <circle cx="12" cy="12" r="2.5" stroke="currentColor" strokeWidth="1.5"/>
-                    </svg>
-                  )}
-                </button>
-              </div>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="login-input"
+                placeholder="********"
+                required
+              />
             </div>
 
             {!isLogin && (
@@ -166,42 +143,41 @@ export function Login({ onSuccess }) {
                 <label htmlFor="confirmPassword" className="login-label">
                   Confirmar senha
                 </label>
-                <div className="input-with-icon">
-                  <input
-                    id="confirmPassword"
-                    type={showConfirmPassword ? 'text' : 'password'}
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="login-input"
-                    placeholder="********"
-                    required
-                  />
-                  <button
-                    type="button"
-                    className="password-toggle"
-                    onClick={() => setShowConfirmPassword((s) => !s)}
-                    aria-label={showConfirmPassword ? 'Esconder senha' : 'Mostrar senha'}
-                  >
-                    {showConfirmPassword ? (
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                        <path d="M3 3l18 18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M9.88 9.88a3 3 0 004.24 4.24" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M10.94 5.06C12.23 4.76 13.57 4.75 14.86 5.06c4 1 7 5.02 7 6.94 0 .54-.2 1.2-.47 1.8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    ) : (
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                        <path d="M2.99 12.02C4.99 7.99 8.99 5 12 5c3.01 0 7.01 2.99 9.01 7.02-2 4.03-6 7.98-9.01 7.98-3.02 0-7.02-3.95-9.01-7.98z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <circle cx="12" cy="12" r="2.5" stroke="currentColor" strokeWidth="1.5"/>
-                      </svg>
-                    )}
-                  </button>
-                </div>
+                <input
+                  id="confirmPassword"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="login-input"
+                  placeholder="********"
+                  required
+                />
               </div>
             )}
 
-            <div className="login-feedback">
-              <div className={`login-error ${error ? 'show' : ''}`} role="alert" aria-live="polite">{error || ''}</div>
-            </div>
+            {error && (
+              <div style={{ 
+                color: '#dc2626', 
+                padding: '10px', 
+                backgroundColor: '#fee2e2', 
+                borderRadius: '4px',
+                marginBottom: '10px'
+              }}>
+                {error}
+              </div>
+            )}
+
+            {message && (
+              <div style={{ 
+                color: '#16a34a', 
+                padding: '10px', 
+                backgroundColor: '#dcfce7', 
+                borderRadius: '4px',
+                marginBottom: '10px'
+              }}>
+                {message}
+              </div>
+            )}
 
             <button 
               type="submit" 
