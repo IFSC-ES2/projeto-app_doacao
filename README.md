@@ -49,7 +49,7 @@
 - Isadora Eidt  
 - Lucas Gabriel  
 
-**Scrum Master da primeira sprint:** Isadora Eidt  
+**Scrum Master da segunda sprint e DevOps/Infra:** Haydée Murara  
 **Arquiteto de Software:** Isaac Kozuchovski  
-**DevOps/Infra:** Haydeé Murara  
+**Desenvolvedora frontend:** Isadora Eidt
 **Engenheiro de Qualidade:** Lucas Gabriel  
