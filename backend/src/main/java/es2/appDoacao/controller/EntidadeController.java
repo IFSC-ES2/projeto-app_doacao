@@ -26,13 +26,13 @@ public class EntidadeController {
 
     @PostMapping("/entidades")
     public ResponseEntity<?> criar(@RequestBody Entidade entidade) {
-        boolean criado = entidadeService.salvar(entidade);
+        var erro = entidadeService.salvar(entidade);
 
-        if (criado) {
+        if (erro.isEmpty()) {
             return ResponseEntity.ok(Map.of("mensagem", "Entidade cadastrada com sucesso"));
         } else {
             return ResponseEntity.badRequest()
-                    .body(Map.of("mensagem", "Entidade já existente ou dados inválidos"));
+                    .body(Map.of("mensagem", erro.get()));
         }
     }
 
