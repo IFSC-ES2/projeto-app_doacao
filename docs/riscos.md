@@ -134,3 +134,28 @@ Critérios:
 Os riscos **R1 e R2** foram classificados com a prioridade mais alta por estarem no quadrante de probabilidade Alta e impacto Alto. O **R1** é o mais crítico no momento, pois qualquer falha na definição do que deve ser construído compromete todas as fases seguintes de desenvolvimento e arquitetura. 
 
 Os riscos **R4 e R5**, embora tenham um impacto Alto na integridade do software, foram mantidos com probabilidade Média, uma vez que a definição prévia da stack tecnológica e dos padrões de arquitetura ajuda a mitigar a ocorrência de problemas técnicos graves.
+
+---
+
+## Atualização Sprint 2
+
+### Riscos que permanecem ativos
+- **R2 (Atraso por subestimação):** continua ativo. Projetos e demandas de outras disciplinas reduziram a disponibilidade da equipe durante a sprint, exigindo maior concentração do esforço nos dias finais.
+
+### Riscos mitigados
+- **R1 (Requisitos mal definidos):** mitigado. Critérios de aceitação foram definidos nas issues antes do início da sprint, garantindo alinhamento entre os integrantes.
+- **R4 (Dificuldade técnica):** mitigado. A configuração do CI exigiu ajustes pontuais, como a correção do limite de caracteres nos arquivos YAML, mas foi resolvida sem impacto significativo. O pipeline funcionou como esperado e permitiu identificar e corrigir problemas antes do merge.
+
+### Riscos que se concretizaram
+- **R3 (Conflito com outras disciplinas):** concretizou-se parcialmente. A equipe teve projetos e entregas simultâneas em outras disciplinas, o que reduziu a disponibilidade em alguns momentos da sprint.
+
+### Novos riscos identificados
+- **R6 – Endpoints sem proteção JWT:** as rotas do sistema estão acessíveis sem autenticação. A implementação do login retorna sucesso ou falha, mas não gera token JWT, o que significa que qualquer requisição pode acessar os endpoints sem estar autenticada.
+  - **Probabilidade:** Alta
+  - **Impacto:** Alto
+  - **Prioridade:** Alta
+  - **Mitigação:** Implementar autenticação JWT na Sprint 3, protegendo todos os endpoints com verificação de token.
+
+### Ações de mitigação para a Sprint 3
+- Implementar autenticação JWT e proteger os endpoints da API
+- Mapear a disponibilidade da equipe no início da sprint considerando o calendário acadêmico
