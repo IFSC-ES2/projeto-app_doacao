@@ -23,9 +23,9 @@ class EntidadeServiceTest {
         Mockito.when(repo.findByCnpj(entidade.getCnpj())).thenReturn(Optional.empty());
         Mockito.when(repo.findByEmail(entidade.getEmail())).thenReturn(Optional.empty());
 
-        boolean resultado = service.salvar(entidade);
+        Optional<String> resultado = service.salvar(entidade);
 
-        assertTrue(resultado);
+        assertTrue(resultado.isEmpty());
         Mockito.verify(repo).save(entidade);
     }
 
@@ -38,9 +38,10 @@ class EntidadeServiceTest {
 
         Mockito.when(repo.findByCnpj(entidade.getCnpj())).thenReturn(Optional.of(entidade));
 
-        boolean resultado = service.salvar(entidade);
+        Optional<String> resultado = service.salvar(entidade);
 
-        assertFalse(resultado);
+        assertTrue(resultado.isPresent());
+        assertEquals("CNPJ já cadastrado", resultado.get());
         Mockito.verify(repo, Mockito.never()).save(Mockito.any());
     }
 
@@ -54,9 +55,10 @@ class EntidadeServiceTest {
         Mockito.when(repo.findByCnpj(entidade.getCnpj())).thenReturn(Optional.empty());
         Mockito.when(repo.findByEmail(entidade.getEmail())).thenReturn(Optional.of(entidade));
 
-        boolean resultado = service.salvar(entidade);
+        Optional<String> resultado = service.salvar(entidade);
 
-        assertFalse(resultado);
+        assertTrue(resultado.isPresent());
+        assertEquals("Email já cadastrado", resultado.get());
         Mockito.verify(repo, Mockito.never()).save(Mockito.any());
     }
 
@@ -68,9 +70,10 @@ class EntidadeServiceTest {
         Entidade entidade = criarEntidadeValida();
         entidade.setNome(null);
 
-        boolean resultado = service.salvar(entidade);
+        Optional<String> resultado = service.salvar(entidade);
 
-        assertFalse(resultado);
+        assertTrue(resultado.isPresent());
+        assertEquals("Nome é obrigatório", resultado.get());
         Mockito.verify(repo, Mockito.never()).save(Mockito.any());
     }
 
@@ -82,9 +85,10 @@ class EntidadeServiceTest {
         Entidade entidade = criarEntidadeValida();
         entidade.setNome("");
 
-        boolean resultado = service.salvar(entidade);
+        Optional<String> resultado = service.salvar(entidade);
 
-        assertFalse(resultado);
+        assertTrue(resultado.isPresent());
+        assertEquals("Nome é obrigatório", resultado.get());
         Mockito.verify(repo, Mockito.never()).save(Mockito.any());
     }
 
@@ -96,9 +100,10 @@ class EntidadeServiceTest {
         Entidade entidade = criarEntidadeValida();
         entidade.setCnpj(null);
 
-        boolean resultado = service.salvar(entidade);
+        Optional<String> resultado = service.salvar(entidade);
 
-        assertFalse(resultado);
+        assertTrue(resultado.isPresent());
+        assertEquals("CNPJ inválido. Use 14 dígitos ou o formato 00.000.000/0000-00", resultado.get());
         Mockito.verify(repo, Mockito.never()).save(Mockito.any());
     }
 
@@ -110,9 +115,10 @@ class EntidadeServiceTest {
         Entidade entidade = criarEntidadeValida();
         entidade.setCnpj("");
 
-        boolean resultado = service.salvar(entidade);
+        Optional<String> resultado = service.salvar(entidade);
 
-        assertFalse(resultado);
+        assertTrue(resultado.isPresent());
+        assertEquals("CNPJ inválido. Use 14 dígitos ou o formato 00.000.000/0000-00", resultado.get());
         Mockito.verify(repo, Mockito.never()).save(Mockito.any());
     }
 
@@ -124,9 +130,10 @@ class EntidadeServiceTest {
         Entidade entidade = criarEntidadeValida();
         entidade.setEmail(null);
 
-        boolean resultado = service.salvar(entidade);
+        Optional<String> resultado = service.salvar(entidade);
 
-        assertFalse(resultado);
+        assertTrue(resultado.isPresent());
+        assertEquals("Email inválido", resultado.get());
         Mockito.verify(repo, Mockito.never()).save(Mockito.any());
     }
 
@@ -138,9 +145,10 @@ class EntidadeServiceTest {
         Entidade entidade = criarEntidadeValida();
         entidade.setEmail("ongvidaemail.com");
 
-        boolean resultado = service.salvar(entidade);
+        Optional<String> resultado = service.salvar(entidade);
 
-        assertFalse(resultado);
+        assertTrue(resultado.isPresent());
+        assertEquals("Email inválido", resultado.get());
         Mockito.verify(repo, Mockito.never()).save(Mockito.any());
     }
 
@@ -152,10 +160,58 @@ class EntidadeServiceTest {
         Entidade entidade = criarEntidadeValida();
         entidade.setEmail("ongvida@emailcom");
 
-        boolean resultado = service.salvar(entidade);
+        Optional<String> resultado = service.salvar(entidade);
 
-        assertFalse(resultado);
+        assertTrue(resultado.isPresent());
+        assertEquals("Email inválido", resultado.get());
         Mockito.verify(repo, Mockito.never()).save(Mockito.any());
+    }
+
+    @Test
+    void naoDeveSalvarEntidadeComTelefoneNulo() {
+        EntidadeRepository repo = Mockito.mock(EntidadeRepository.class);
+        EntidadeService service = new EntidadeService(repo);
+
+        Entidade entidade = criarEntidadeValida();
+        entidade.setTelefone(null);
+
+        Optional<String> resultado = service.salvar(entidade);
+
+        assertTrue(resultado.isPresent());
+        assertEquals("Telefone inválido. Use DDD com 10 ou 11 dígitos (ex: 11999998888 ou (48) 99999-8888)", resultado.get());
+        Mockito.verify(repo, Mockito.never()).save(Mockito.any());
+    }
+
+    @Test
+    void naoDeveSalvarEntidadeComTelefoneInvalido() {
+        EntidadeRepository repo = Mockito.mock(EntidadeRepository.class);
+        EntidadeService service = new EntidadeService(repo);
+
+        Entidade entidade = criarEntidadeValida();
+        entidade.setTelefone("123");
+
+        Optional<String> resultado = service.salvar(entidade);
+
+        assertTrue(resultado.isPresent());
+        assertEquals("Telefone inválido. Use DDD com 10 ou 11 dígitos (ex: 11999998888 ou (48) 99999-8888)", resultado.get());
+        Mockito.verify(repo, Mockito.never()).save(Mockito.any());
+    }
+
+    @Test
+    void deveSalvarEntidadeComTelefoneFormatado() {
+        EntidadeRepository repo = Mockito.mock(EntidadeRepository.class);
+        EntidadeService service = new EntidadeService(repo);
+
+        Entidade entidade = criarEntidadeValida();
+        entidade.setTelefone("(48) 99999-9999");
+
+        Mockito.when(repo.findByCnpj(entidade.getCnpj())).thenReturn(Optional.empty());
+        Mockito.when(repo.findByEmail(entidade.getEmail())).thenReturn(Optional.empty());
+
+        Optional<String> resultado = service.salvar(entidade);
+
+        assertTrue(resultado.isEmpty());
+        Mockito.verify(repo).save(entidade);
     }
 
     @Test

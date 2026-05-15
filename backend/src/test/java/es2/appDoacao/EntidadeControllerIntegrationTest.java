@@ -67,7 +67,7 @@ class EntidadeControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.mensagem").value("Entidade já existente ou dados inválidos"));
+            .andExpect(jsonPath("$.mensagem").value("CNPJ já cadastrado"));
     }
 
     @Test
@@ -88,7 +88,7 @@ class EntidadeControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.mensagem").value("Entidade já existente ou dados inválidos"));
+            .andExpect(jsonPath("$.mensagem").value("Email já cadastrado"));
     }
 
     @Test
@@ -107,7 +107,7 @@ class EntidadeControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.mensagem").value("Entidade já existente ou dados inválidos"));
+            .andExpect(jsonPath("$.mensagem").value("Email inválido"));
     }
 
     @Test
@@ -152,7 +152,7 @@ void naoDeveCriarEntidadeComNomeVazio() throws Exception {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(json))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.mensagem").value("Entidade já existente ou dados inválidos"));
+            .andExpect(jsonPath("$.mensagem").value("Nome é obrigatório"));
 }
 
 @Test
@@ -171,7 +171,7 @@ void naoDeveCriarEntidadeComCnpjVazio() throws Exception {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(json))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.mensagem").value("Entidade já existente ou dados inválidos"));
+            .andExpect(jsonPath("$.mensagem").value("CNPJ inválido. Use 14 dígitos ou o formato 00.000.000/0000-00"));
 }
 
 @Test
@@ -190,6 +190,6 @@ void naoDeveCriarEntidadeComEmailSemPonto() throws Exception {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(json))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.mensagem").value("Entidade já existente ou dados inválidos"));
+            .andExpect(jsonPath("$.mensagem").value("Email inválido"));
 }
 }

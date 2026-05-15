@@ -21,12 +21,12 @@
 ### Back-end
 1. Ter o Java 17+ e Maven instalados
 2. Entrar na pasta backend/
-3. Rodar: ./mvnw spring-boot:run
+3. Rodar: mvn spring-boot:run
 4. O servidor roda em: http://localhost:8080
 
 ### Testes (back-end)
 1. Entrar na pasta backend/
-2. Rodar: ./mvnw test
+2. Rodar: mvn test
 
 ### Front-end
 1. Ter o Node.js instalado
