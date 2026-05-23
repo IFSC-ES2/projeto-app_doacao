@@ -4,13 +4,14 @@ on:
   pull_request:
     branches:
       - dev
+      - main
     types:
       - opened
       - synchronize
       - reopened
 
 jobs:
-  build-and-test:
+  backend:
     runs-on: ubuntu-latest
 
     steps:
@@ -48,3 +49,27 @@ jobs:
            test -d .github/workflows \
              || (echo "workflows nao encontrado" && exit 1)
            echo "Todos os arquivos obrigatorios encontrados."
+
+  frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Instalar dependências do frontend
+        run: npm install
+        working-directory: frontend
+
+      - name: Verificar build do frontend
+        run: npm run build
+        working-directory: frontend
+
+      - name: Executar testes do frontend
+        run: npm test
+        working-directory: frontend
