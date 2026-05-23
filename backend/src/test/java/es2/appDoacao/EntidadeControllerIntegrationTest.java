@@ -1,6 +1,7 @@
 package es2.appDoacao;
 
 import es2.appDoacao.model.Entidade;
+import es2.appDoacao.repository.DistribuicaoRepository;
 import es2.appDoacao.repository.EntidadeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,10 +24,14 @@ class EntidadeControllerIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
+    private DistribuicaoRepository distribuicaoRepository;
+
+    @Autowired
     private EntidadeRepository entidadeRepository;
 
     @BeforeEach
     void limparBanco() {
+        distribuicaoRepository.deleteAll();
         entidadeRepository.deleteAll();
     }
 
