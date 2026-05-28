@@ -1,7 +1,46 @@
+import { useEffect, useMemo, useState } from 'react';
 import { FiBox, FiHeart, FiUsers, FiStar } from 'react-icons/fi';
 
-export function Dashboard({ entidades, doacoes, loading, error, onRefresh }) {
-  const totalEstoque = doacoes.reduce((sum, item) => sum + Number(item.quantidade || 0), 0);
+const API_URL = 'http://localhost:8080';
+
+export function Dashboard() {
+  const [entidades, setEntidades] = useState([]);
+  const [doacoes, setDoacoes] = useState([]);
+  const [estoque, setEstoque] = useState([]);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const fetchJson = async (path) => {
+      const response = await fetch(`${API_URL}${path}`);
+      if (!response.ok) {
+        throw new Error('Falha ao carregar dados');
+      }
+      return response.json();
+    };
+
+    const loadDashboard = async () => {
+      setError('');
+      try {
+        const [entidadesResponse, doacoesResponse, estoqueResponse] = await Promise.all([
+          fetchJson('/entidades'),
+          fetchJson('/doacoes'),
+          fetchJson('/estoque'),
+        ]);
+        setEntidades(Array.isArray(entidadesResponse) ? entidadesResponse : []);
+        setDoacoes(Array.isArray(doacoesResponse) ? doacoesResponse : []);
+        setEstoque(Array.isArray(estoqueResponse) ? estoqueResponse : []);
+      } catch (err) {
+        setError(err.message || 'Erro ao atualizar dados');
+      }
+    };
+
+    loadDashboard();
+  }, []);
+
+  const totalEstoque = useMemo(
+    () => estoque.reduce((sum, item) => sum + Number(item.quantidadeEstoque || 0), 0),
+    [estoque]
+  );
   const totalDoacoes = doacoes.length;
   const totalEntidades = entidades.length;
   const doadoresUnicos = new Set(doacoes.map((item) => item.doador)).size;
@@ -35,7 +74,7 @@ export function Dashboard({ entidades, doacoes, loading, error, onRefresh }) {
           <div className="app-card-icon" aria-hidden>
             <FiHeart />
           </div>
-          <h3>Doacoes recebidas</h3>
+          <h3>Doações recebidas</h3>
           <strong>{totalDoacoes}</strong>
           <p className="app-muted">Entradas registradas</p>
         </div>
@@ -51,7 +90,7 @@ export function Dashboard({ entidades, doacoes, loading, error, onRefresh }) {
           <div className="app-card-icon" aria-hidden>
             <FiStar />
           </div>
-          <h3>Doadores unicos</h3>
+          <h3>Doadores únicos</h3>
           <strong>{doadoresUnicos}</strong>
           <p className="app-muted">Pessoas apoiadoras</p>
         </div>
@@ -89,9 +128,9 @@ export function Dashboard({ entidades, doacoes, loading, error, onRefresh }) {
             )}
           </div>
           <div className="app-section">
-            <h2>Doacoes recentes</h2>
+            <h2>Doações recentes</h2>
             {recentes.length === 0 ? (
-              <p className="app-muted">Sem doacoes por enquanto.</p>
+              <p className="app-muted">Sem doações por enquanto.</p>
             ) : (
               <table className="app-table">
                 <thead>

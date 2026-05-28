@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 const API_URL = 'http://localhost:8080';
 
-export function Entidades({ items, loading, onRefresh }) {
+export function Entidades() {
   const [form, setForm] = useState({
     nome: '',
     cnpj: '',
@@ -10,7 +10,31 @@ export function Entidades({ items, loading, onRefresh }) {
     telefone: '',
     email: '',
   });
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const loadEntidades = useCallback(async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const response = await fetch(`${API_URL}/entidades`);
+      const data = await response.json();
+      if (!response.ok) {
+        setError(data.mensagem || 'Não foi possível carregar as entidades');
+        return;
+      }
+      setItems(Array.isArray(data) ? data : []);
+    } catch (err) {
+      setError('Erro de conexão com o servidor');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadEntidades();
+  }, [loadEntidades]);
 
   const handleChange = (field) => (event) => {
     setForm((prev) => ({ ...prev, [field]: event.target.value }));
@@ -29,14 +53,14 @@ export function Entidades({ items, loading, onRefresh }) {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.mensagem || 'Nao foi possivel salvar a entidade');
+        setError(data.mensagem || 'Não foi possível salvar a entidade');
         return;
       }
 
       setForm({ nome: '', cnpj: '', endereco: '', telefone: '', email: '' });
-      onRefresh();
+      await loadEntidades();
     } catch (err) {
-      setError('Erro de conexao com o servidor');
+      setError('Erro de conexão com o servidor');
     }
   };
 
@@ -64,7 +88,7 @@ export function Entidades({ items, loading, onRefresh }) {
           <div className="app-form-row">
             <input
               className="app-input"
-              placeholder="Endereco"
+              placeholder="Endereço"
               value={form.endereco}
               onChange={handleChange('endereco')}
               required
@@ -79,7 +103,7 @@ export function Entidades({ items, loading, onRefresh }) {
           </div>
           <input
             className="app-input"
-            placeholder="Email"
+            placeholder="E-mail"
             value={form.email}
             onChange={handleChange('email')}
             required
