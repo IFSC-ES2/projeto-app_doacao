@@ -26,6 +26,8 @@ class DistribuicaoServiceTest {
 
         Mockito.when(produtoRepo.existsById(1L)).thenReturn(true);
         Mockito.when(entidadeRepo.existsById(1L)).thenReturn(true);
+        Mockito.when(produtoRepo.findById(1L)).thenReturn(Optional.of(criarDistribuicaoValida().getProduto()));
+        Mockito.when(entidadeRepo.findById(1L)).thenReturn(Optional.of(criarDistribuicaoValida().getEntidade()));
 
         Distribuicao distribuicao = criarDistribuicaoValida();
 
@@ -82,6 +84,7 @@ class DistribuicaoServiceTest {
 
         Mockito.when(produtoRepo.existsById(1L)).thenReturn(true);
         Mockito.when(entidadeRepo.existsById(1L)).thenReturn(false);
+        Mockito.when(produtoRepo.findById(1L)).thenReturn(Optional.of(criarDistribuicaoValida().getProduto()));
 
         Distribuicao distribuicao = criarDistribuicaoValida();
 
@@ -101,6 +104,8 @@ class DistribuicaoServiceTest {
 
         Mockito.when(produtoRepo.existsById(1L)).thenReturn(true);
         Mockito.when(entidadeRepo.existsById(1L)).thenReturn(true);
+        Mockito.when(produtoRepo.findById(1L)).thenReturn(Optional.of(criarDistribuicaoValida().getProduto()));
+        Mockito.when(entidadeRepo.findById(1L)).thenReturn(Optional.of(criarDistribuicaoValida().getEntidade()));
 
         Distribuicao distribuicao = criarDistribuicaoValida();
         distribuicao.setDataDistribuicao(null);
