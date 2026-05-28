@@ -1,0 +1,41 @@
+.page-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.page-feedback {
+  min-height: 20px;
+  font-size: 13px;
+  margin: 0 0 12px;
+}
+
+.page-feedback.success {
+  color: #86efac;
+}
+
+.page-feedback.error {
+  color: #fca5a5;
+}
+
+.estoque-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.estoque-zero {
+  background: rgba(248, 113, 113, 0.18);
+  color: #fca5a5;
+}
+
+.estoque-ok {
+  background: rgba(34, 197, 94, 0.18);
+  color: #86efac;
+}
