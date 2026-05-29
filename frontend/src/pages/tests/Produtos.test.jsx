@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, it, vi } from 'vitest';
-import { Produtos } from './Produtos.jsx';
+import { Produtos } from '../Produtos.jsx';
 
 beforeEach(() => {
   global.fetch = vi.fn();

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import './Estoque.css';
+import './css/Estoque.css';
 
 const API_URL = 'http://localhost:8080';
 

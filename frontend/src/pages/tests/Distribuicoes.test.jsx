@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, it, vi } from 'vitest';
-import { Distribuicoes } from './Distribuicoes.jsx';
+import { Distribuicoes } from '../Distribuicoes.jsx';
 
 beforeEach(() => {
   global.fetch = vi.fn();

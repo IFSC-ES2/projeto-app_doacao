@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import './Distribuicoes.css';
+import './css/Distribuicoes.css';
 
 const API_URL = 'http://localhost:8080';
 

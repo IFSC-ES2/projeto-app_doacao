@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import './Doacoes.css';
+import './css/Doacoes.css';
 
 const API_URL = 'http://localhost:8080';
 
