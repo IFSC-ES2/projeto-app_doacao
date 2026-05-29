@@ -1,7 +1,7 @@
 # Taxa de Aprovação nos Testes (Test Pass Rate)
 
-- **Data do acompanhamento:** 14/05/2026
-- **Valor coletado:** 97 %
+- **Data do acompanhamento:** 28/05/2026
+- **Valor coletado:** 100 %
 
 ## Classificação
 Produto

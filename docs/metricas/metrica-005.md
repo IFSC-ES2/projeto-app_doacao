@@ -1,6 +1,6 @@
 # Taxa de Conclusão da Sprint (Sprint Completion Rate)
 
-- **Data do acompanhamento:** 04/05/2026
+- **Data do acompanhamento:** 28/05/2026
 - **Valor coletado:** 100 %
 
 ## Classificação

@@ -1,7 +1,7 @@
 # Taxa de Tarefas Atrasadas (Overdue Task Rate)
 
-- **Data do acompanhamento:** ___/___/____
-- **Valor coletado:** ______ %
+- **Data do acompanhamento:** 28/05/2026
+- **Valor coletado:** 0%
 
 ## Classificação
 Projeto

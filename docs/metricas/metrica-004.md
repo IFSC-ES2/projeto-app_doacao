@@ -1,7 +1,7 @@
 # Velocidade (Velocity)
 
-- **Data do acompanhamento:** 14/05/2026
-- **Valor coletado:** 24 pontos
+- **Data do acompanhamento:** 28/05/2026
+- **Valor coletado:** 39 pontos
 
 ## Classificação
 Processo

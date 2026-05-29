@@ -28,6 +28,10 @@
 1. Entrar na pasta backend/
 2. Rodar: mvn test
 
+### Testes (front-end)
+1. Entrar na pasta frontend/
+2. Rodar: npm test
+
 ### Front-end
 1. Ter o Node.js instalado
 2. Entrar na pasta onde está o front
@@ -49,7 +53,6 @@
 - Isadora Eidt  
 - Lucas Gabriel  
 
-**Scrum Master da segunda sprint e DevOps/Infra:** Haydée Murara  
-**Arquiteto de Software:** Isaac Kozuchovski  
-**Desenvolvedora frontend:** Isadora Eidt
-**Engenheiro de Qualidade:** Lucas Gabriel  
+**Engenheiro de Qualidade/DevOps/Infra:** Haydée Murara  
+**Scrum Master da terceira Sprint/Arquiteto de Software:** Isaac Kozuchovski  
+**Desenvolvedora frontend/Engenheiro de Qualidade:** Isadora Eidt

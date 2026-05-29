@@ -1,7 +1,7 @@
 # Variação Planejado vs. Realizado (Planned vs. Completed Variance)
 
-- **Data do acompanhamento:** ___/___/____
-- **Valor coletado:** ______ tarefas
+- **Data do acompanhamento:** 28/05/2026
+- **Valor coletado:** 10 tarefas
 
 ## Classificação
 Projeto
