@@ -1,7 +1,7 @@
 # Contagem de Defeitos (Defect Count)
 
-- **Data do acompanhamento:** 14/05/2026
-- **Valor coletado:** 4 bugs
+- **Data do acompanhamento:** 28/05/2026
+- **Valor coletado:** 0
 
 ## Classificação
 Produto

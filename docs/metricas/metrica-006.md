@@ -1,7 +1,7 @@
 # Lead Time Médio (Average Lead Time)
 
-- **Data do acompanhamento:** ___/___/____
-- **Valor coletado:** ______ dias
+- **Data do acompanhamento:** 28/05/2026
+- **Valor coletado:** 7 dias
 
 ## Classificação
 Processo
