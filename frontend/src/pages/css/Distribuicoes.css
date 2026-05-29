@@ -1,0 +1,30 @@
+.page-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.page-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.page-feedback {
+  min-height: 20px;
+  font-size: 13px;
+  margin: 0;
+}
+
+.page-feedback.success {
+  color: #86efac;
+}
+
+.page-feedback.error {
+  color: #fca5a5;
+}

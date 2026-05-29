@@ -1,7 +1,7 @@
 # Capacidade da Equipe (Team Capacity)
 
-- **Data do acompanhamento:** ___/___/____
-- **Valor coletado:** ______ horas
+- **Data do acompanhamento:** 28/05/2026
+- **Valor coletado:** 3 horas
 
 ## Classificação
 Projeto

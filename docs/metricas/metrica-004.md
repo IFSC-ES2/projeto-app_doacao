@@ -1,7 +1,7 @@
 # Velocidade (Velocity)
 
-- **Data do acompanhamento:** 04/05/2026
-- **Valor coletado:** 13 pontos
+- **Data do acompanhamento:** 28/05/2026
+- **Valor coletado:** 39 pontos
 
 ## Classificação
 Processo
@@ -23,3 +23,6 @@ Isaac Kozuchovski
 
 ## Interpretação
 Ajuda a saber quantos pontos a equipe consegue fazer nas próximas sprints.
+
+## Análise da Sprint 2
+A equipe aumentou a produtividade em relação à Sprint 1 com a entrega das funcionalidades de entidades, doações e criação dos testes automatizados.

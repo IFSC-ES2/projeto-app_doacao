@@ -1,7 +1,7 @@
 # Percentual de Conclusão do MVP (Feature Completion Rate)
 
-- **Data do acompanhamento:** 04/05/2026
-- **Valor coletado:** 14,28 %
+- **Data do acompanhamento:** 28/05/2026
+- **Valor coletado:** 100 %
 
 ## Classificação
 Produto
@@ -23,3 +23,6 @@ Isadora Eidt
 
 ## Interpretação
 Quanto maior o número, mais perto o sistema está de ficar pronto.
+
+## Análise da Sprint 2
+Em relação à Sprint 1, houve aumento significativo do progresso do MVP com a implementação das funcionalidades de entidades, registro de doações e ampliação da cobertura de testes automatizados.
