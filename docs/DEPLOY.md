@@ -2,7 +2,7 @@
 
 ## Ambiente de execução
 
-O sistema não possui hospedagem web externa. O MVP é validado por execução local reprodutível, sem necessidade de configuração adicional.
+O sistema não possui hospedagem web externa. A execução local reprodutível descrita neste documento é o equivalente ao ambiente de staging: qualquer pessoa com os pré-requisitos instalados consegue subir e validar o MVP completo seguindo os passos abaixo, sem dependências externas.
 
 ---
 
@@ -18,22 +18,28 @@ O sistema não possui hospedagem web externa. O MVP é validado por execução l
 
 ---
 
-## Obter o código
-
-```bash
-git clone https://github.com/IFSC-ES2/projeto-app_doacao.git
-cd projeto-app_doacao
-```
-
----
-
 ## Variáveis de ambiente
 
 Nenhuma variável de ambiente é necessária. O backend usa banco H2 em memória, configurado em `backend/src/main/resources/application.properties`.
 
 ---
 
-## Backend
+## Processo de deploy
+
+### 1. Clonar o repositório
+
+```bash
+git clone https://github.com/IFSC-ES2/projeto-app_doacao.git
+cd projeto-app_doacao
+```
+
+### 2. Verificar o build do backend
+
+```bash
+mvn compile -f backend/pom.xml
+```
+
+### 3. Subir o backend
 
 Rodar em um terminal dedicado:
 
@@ -46,15 +52,24 @@ API disponível em: `http://localhost:8080`
 
 Ao subir, o `DataLoader` cria automaticamente os usuários de teste. O banco H2 é recriado a cada inicialização.
 
----
-
-## Frontend
+### 4. Instalar dependências do frontend
 
 Rodar em outro terminal:
 
 ```bash
 cd frontend
 npm install
+```
+
+### 5. Verificar o build do frontend
+
+```bash
+npm run build
+```
+
+### 6. Subir o frontend
+
+```bash
 npm run dev
 ```
 
