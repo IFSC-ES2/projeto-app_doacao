@@ -4,48 +4,58 @@
 
 ## Padrão 1 — Repository Pattern
 
-**Problema:** o acesso ao banco estava muito ligado aos Controllers, misturando funções diferentes.
+**Problema:** o acesso ao banco estava acoplado aos controllers e serviços, misturando responsabilidades. Sem uma camada dedicada, cada classe que precisasse de dados teria que conhecer detalhes de JPA, dificultando testes e manutenção.
 
-**Padrão aplicado:** foram criadas interfaces que estendem JpaRepository, responsáveis pelo acesso aos dados.
+**Padrão aplicado:** interfaces que estendem `JpaRepository`, uma por entidade. O Spring Data JPA gera as implementações automaticamente a partir dos nomes dos métodos declarados.
 
-**Por que foi adequado:** o projeto já utilizava UsuarioRepository, então seguir o mesmo padrão manteve a organização do sistema.
+**Classes afetadas:** `EntidadeRepository`, `EntradaDoacaoRepository`, `UsuarioRepository`, `ProdutoRepository` e `DistribuicaoRepository`.
 
-**Classes afetadas:** EntidadeRepository, EntradaDoacaoRepository e UsuarioRepository.
+**Decisões de design dentro do padrão:**
+- Todos os métodos de busca usam queries derivadas do nome (`findByCnpj`, `findByDoador`, `findByDataEntradaBetween`) em vez de `@Query` JPQL. A escolha foi feita porque os filtros do MVP são simples e o nome do método já documenta a intenção sem SQL adicional.
+- A lógica de verificação de duplicidade (CNPJ e e-mail já cadastrados) ficou em `EntidadeService.validarCadastro()`, usando `findByCnpj()` e `findByEmail()` do repositório. A consulta ao banco fica isolada no repositório; a decisão do que fazer com o resultado fica no serviço.
+- Os repositórios são injetados por construtor nos serviços, não como campo com `@Autowired`, o que permite substituição por mock nos testes unitários (`EntidadeServiceTest`, `AuthServiceTest`, `ProdutoServiceTest`, `DistribuicaoServiceTest`, `EntradaDoacaoServiceTest`).
 
-**Benefícios:** código mais organizado, facilidade para trocar o banco de dados, consultas automáticas pelo nome do método, mais fácil de testar.
+**Benefícios:** acesso a dados centralizado em uma camada; consultas automáticas pelo nome do método; testabilidade garantida por injeção via construtor.
 
-**Trade-offs:** adiciona uma camada a mais no projeto e consultas mais complexas podem precisar de @Query.
+**Trade-offs:** consultas mais complexas, como filtros combinados por período e produto, precisariam de `@Query`. Para o escopo do MVP, as queries derivadas foram suficientes.
 
 ---
 
 ## Padrão 2 — Service Layer
 
-**Problema:** as regras de negócio poderiam ficar espalhadas nos Controllers conforme o sistema crescesse.
+**Problema:** sem a camada de serviço, as regras de negócio ficariam nos controllers. O `EntidadeController` teria que validar CNPJ, e-mail e telefone. O `AuthController` teria que verificar força de senha. Controllers com lógica de negócio são difíceis de testar e de evoluir.
 
-**Padrão aplicado:** criação de classes @Service para centralizar regras e validações, deixando os Controllers responsáveis apenas pelas requisições HTTP.
+**Padrão aplicado:** classes anotadas com `@Service` centralizam regras de negócio e validações, deixando os controllers responsáveis apenas por receber e responder requisições HTTP.
 
-**Por que foi adequado:** o AuthService já utilizava esse padrão, então aplicar o mesmo nas novas funcionalidades manteve a consistência do código.
+**Classes afetadas:** `EntidadeService`, `EntradaDoacaoService`, `AuthService`, `ProdutoService` e `DistribuicaoService`.
 
-**Classes afetadas:** EntidadeService, EntradaDoacaoService, AuthService, EntidadeController e EntradaDoacaoController.
+**Decisões de design dentro do padrão:**
+- A validação de formato (CNPJ, e-mail, telefone) ficou no `EntidadeService` via regex, em vez de usar anotações do Bean Validation (`@Pattern`, `@Email`) no model. A razão é que algumas validações precisam de lógica adicional, como verificar duplicidade de CNPJ antes de salvar, o que não é possível com anotações simples.
+- O método `salvar()` em `EntidadeService` e `registrar()` em `DistribuicaoService` retornam `Optional<String>` com a mensagem de erro em vez de lançar exceção. Isso simplifica o controller, que verifica apenas se o Optional está presente antes de montar a resposta HTTP, sem bloco try/catch.
+- A validação de força de senha em `AuthService` (maiúsculas, minúsculas, números e caracteres especiais) ficou no serviço, não no model, porque é uma regra de negócio do sistema, não uma restrição de persistência.
 
-**Benefícios:** Controllers mais simples, lógica de negócio mais organizada e código mais fácil de testar e manter.
+**Benefícios:** controllers com responsabilidade única (HTTP); regras de negócio centralizadas e testáveis em isolamento; decisões de validação explícitas e rastreáveis no código.
 
-**Trade-offs:** adiciona mais uma camada no sistema e em CRUDs simples pode parecer excesso de estrutura.
+**Trade-offs:** em operações simples como `listarTodas()`, o serviço é uma camada passante. Para o MVP, a consistência da estrutura compensa essa passagem extra.
 
 ---
 
-## ADR-001 — Arquitetura em Camadas
+## Padrão 3 — Arquitetura em Camadas
 
-**Status:** Aceito
+A decisão arquitetural está registrada em [ADR-0003](adrs/ADR-0003-arquitetura.md).
 
-**Contexto:** com o crescimento do sistema na Sprint 2, foi necessário definir uma organização padrão para o backend.
+**Fluxo adotado em todo o backend:**
 
-**Decisão:** adotar oficialmente a arquitetura em camadas:
-- Controller: recebe requisições HTTP
-- Service: aplica regras de negócio
-- Repository: acessa o banco de dados
+```
+Controller → Service → Repository → Model
+```
 
-**Justificativa:** essa estrutura já era usada em parte do projeto. Formalizar o padrão ajuda a manter consistência e facilita o trabalho em equipe.
+**Exemplos rastreáveis no código:**
+- **Login:** `AuthController.login()` → `AuthService.autenticar()` → `UsuarioRepository.findByLogin()` → `Usuario`
+- **Cadastro de entidade:** `EntidadeController.criar()` → `EntidadeService.salvar()` → validações → `EntidadeRepository.save()` → `Entidade`
+- **Registro de distribuição:** `DistribuicaoController.registrar()` → `DistribuicaoService.registrar()` → `DistribuicaoRepository.save()` → `Distribuicao`
 
-**Consequências:** código mais organizado e fácil de manter; novas funcionalidades devem seguir o fluxo:
-model - repository - service - controller.
+**Relação com manutenção e testabilidade:**
+- O `EntidadeController` nunca acessa o banco diretamente — só conhece o `EntidadeService`
+- O `EntidadeRepository` nunca sabe que existe uma resposta HTTP — só faz consultas
+- Essa separação permite testar cada camada de forma independente: nos testes unitários (`EntidadeServiceTest`, `AuthServiceTest`), o repositório é substituído por mock sem precisar do banco; nos testes de integração (`EntidadeControllerIntegrationTest`, `ProdutoControllerIntegrationTest`, `DistribuicaoControllerIntegrationTest`), o sistema inteiro sobe contra o H2
