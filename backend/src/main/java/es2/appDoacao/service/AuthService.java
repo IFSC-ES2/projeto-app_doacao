@@ -2,6 +2,8 @@ package es2.appDoacao.service;
 
 import es2.appDoacao.model.Usuario;
 import es2.appDoacao.repository.UsuarioRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -10,10 +12,12 @@ import java.util.Optional;
 public class AuthService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
     public AuthService(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     public boolean autenticar(String loginOuEmail, String senha) {
@@ -35,9 +39,21 @@ public class AuthService {
         }
 
 
-        return usuario.isPresent() && usuario.get().getSenha().equals(senha);
+        return usuario.isPresent() && passwordEncoder.matches(senha, usuario.get().getSenha());
     }
 
+    public boolean registrar(String login, String email, String senha) {
+        if (!emailValido(email) || !senhaValida(senha)) return false;
+        if (usuarioRepository.findByEmail(email).isPresent()) return false;
+        if (usuarioRepository.findByLogin(login).isPresent()) return false;
+
+        Usuario usuario = new Usuario();
+        usuario.setLogin(login);
+        usuario.setEmail(email);
+        usuario.setSenha(passwordEncoder.encode(senha));
+        usuarioRepository.save(usuario);
+        return true;
+    }
 
     private boolean emailValido(String email) {
         return email != null && email.contains("@") && email.contains(".");
@@ -54,20 +70,5 @@ public class AuthService {
 
         return temMaiuscula && temMinuscula && temNumero && temEspecial;
     }
-    public boolean registrar(String login, String email, String senha) {
-
-        if (!emailValido(email) || !senhaValida(senha)) return false;
-
-        if (usuarioRepository.findByEmail(email).isPresent()) return false;
-        if (usuarioRepository.findByLogin(login).isPresent()) return false;
-
-        Usuario usuario = new Usuario();
-        usuario.setLogin(login);
-        usuario.setEmail(email);
-        usuario.setSenha(senha);
-
-        usuarioRepository.save(usuario);
-
-        return true;
-    }
+    
 }
