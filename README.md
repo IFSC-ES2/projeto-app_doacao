@@ -31,5 +31,5 @@ Consulte [docs/DEPLOY.md](docs/DEPLOY.md) para pré-requisitos, execução e val
 - Lucas Gabriel  
 
 **Engenheiro de Qualidade/DevOps/Infra:** Haydée Murara  
-**Scrum Master da terceira Sprint/Arquiteto de Software:** Isaac Kozuchovski  
-**Desenvolvedora frontend/Engenheiro de Qualidade:** Isadora Eidt
+**Arquiteto de Software:** Isaac Kozuchovski  
+**Desenvolvedora frontend/Engenheiro de Qualidade/Scrum Master da quarta Sprint:** Isadora Eidt
