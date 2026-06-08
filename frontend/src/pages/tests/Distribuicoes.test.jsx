@@ -1,10 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
-import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { Distribuicoes } from '../Distribuicoes.jsx';
 
 beforeEach(() => {
-  vi.stubGlobal('fetch', vi.fn());
   vi.stubGlobal('fetch', vi.fn());
 });
 
@@ -37,37 +35,9 @@ it('renderiza o formulario com selects carregados da API', async () => {
 
     throw new Error(`Unexpected request: ${url}`);
   });
-it('renderiza o formulario com selects carregados da API', async () => {
-  fetch.mockImplementation(async (url) => {
-    if (url === 'http://localhost:8080/produtos') {
-      return {
-        ok: true,
-        json: async () => [{ id: 1, nome: 'Arroz' }],
-      };
-    }
-
-    if (url === 'http://localhost:8080/entidades') {
-      return {
-        ok: true,
-        json: async () => [{ id: 10, nome: 'Casa Solidaria' }],
-      };
-    }
-
-    if (url === 'http://localhost:8080/distribuicoes') {
-      return {
-        ok: true,
-        json: async () => [],
-      };
-    }
-
-    throw new Error(`Unexpected request: ${url}`);
-  });
 
   render(<Distribuicoes />);
 
-  expect(fetch).toHaveBeenCalledWith('http://localhost:8080/produtos');
-  expect(fetch).toHaveBeenCalledWith('http://localhost:8080/entidades');
-  expect(fetch).toHaveBeenCalledWith('http://localhost:8080/distribuicoes');
   expect(fetch).toHaveBeenCalledWith('http://localhost:8080/produtos');
   expect(fetch).toHaveBeenCalledWith('http://localhost:8080/entidades');
   expect(fetch).toHaveBeenCalledWith('http://localhost:8080/distribuicoes');
@@ -75,48 +45,6 @@ it('renderiza o formulario com selects carregados da API', async () => {
   expect(screen.getByLabelText('Entidade')).toBeTruthy();
 });
 
-it('faz POST em distribuicoes com o payload esperado', async () => {
-  const distribuicoes = [];
-
-  fetch.mockImplementation(async (url, options = {}) => {
-    if (url === 'http://localhost:8080/produtos') {
-      return {
-        ok: true,
-        json: async () => [{ id: 1, nome: 'Arroz' }],
-      };
-    }
-
-    if (url === 'http://localhost:8080/entidades') {
-      return {
-        ok: true,
-        json: async () => [{ id: 10, nome: 'Casa Solidaria' }],
-      };
-    }
-
-    if (url === 'http://localhost:8080/distribuicoes' && (!options.method || options.method === 'GET')) {
-      return {
-        ok: true,
-        json: async () => distribuicoes,
-      };
-    }
-
-    if (url === 'http://localhost:8080/distribuicoes' && options.method === 'POST') {
-      const body = JSON.parse(options.body);
-      distribuicoes.push({
-        id: 1,
-        quantidade: body.quantidade,
-        dataDistribuicao: body.dataDistribuicao,
-        produto: { id: body.produto.id, nome: 'Arroz' },
-        entidade: { id: body.entidade.id, nome: 'Casa Solidaria' },
-      });
-      return {
-        ok: true,
-        json: async () => ({ mensagem: 'Distribuição registrada' }),
-      };
-    }
-
-    throw new Error(`Unexpected request: ${options.method || 'GET'} ${url}`);
-  });
 it('faz POST em distribuicoes com o payload esperado', async () => {
   const distribuicoes = [];
 
@@ -199,27 +127,38 @@ it('faz POST em distribuicoes com o payload esperado', async () => {
 });
 
 it('pagina as distribuicoes quando ha mais registros que o limite', async () => {
-  global.fetch
-    .mockResolvedValueOnce({
-      ok: true,
-      json: async () => [{ id: 1, nome: 'Arroz' }],
-    })
-    .mockResolvedValueOnce({
-      ok: true,
-      json: async () => [{ id: 10, nome: 'Casa Solidaria' }],
-    })
-    .mockResolvedValueOnce({
-      ok: true,
-      json: async () => [
-        { id: 1, produto: 'Arroz 1', quantidade: 1, dataDistribuicao: '2026-05-20', entidade: 'Casa Solidaria' },
-        { id: 2, produto: 'Arroz 2', quantidade: 1, dataDistribuicao: '2026-05-21', entidade: 'Casa Solidaria' },
-        { id: 3, produto: 'Arroz 3', quantidade: 1, dataDistribuicao: '2026-05-22', entidade: 'Casa Solidaria' },
-        { id: 4, produto: 'Arroz 4', quantidade: 1, dataDistribuicao: '2026-05-23', entidade: 'Casa Solidaria' },
-        { id: 5, produto: 'Arroz 5', quantidade: 1, dataDistribuicao: '2026-05-24', entidade: 'Casa Solidaria' },
-        { id: 6, produto: 'Arroz 6', quantidade: 1, dataDistribuicao: '2026-05-25', entidade: 'Casa Solidaria' },
-        { id: 7, produto: 'Arroz 7', quantidade: 1, dataDistribuicao: '2026-05-26', entidade: 'Casa Solidaria' },
-      ],
-    });
+  fetch.mockImplementation(async (url) => {
+    if (url === 'http://localhost:8080/produtos') {
+      return {
+        ok: true,
+        json: async () => [{ id: 1, nome: 'Arroz' }],
+      };
+    }
+
+    if (url === 'http://localhost:8080/entidades') {
+      return {
+        ok: true,
+        json: async () => [{ id: 10, nome: 'Casa Solidaria' }],
+      };
+    }
+
+    if (url === 'http://localhost:8080/distribuicoes') {
+      return {
+        ok: true,
+        json: async () => [
+          { id: 1, produto: 'Arroz 1', quantidade: 1, dataDistribuicao: '2026-05-20', entidade: 'Casa Solidaria' },
+          { id: 2, produto: 'Arroz 2', quantidade: 1, dataDistribuicao: '2026-05-21', entidade: 'Casa Solidaria' },
+          { id: 3, produto: 'Arroz 3', quantidade: 1, dataDistribuicao: '2026-05-22', entidade: 'Casa Solidaria' },
+          { id: 4, produto: 'Arroz 4', quantidade: 1, dataDistribuicao: '2026-05-23', entidade: 'Casa Solidaria' },
+          { id: 5, produto: 'Arroz 5', quantidade: 1, dataDistribuicao: '2026-05-24', entidade: 'Casa Solidaria' },
+          { id: 6, produto: 'Arroz 6', quantidade: 1, dataDistribuicao: '2026-05-25', entidade: 'Casa Solidaria' },
+          { id: 7, produto: 'Arroz 7', quantidade: 1, dataDistribuicao: '2026-05-26', entidade: 'Casa Solidaria' },
+        ],
+      };
+    }
+
+    throw new Error(`Unexpected request: ${url}`);
+  });
 
   render(<Distribuicoes />);
 

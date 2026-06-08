@@ -1,10 +1,6 @@
-<<<<<<< HEAD
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FiTrash2 } from 'react-icons/fi';
 import { Pagination } from '../components/Pagination.jsx';
-=======
-import { useEffect, useState } from 'react';
->>>>>>> 7cf92ea (fix: ajustando arquivos para que passem no lint)
 import './css/Produtos.css';
 
 const API_URL = 'http://localhost:8080';
@@ -53,19 +49,9 @@ export function Produtos() {
   useEffect(() => {
     let cancelled = false;
 
-<<<<<<< HEAD
-  useEffect(() => {
-    const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
-    setCurrentPage((page) => Math.min(page, totalPages));
-  }, [items.length]);
-
-  useEffect(() => {
-    const loadEntidades = async () => {
-=======
     const loadInitialProdutos = async () => {
       setLoading(true);
       setStatus({ type: '', message: '' });
->>>>>>> 7cf92ea (fix: ajustando arquivos para que passem no lint)
       try {
         const response = await fetch(`${API_URL}/produtos`);
         const data = await response.json();
@@ -119,6 +105,12 @@ export function Produtos() {
       cancelled = true;
     };
   }, []);
+
+  const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
+
+  useEffect(() => {
+    setCurrentPage((page) => Math.min(page, totalPages));
+  }, [totalPages]);
 
   const handleChange = (field) => (event) => {
     setForm((prev) => ({ ...prev, [field]: event.target.value }));
@@ -221,12 +213,11 @@ export function Produtos() {
       setStatus({ type: 'success', message: 'Produto excluído com sucesso' });
       setDeletingId(null);
       await loadProdutos({ resetStatus: false });
-    } catch (err) {
+    } catch {
       setStatus({ type: 'error', message: 'Erro de conexão com o servidor' });
     }
   };
 
-  const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
   const visibleItems = useMemo(() => {
     const start = (currentPage - 1) * PAGE_SIZE;
     return items.slice(start, start + PAGE_SIZE);
@@ -339,43 +330,44 @@ export function Produtos() {
           <>
             <table className="app-table">
               <thead>
-              <tr>
-                <th>Produto</th>
-                <th>Descrição</th>
-                <th>Unidade</th>
-                <th>Quantidade</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              {visibleItems.map((produto) => {
-                const quantidade =
+                <tr>
+                  <th>Produto</th>
+                  <th>Descrição</th>
+                  <th>Unidade</th>
+                  <th>Quantidade</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                {visibleItems.map((produto) => {
+                  const quantidade =
                     produto.quantidadeEstoque ?? produto.quantidadeAtual ?? produto.quantidade ?? 0;
+
                   return (
                     <tr key={produto.id ?? `${produto.nome}-${produto.unidade}`}>
                       <td>{produto.nome}</td>
-                    <td>{produto.descricao}</td>
-                    <td>{produto.unidade}</td>
-                    <td>
-                      <span className="app-pill">{quantidade}</span>
-                    </td>
-                    <td>
-                      <button
-                        type="button"
-                        className="product-delete-button"
-                        onClick={() => setDeletingId(produto.id)}
-                        aria-label={`Excluir produto ${produto.nome}`}
-                      >
-                        <FiTrash2 aria-hidden />
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
-        </>
+                      <td>{produto.descricao}</td>
+                      <td>{produto.unidade}</td>
+                      <td>
+                        <span className="app-pill">{quantidade}</span>
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          className="product-delete-button"
+                          onClick={() => setDeletingId(produto.id)}
+                          aria-label={`Excluir produto ${produto.nome}`}
+                        >
+                          <FiTrash2 aria-hidden />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+          </>
         )}
       </section>
 

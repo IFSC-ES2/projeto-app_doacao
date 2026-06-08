@@ -1,15 +1,8 @@
-<<<<<<< HEAD
 import { fireEvent, render, screen } from '@testing-library/react';
-import { afterEach, beforeEach, it, vi } from 'vitest';
-=======
-import { render, screen } from '@testing-library/react';
-import { afterEach, beforeEach, expect, it, vi } from 'vitest';
->>>>>>> 7cf92ea (fix: ajustando arquivos para que passem no lint)
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { Estoque } from '../Estoque.jsx';
 
 beforeEach(() => {
-  vi.stubGlobal('fetch', vi.fn());
   vi.stubGlobal('fetch', vi.fn());
 });
 
@@ -36,8 +29,6 @@ it('consulta a rota de estoque e exibe o saldo calculado pela API', async () => 
 });
 
 it('filtra produtos pelo nome digitado', async () => {
-  global.fetch.mockResolvedValueOnce({
-it('consulta a rota de estoque e exibe o saldo calculado pela API', async () => {
   fetch.mockResolvedValueOnce({
     ok: true,
     json: async () => [
@@ -55,15 +46,11 @@ it('consulta a rota de estoque e exibe o saldo calculado pela API', async () => 
   });
 
   expect(screen.queryByText('Cesta basica')).toBeNull();
-  expect(fetch).toHaveBeenCalledWith('http://localhost:8080/estoque');
-  expect(await screen.findByText('Cesta basica')).toBeTruthy();
   expect(screen.getByText('Agua')).toBeTruthy();
-  expect(screen.getByText('Zerado')).toBeTruthy();
-  expect(screen.getByText('Disponível')).toBeTruthy();
 });
 
 it('mostra mensagem quando a busca nao encontra resultados', async () => {
-  global.fetch.mockResolvedValueOnce({
+  fetch.mockResolvedValueOnce({
     ok: true,
     json: async () => [
       { id: 1, produto: 'Cesta basica', unidade: 'un', quantidadeAtual: 0 },
@@ -82,7 +69,7 @@ it('mostra mensagem quando a busca nao encontra resultados', async () => {
 });
 
 it('pagina os itens do estoque quando a lista e maior que o limite', async () => {
-  global.fetch.mockResolvedValueOnce({
+  fetch.mockResolvedValueOnce({
     ok: true,
     json: async () => [
       { id: 1, produto: 'Produto 1', unidade: 'un', quantidadeAtual: 0 },

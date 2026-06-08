@@ -73,8 +73,7 @@ export function Distribuicoes() {
         } else if (!cancelled) {
           setStatus({
             type: 'error',
-            message:
-              distribuicoesData.mensagem || 'Não foi possível carregar as distribuições',
+            message: distribuicoesData.mensagem || 'Não foi possível carregar as distribuições',
           });
         }
       } catch {
@@ -147,7 +146,7 @@ export function Distribuicoes() {
       setCurrentPage(1);
       await loadDistribuicoes({ resetStatus: false });
     } catch {
-      setStatus({ type: 'error', message: 'Erro de conexao com o servidor' });
+      setStatus({ type: 'error', message: 'Erro de conexão com o servidor' });
     } finally {
       setSaving(false);
     }

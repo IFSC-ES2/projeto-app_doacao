@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-import { useCallback, useEffect, useState } from 'react';
-import { Pagination } from '../components/Pagination.jsx';
-=======
 import { useEffect, useState } from 'react';
->>>>>>> 7cf92ea (fix: ajustando arquivos para que passem no lint)
+import { Pagination } from '../components/Pagination.jsx';
 
 const API_URL = 'http://localhost:8080';
 const PAGE_SIZE = 6;

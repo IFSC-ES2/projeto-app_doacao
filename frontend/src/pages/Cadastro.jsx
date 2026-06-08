@@ -21,7 +21,12 @@ function getRegisterErrorMessage(response, data) {
     return 'Este usuário ou email já está em uso.';
   }
 
-  if (response.status === 422 || normalizedMessage.includes('inválid') || normalizedMessage.includes('invalíd') || normalizedMessage.includes('campos')) {
+  if (
+    response.status === 422 ||
+    normalizedMessage.includes('inválid') ||
+    normalizedMessage.includes('invalíd') ||
+    normalizedMessage.includes('campos')
+  ) {
     return 'Confira os dados informados e tente novamente.';
   }
 
@@ -66,12 +71,8 @@ export function Register() {
         setMensagem(getRegisterErrorMessage(response, data));
       }
     } catch {
-<<<<<<< HEAD
       setTipoMensagem('error');
-      setMensagem('Sem conexão com o servidor. Tente novamente.');
-=======
       setMensagem('Erro de conexão com o servidor.');
->>>>>>> 7cf92ea (fix: ajustando arquivos para que passem no lint)
     }
   };
 
