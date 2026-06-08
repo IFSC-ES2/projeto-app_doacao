@@ -34,6 +34,17 @@ public class ProdutoController {
         }
     }
 
+    @DeleteMapping("/produtos/{id}")
+    public ResponseEntity<?> excluir(@PathVariable Long id) {
+        boolean removido = produtoService.deletar(id);
+        if (removido) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.status(404)
+                .body(Map.of("mensagem", "Produto não encontrado"));
+    }
+
     @GetMapping("/estoque")
     public ResponseEntity<?> estoque() {
         return ResponseEntity.ok(produtoService.listarEstoque());

@@ -1,13 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { FiTrash2 } from 'react-icons/fi';
+import { Pagination } from '../components/Pagination.jsx';
 import './css/Produtos.css';
 
 const API_URL = 'http://localhost:8080';
+const PAGE_SIZE = 6;
 
 const initialForm = {
   nome: '',
   descricao: '',
   unidade: '',
   quantidadeEstoque: '',
+  doadorTipo: 'avulso',
+  doador: '',
   entidadeId: '',
 };
 
@@ -15,8 +20,10 @@ export function Produtos() {
   const [form, setForm] = useState(initialForm);
   const [items, setItems] = useState([]);
   const [entidades, setEntidades] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
   const [status, setStatus] = useState({ type: '', message: '' });
 
   const loadProdutos = async (options = { resetStatus: true }) => {
@@ -99,6 +106,9 @@ export function Produtos() {
     };
   }, []);
 
+  const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+
   const handleChange = (field) => (event) => {
     setForm((prev) => ({ ...prev, [field]: event.target.value }));
   };
@@ -109,6 +119,22 @@ export function Produtos() {
     setStatus({ type: '', message: '' });
 
     try {
+      const doadorNome =
+        form.doadorTipo === 'entidade'
+          ? entidades.find((entidade) => String(entidade.id) === String(form.entidadeId))?.nome || ''
+          : form.doador.trim();
+
+      if (!doadorNome) {
+        setStatus({
+          type: 'error',
+          message:
+            form.doadorTipo === 'entidade'
+              ? 'Selecione uma entidade válida'
+              : 'Informe o nome do doador',
+        });
+        return;
+      }
+
       const response = await fetch(`${API_URL}/produtos`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -126,15 +152,6 @@ export function Produtos() {
         return;
       }
 
-      const entidadeSelecionada = entidades.find(
-        (entidade) => String(entidade.id) === String(form.entidadeId)
-      );
-
-      if (!entidadeSelecionada) {
-        setStatus({ type: 'error', message: 'Selecione uma entidade válida' });
-        return;
-      }
-
       const doacaoResponse = await fetch(`${API_URL}/doacoes`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -142,8 +159,11 @@ export function Produtos() {
           produto: form.nome,
           quantidade: Number(form.quantidadeEstoque),
           dataEntrada: new Date().toISOString().slice(0, 10),
-          doador: entidadeSelecionada.nome,
-          observacao: `Entrada vinculada a entidade ${entidadeSelecionada.nome}`,
+          doador: doadorNome,
+          observacao:
+            form.doadorTipo === 'entidade'
+              ? `Entrada vinculada a entidade ${doadorNome}`
+              : `Entrada registrada com doador avulso ${doadorNome}`,
         }),
       });
 
@@ -158,6 +178,7 @@ export function Produtos() {
 
       setStatus({ type: 'success', message: data.mensagem || 'Produto cadastrado com sucesso' });
       setForm(initialForm);
+      setCurrentPage(1);
       await loadProdutos({ resetStatus: false });
     } catch {
       setStatus({ type: 'error', message: 'Erro de conexão com o servidor' });
@@ -165,6 +186,43 @@ export function Produtos() {
       setSaving(false);
     }
   };
+
+  const handleDelete = async () => {
+    if (!deletingId) {
+      return;
+    }
+
+    try {
+      setStatus({ type: '', message: '' });
+      const response = await fetch(`${API_URL}/produtos/${deletingId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        setStatus({
+          type: 'error',
+          message: data.mensagem || 'Não foi possível excluir o produto',
+        });
+        return;
+      }
+
+      setStatus({ type: 'success', message: 'Produto excluído com sucesso' });
+      setDeletingId(null);
+      await loadProdutos({ resetStatus: false });
+    } catch {
+      setStatus({ type: 'error', message: 'Erro de conexão com o servidor' });
+    }
+  };
+
+  const visibleItems = useMemo(() => {
+    const start = (safeCurrentPage - 1) * PAGE_SIZE;
+    return items.slice(start, start + PAGE_SIZE);
+  }, [items, safeCurrentPage]);
+
+  const deletingProduct = useMemo(() => {
+    return items.find((produto) => String(produto.id) === String(deletingId)) || null;
+  }, [items, deletingId]);
 
   return (
     <div className="app-grid">
@@ -194,22 +252,48 @@ export function Produtos() {
             onChange={handleChange('descricao')}
             required
           />
-          <label className="page-field">
-            Entidade
-            <select
-              className="app-input"
-              value={form.entidadeId}
-              onChange={handleChange('entidadeId')}
-              required
+          <div className="page-toggle-group" role="group" aria-label="Tipo de doador">
+            <button
+              type="button"
+              className={`page-toggle ${form.doadorTipo === 'avulso' ? 'active' : ''}`}
+              onClick={() => setForm((prev) => ({ ...prev, doadorTipo: 'avulso', entidadeId: '' }))}
             >
-              <option value="">Selecione uma entidade</option>
-              {entidades.map((entidade) => (
-                <option key={entidade.id} value={entidade.id}>
-                  {entidade.nome}
-                </option>
-              ))}
-            </select>
-          </label>
+              Doador avulso
+            </button>
+            <button
+              type="button"
+              className={`page-toggle ${form.doadorTipo === 'entidade' ? 'active' : ''}`}
+              onClick={() => setForm((prev) => ({ ...prev, doadorTipo: 'entidade', doador: '' }))}
+            >
+              Entidade
+            </button>
+          </div>
+          {form.doadorTipo === 'avulso' ? (
+            <input
+              className="app-input"
+              placeholder="Nome do doador"
+              value={form.doador}
+              onChange={handleChange('doador')}
+              required
+            />
+          ) : (
+            <label className="page-field">
+              Entidade
+              <select
+                className="app-input"
+                value={form.entidadeId}
+                onChange={handleChange('entidadeId')}
+                required
+              >
+                <option value="">Selecione uma entidade</option>
+                {entidades.map((entidade) => (
+                  <option key={entidade.id} value={entidade.id}>
+                    {entidade.nome}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
           <input
             className="app-input"
             type="number"
@@ -240,34 +324,87 @@ export function Produtos() {
         ) : items.length === 0 ? (
           <p className="app-muted">Nenhum produto registrado ainda.</p>
         ) : (
-          <table className="app-table">
-            <thead>
-              <tr>
-                <th>Produto</th>
-                <th>Descrição</th>
-                <th>Unidade</th>
-                <th>Quantidade</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((produto) => {
-                const quantidade =
-                  produto.quantidadeEstoque ?? produto.quantidadeAtual ?? produto.quantidade ?? 0;
-                return (
-                  <tr key={produto.id ?? `${produto.nome}-${produto.unidade}`}>
-                    <td>{produto.nome}</td>
-                    <td>{produto.descricao}</td>
-                    <td>{produto.unidade}</td>
-                    <td>
-                      <span className="app-pill">{quantidade}</span>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          <>
+            <table className="app-table">
+              <thead>
+                <tr>
+                  <th>Produto</th>
+                  <th>Descrição</th>
+                  <th>Unidade</th>
+                  <th>Quantidade</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                {visibleItems.map((produto) => {
+                  const quantidade =
+                    produto.quantidadeEstoque ?? produto.quantidadeAtual ?? produto.quantidade ?? 0;
+
+                  return (
+                    <tr key={produto.id ?? `${produto.nome}-${produto.unidade}`}>
+                      <td>{produto.nome}</td>
+                      <td>{produto.descricao}</td>
+                      <td>{produto.unidade}</td>
+                      <td>
+                        <span className="app-pill">{quantidade}</span>
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          className="product-delete-button"
+                          onClick={() => setDeletingId(produto.id)}
+                          aria-label={`Excluir produto ${produto.nome}`}
+                        >
+                          <FiTrash2 aria-hidden />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            <Pagination currentPage={safeCurrentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+          </>
         )}
       </section>
+
+      {deletingProduct && (
+        <div className="product-modal-overlay" role="presentation" onClick={() => setDeletingId(null)}>
+          <div
+            className="product-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="delete-product-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <h3 id="delete-product-title">Excluir produto</h3>
+            <p>
+              Tem certeza que deseja excluir <strong>{deletingProduct.nome}</strong>?
+            </p>
+            <p className="app-muted">
+              Essa ação remove o produto da lista cadastrada e não pode ser desfeita.
+            </p>
+            <div className="product-modal-actions">
+              <button
+                type="button"
+                className="product-modal-cancel"
+                onClick={() => setDeletingId(null)}
+                disabled={saving}
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                className="product-modal-confirm"
+                onClick={handleDelete}
+                disabled={saving}
+              >
+                Excluir
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

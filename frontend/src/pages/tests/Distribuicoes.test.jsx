@@ -125,3 +125,48 @@ it('faz POST em distribuicoes com o payload esperado', async () => {
     observacao: 'Entrega urgente',
   });
 });
+
+it('pagina as distribuicoes quando ha mais registros que o limite', async () => {
+  fetch.mockImplementation(async (url) => {
+    if (url === 'http://localhost:8080/produtos') {
+      return {
+        ok: true,
+        json: async () => [{ id: 1, nome: 'Arroz' }],
+      };
+    }
+
+    if (url === 'http://localhost:8080/entidades') {
+      return {
+        ok: true,
+        json: async () => [{ id: 10, nome: 'Casa Solidaria' }],
+      };
+    }
+
+    if (url === 'http://localhost:8080/distribuicoes') {
+      return {
+        ok: true,
+        json: async () => [
+          { id: 1, produto: 'Arroz 1', quantidade: 1, dataDistribuicao: '2026-05-20', entidade: 'Casa Solidaria' },
+          { id: 2, produto: 'Arroz 2', quantidade: 1, dataDistribuicao: '2026-05-21', entidade: 'Casa Solidaria' },
+          { id: 3, produto: 'Arroz 3', quantidade: 1, dataDistribuicao: '2026-05-22', entidade: 'Casa Solidaria' },
+          { id: 4, produto: 'Arroz 4', quantidade: 1, dataDistribuicao: '2026-05-23', entidade: 'Casa Solidaria' },
+          { id: 5, produto: 'Arroz 5', quantidade: 1, dataDistribuicao: '2026-05-24', entidade: 'Casa Solidaria' },
+          { id: 6, produto: 'Arroz 6', quantidade: 1, dataDistribuicao: '2026-05-25', entidade: 'Casa Solidaria' },
+          { id: 7, produto: 'Arroz 7', quantidade: 1, dataDistribuicao: '2026-05-26', entidade: 'Casa Solidaria' },
+        ],
+      };
+    }
+
+    throw new Error(`Unexpected request: ${url}`);
+  });
+
+  render(<Distribuicoes />);
+
+  expect(await screen.findByText('Arroz 1')).toBeTruthy();
+  expect(screen.queryByText('Arroz 7')).toBeNull();
+
+  fireEvent.click(screen.getByRole('button', { name: /próxima/i }));
+
+  expect(screen.getByText('Arroz 7')).toBeTruthy();
+  expect(screen.queryByText('Arroz 1')).toBeNull();
+});

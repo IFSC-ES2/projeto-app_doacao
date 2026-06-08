@@ -7,6 +7,11 @@
   margin-bottom: 12px;
 }
 
+.estoque-search {
+  min-width: 280px;
+  max-width: 360px;
+}
+
 .page-feedback {
   min-height: 20px;
   font-size: 13px;
