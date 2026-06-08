@@ -24,8 +24,8 @@ export function Register() {
       } else {
         setMensagem("erro " + data.mensagem); 
       }
-    } catch (error) {
-      setMensagem(" Erro de conexão com o servidor.");
+    } catch {
+      setMensagem('Erro de conexão com o servidor.');
     }
   };
 
