@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
+import { Pagination } from '../components/Pagination.jsx';
 
 const API_URL = 'http://localhost:8080';
+const PAGE_SIZE = 6;
 
 export function Entidades() {
   const [form, setForm] = useState({
@@ -11,6 +13,7 @@ export function Entidades() {
     email: '',
   });
   const [items, setItems] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -35,6 +38,14 @@ export function Entidades() {
   useEffect(() => {
     loadEntidades();
   }, [loadEntidades]);
+
+  const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
+
+  useEffect(() => {
+    setCurrentPage((page) => Math.min(page, totalPages));
+  }, [totalPages]);
+
+  const visibleItems = items.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   const handleChange = (field) => (event) => {
     setForm((prev) => ({ ...prev, [field]: event.target.value }));
@@ -122,26 +133,29 @@ export function Entidades() {
         {items.length === 0 ? (
           <p className="app-muted">Nenhuma entidade registrada ainda.</p>
         ) : (
-          <table className="app-table">
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>CNPJ</th>
-                <th>Email</th>
-                <th>Telefone</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((entidade) => (
-                <tr key={entidade.id}>
-                  <td>{entidade.nome}</td>
-                  <td>{entidade.cnpj}</td>
-                  <td>{entidade.email}</td>
-                  <td>{entidade.telefone}</td>
+          <>
+            <table className="app-table">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>CNPJ</th>
+                  <th>Email</th>
+                  <th>Telefone</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {visibleItems.map((entidade) => (
+                  <tr key={entidade.id}>
+                    <td>{entidade.nome}</td>
+                    <td>{entidade.cnpj}</td>
+                    <td>{entidade.email}</td>
+                    <td>{entidade.telefone}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+          </>
         )}
       </section>
     </div>

@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Pagination } from '../components/Pagination.jsx';
 import './css/Distribuicoes.css';
 
 const API_URL = 'http://localhost:8080';
+const PAGE_SIZE = 6;
 
 const initialForm = {
   produtoId: '',
@@ -16,6 +18,7 @@ export function Distribuicoes() {
   const [produtos, setProdutos] = useState([]);
   const [entidades, setEntidades] = useState([]);
   const [items, setItems] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState({ type: '', message: '' });
@@ -65,6 +68,12 @@ export function Distribuicoes() {
     loadDistribuicoes();
   }, [loadOptions, loadDistribuicoes]);
 
+  const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
+
+  useEffect(() => {
+    setCurrentPage((page) => Math.min(page, totalPages));
+  }, [totalPages]);
+
   const produtoLookup = useMemo(() => {
     return new Map(produtos.map((produto) => [String(produto.id), produto.nome]));
   }, [produtos]);
@@ -72,6 +81,11 @@ export function Distribuicoes() {
   const entidadeLookup = useMemo(() => {
     return new Map(entidades.map((entidade) => [String(entidade.id), entidade.nome]));
   }, [entidades]);
+
+  const visibleItems = useMemo(() => {
+    const start = (currentPage - 1) * PAGE_SIZE;
+    return items.slice(start, start + PAGE_SIZE);
+  }, [items, currentPage]);
 
   const handleChange = (field) => (event) => {
     setForm((prev) => ({ ...prev, [field]: event.target.value }));
@@ -103,6 +117,7 @@ export function Distribuicoes() {
 
       setStatus({ type: 'success', message: data.mensagem || 'Distribuição registrada com sucesso' });
       setForm(initialForm);
+      setCurrentPage(1);
       await loadDistribuicoes({ resetStatus: false });
     } catch (err) {
       setStatus({ type: 'error', message: 'Erro de conexao com o servidor' });
@@ -203,39 +218,42 @@ export function Distribuicoes() {
         ) : items.length === 0 ? (
           <p className="app-muted">Nenhuma distribuição registrada ainda.</p>
         ) : (
-          <table className="app-table">
-            <thead>
-              <tr>
-                <th>Produto</th>
-                <th>Entidade</th>
-                <th>Quantidade</th>
-                <th>Data</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((item) => {
-                const produtoNome =
-                  item.produtoNome ||
-                  (typeof item.produto === 'string' ? item.produto : item.produto?.nome) ||
-                  produtoLookup.get(String(item.produtoId)) ||
-                  'Produto';
-                const entidadeNome =
-                  item.entidadeNome ||
-                  (typeof item.entidade === 'string' ? item.entidade : item.entidade?.nome) ||
-                  entidadeLookup.get(String(item.entidadeId)) ||
-                  'Entidade';
-                const dataDistribuicao = item.dataDistribuicao ?? item.data;
-                return (
-                  <tr key={item.id ?? `${produtoNome}-${dataDistribuicao}`}>
-                    <td>{produtoNome}</td>
-                    <td>{entidadeNome}</td>
-                    <td>{item.quantidade}</td>
-                    <td>{dataDistribuicao}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          <>
+            <table className="app-table">
+              <thead>
+                <tr>
+                  <th>Produto</th>
+                  <th>Entidade</th>
+                  <th>Quantidade</th>
+                  <th>Data</th>
+                </tr>
+              </thead>
+              <tbody>
+                {visibleItems.map((item) => {
+                  const produtoNome =
+                    item.produtoNome ||
+                    (typeof item.produto === 'string' ? item.produto : item.produto?.nome) ||
+                    produtoLookup.get(String(item.produtoId)) ||
+                    'Produto';
+                  const entidadeNome =
+                    item.entidadeNome ||
+                    (typeof item.entidade === 'string' ? item.entidade : item.entidade?.nome) ||
+                    entidadeLookup.get(String(item.entidadeId)) ||
+                    'Entidade';
+                  const dataDistribuicao = item.dataDistribuicao ?? item.data;
+                  return (
+                    <tr key={item.id ?? `${produtoNome}-${dataDistribuicao}`}>
+                      <td>{produtoNome}</td>
+                      <td>{entidadeNome}</td>
+                      <td>{item.quantidade}</td>
+                      <td>{dataDistribuicao}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+          </>
         )}
       </section>
     </div>

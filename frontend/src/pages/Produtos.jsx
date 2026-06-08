@@ -1,7 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Pagination } from '../components/Pagination.jsx';
 import './css/Produtos.css';
 
 const API_URL = 'http://localhost:8080';
+const PAGE_SIZE = 6;
 
 const initialForm = {
   nome: '',
@@ -17,6 +19,7 @@ export function Produtos() {
   const [form, setForm] = useState(initialForm);
   const [items, setItems] = useState([]);
   const [entidades, setEntidades] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState({ type: '', message: '' });
@@ -44,6 +47,11 @@ export function Produtos() {
   useEffect(() => {
     loadProdutos();
   }, [loadProdutos]);
+
+  useEffect(() => {
+    const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
+    setCurrentPage((page) => Math.min(page, totalPages));
+  }, [items.length]);
 
   useEffect(() => {
     const loadEntidades = async () => {
@@ -130,6 +138,7 @@ export function Produtos() {
 
       setStatus({ type: 'success', message: data.mensagem || 'Produto cadastrado com sucesso' });
       setForm(initialForm);
+      setCurrentPage(1);
       await loadProdutos({ resetStatus: false });
     } catch (err) {
       setStatus({ type: 'error', message: 'Erro de conexão com o servidor' });
@@ -137,6 +146,12 @@ export function Produtos() {
       setSaving(false);
     }
   };
+
+  const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
+  const visibleItems = useMemo(() => {
+    const start = (currentPage - 1) * PAGE_SIZE;
+    return items.slice(start, start + PAGE_SIZE);
+  }, [items, currentPage]);
 
   return (
     <div className="app-grid">
@@ -238,32 +253,35 @@ export function Produtos() {
         ) : items.length === 0 ? (
           <p className="app-muted">Nenhum produto registrado ainda.</p>
         ) : (
-          <table className="app-table">
-            <thead>
-              <tr>
-                <th>Produto</th>
-                <th>Descrição</th>
-                <th>Unidade</th>
-                <th>Quantidade</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((produto) => {
-                const quantidade =
-                  produto.quantidadeEstoque ?? produto.quantidadeAtual ?? produto.quantidade ?? 0;
-                return (
-                  <tr key={produto.id ?? `${produto.nome}-${produto.unidade}`}>
-                    <td>{produto.nome}</td>
-                    <td>{produto.descricao}</td>
-                    <td>{produto.unidade}</td>
-                    <td>
-                      <span className="app-pill">{quantidade}</span>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          <>
+            <table className="app-table">
+              <thead>
+                <tr>
+                  <th>Produto</th>
+                  <th>Descrição</th>
+                  <th>Unidade</th>
+                  <th>Quantidade</th>
+                </tr>
+              </thead>
+              <tbody>
+                {visibleItems.map((produto) => {
+                  const quantidade =
+                    produto.quantidadeEstoque ?? produto.quantidadeAtual ?? produto.quantidade ?? 0;
+                  return (
+                    <tr key={produto.id ?? `${produto.nome}-${produto.unidade}`}>
+                      <td>{produto.nome}</td>
+                      <td>{produto.descricao}</td>
+                      <td>{produto.unidade}</td>
+                      <td>
+                        <span className="app-pill">{quantidade}</span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+          </>
         )}
       </section>
     </div>
