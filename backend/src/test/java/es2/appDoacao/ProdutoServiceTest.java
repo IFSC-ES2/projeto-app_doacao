@@ -80,6 +80,36 @@ class ProdutoServiceTest {
         Mockito.verify(produtoRepo, Mockito.never()).save(Mockito.any());
     }
 
+    @Test
+    void deveExcluirProdutoQuandoExiste() {
+        ProdutoRepository produtoRepo = Mockito.mock(ProdutoRepository.class);
+        EntradaDoacaoRepository entradaRepo = Mockito.mock(EntradaDoacaoRepository.class);
+        DistribuicaoRepository distribuicaoRepo = Mockito.mock(DistribuicaoRepository.class);
+        ProdutoService service = new ProdutoService(produtoRepo, entradaRepo, distribuicaoRepo);
+
+        Mockito.when(produtoRepo.existsById(1L)).thenReturn(true);
+
+        boolean resultado = service.deletar(1L);
+
+        assertTrue(resultado);
+        Mockito.verify(produtoRepo).deleteById(1L);
+    }
+
+    @Test
+    void naoDeveExcluirProdutoInexistente() {
+        ProdutoRepository produtoRepo = Mockito.mock(ProdutoRepository.class);
+        EntradaDoacaoRepository entradaRepo = Mockito.mock(EntradaDoacaoRepository.class);
+        DistribuicaoRepository distribuicaoRepo = Mockito.mock(DistribuicaoRepository.class);
+        ProdutoService service = new ProdutoService(produtoRepo, entradaRepo, distribuicaoRepo);
+
+        Mockito.when(produtoRepo.existsById(1L)).thenReturn(false);
+
+        boolean resultado = service.deletar(1L);
+
+        assertFalse(resultado);
+        Mockito.verify(produtoRepo, Mockito.never()).deleteById(Mockito.anyLong());
+    }
+
     private Produto criarProdutoValido() {
         Produto produto = new Produto();
         produto.setNome("Arroz");

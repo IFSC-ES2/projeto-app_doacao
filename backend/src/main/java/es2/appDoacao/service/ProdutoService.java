@@ -43,8 +43,13 @@ public class ProdutoService {
         return Optional.empty();
     }
 
-    public void deletar(Long id) {
+    public boolean deletar(Long id) {
+        if (!produtoRepository.existsById(id)) {
+            return false;
+        }
+
         produtoRepository.deleteById(id);
+        return true;
     }
 
     public List<Map<String, Object>> listarEstoque() {
