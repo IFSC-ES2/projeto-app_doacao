@@ -112,8 +112,8 @@ curl -s -X POST http://localhost:8080/login \
 | POST | `/register` | Cadastro de usuário |
 | GET | `/entidades` | Listar entidades |
 | POST | `/entidades` | Cadastrar entidade |
-| GET | `/entradaDoacao` | Listar doações |
-| POST | `/entradaDoacao` | Registrar doação |
+| GET | `/doacoes` | Listar doações |
+| POST | `/doacoes` | Registrar doação |
 | GET | `/produtos` | Listar produtos |
 | POST | `/produtos` | Cadastrar produto |
 | GET | `/distribuicoes` | Listar distribuições |
