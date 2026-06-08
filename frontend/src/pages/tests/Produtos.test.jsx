@@ -199,6 +199,27 @@ it('exclui um produto apos confirmacao no dialogo', async () => {
 
   render(<Produtos />);
 
+  await screen.findByLabelText('Entidade');
+
+  fireEvent.change(screen.getByPlaceholderText('Nome do produto'), {
+    target: { value: 'Arroz' },
+  });
+  fireEvent.change(screen.getByPlaceholderText('Descrição'), {
+    target: { value: 'Pacote 5kg' },
+  });
+  fireEvent.change(screen.getByPlaceholderText('Unidade de medida'), {
+    target: { value: 'kg' },
+  });
+  fireEvent.change(screen.getByLabelText('Entidade'), {
+    target: { value: '1' },
+  });
+  fireEvent.change(screen.getByPlaceholderText('Quantidade inicial'), {
+    target: { value: '10' },
+  });
+
+  fireEvent.click(screen.getByRole('button', { name: /cadastrar produto/i }));
+
+  expect(await screen.findByText('Produto cadastrado com sucesso')).toBeTruthy();
   expect(await screen.findByText('Arroz')).toBeTruthy();
 
   fireEvent.click(screen.getByLabelText('Excluir produto Arroz'));
