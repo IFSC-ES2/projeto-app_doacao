@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { Produtos } from '../Produtos.jsx';
 
@@ -37,6 +37,14 @@ function mockProdutosApi(produtos = [], entidades = []) {
       return Promise.resolve({
         ok: true,
         json: async () => ({ mensagem: 'Doação registrada com sucesso' }),
+      });
+    }
+
+    if (url.includes('/produtos/') && options.method === 'DELETE') {
+      return Promise.resolve({
+        ok: true,
+        status: 204,
+        json: async () => ({}),
       });
     }
 
@@ -139,4 +147,61 @@ it('cadastra produto com entidade selecionada', async () => {
     doador: 'Casa Solidaria',
     observacao: 'Entrada vinculada a entidade Casa Solidaria',
   });
+});
+
+it('exclui um produto apos confirmacao no dialogo', async () => {
+  const produtos = [
+    {
+      id: 1,
+      nome: 'Arroz',
+      descricao: 'Pacote 5kg',
+      unidade: 'kg',
+      quantidadeEstoque: 10,
+    },
+  ];
+
+  global.fetch.mockImplementation((url, options = {}) => {
+    if (url === 'http://localhost:8080/produtos' && (!options.method || options.method === 'GET')) {
+      return Promise.resolve({
+        ok: true,
+        json: async () => produtos,
+      });
+    }
+
+    if (url === 'http://localhost:8080/entidades' && (!options.method || options.method === 'GET')) {
+      return Promise.resolve({
+        ok: true,
+        json: async () => [],
+      });
+    }
+
+    if (url === 'http://localhost:8080/produtos/1' && options.method === 'DELETE') {
+      produtos.splice(0, produtos.length);
+      return Promise.resolve({
+        ok: true,
+        status: 204,
+        json: async () => ({}),
+      });
+    }
+
+    return Promise.resolve({
+      ok: true,
+      json: async () => ({ mensagem: 'Produto cadastrado com sucesso' }),
+    });
+  });
+
+  render(<Produtos />);
+
+  expect(await screen.findByText('Arroz')).toBeTruthy();
+
+  fireEvent.click(screen.getByRole('button', { name: /excluir produto arroz/i }));
+
+  expect(await screen.findByRole('dialog')).toBeTruthy();
+  expect(screen.getByText(/tem certeza que deseja excluir/i)).toBeTruthy();
+
+  const dialog = screen.getByRole('dialog');
+  fireEvent.click(within(dialog).getByRole('button', { name: /^excluir$/i }));
+
+  expect(await screen.findByText('Produto excluído com sucesso')).toBeTruthy();
+  expect(screen.queryByText('Arroz')).toBeNull();
 });

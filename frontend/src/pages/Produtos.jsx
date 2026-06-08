@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { FiTrash2 } from 'react-icons/fi';
 import { Pagination } from '../components/Pagination.jsx';
 import './css/Produtos.css';
 
@@ -22,6 +23,7 @@ export function Produtos() {
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
   const [status, setStatus] = useState({ type: '', message: '' });
 
   const loadProdutos = useCallback(async (options = { resetStatus: true }) => {
@@ -147,11 +149,43 @@ export function Produtos() {
     }
   };
 
+  const handleDelete = async () => {
+    if (!deletingId) {
+      return;
+    }
+
+    try {
+      setStatus({ type: '', message: '' });
+      const response = await fetch(`${API_URL}/produtos/${deletingId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        setStatus({
+          type: 'error',
+          message: data.mensagem || 'Não foi possível excluir o produto',
+        });
+        return;
+      }
+
+      setStatus({ type: 'success', message: 'Produto excluído com sucesso' });
+      setDeletingId(null);
+      await loadProdutos({ resetStatus: false });
+    } catch (err) {
+      setStatus({ type: 'error', message: 'Erro de conexão com o servidor' });
+    }
+  };
+
   const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
   const visibleItems = useMemo(() => {
     const start = (currentPage - 1) * PAGE_SIZE;
     return items.slice(start, start + PAGE_SIZE);
   }, [items, currentPage]);
+
+  const deletingProduct = useMemo(() => {
+    return items.find((produto) => String(produto.id) === String(deletingId)) || null;
+  }, [items, deletingId]);
 
   return (
     <div className="app-grid">
@@ -256,34 +290,83 @@ export function Produtos() {
           <>
             <table className="app-table">
               <thead>
-                <tr>
-                  <th>Produto</th>
-                  <th>Descrição</th>
-                  <th>Unidade</th>
-                  <th>Quantidade</th>
-                </tr>
-              </thead>
-              <tbody>
-                {visibleItems.map((produto) => {
-                  const quantidade =
+              <tr>
+                <th>Produto</th>
+                <th>Descrição</th>
+                <th>Unidade</th>
+                <th>Quantidade</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {visibleItems.map((produto) => {
+                const quantidade =
                     produto.quantidadeEstoque ?? produto.quantidadeAtual ?? produto.quantidade ?? 0;
                   return (
                     <tr key={produto.id ?? `${produto.nome}-${produto.unidade}`}>
                       <td>{produto.nome}</td>
-                      <td>{produto.descricao}</td>
-                      <td>{produto.unidade}</td>
-                      <td>
-                        <span className="app-pill">{quantidade}</span>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
-          </>
+                    <td>{produto.descricao}</td>
+                    <td>{produto.unidade}</td>
+                    <td>
+                      <span className="app-pill">{quantidade}</span>
+                    </td>
+                    <td>
+                      <button
+                        type="button"
+                        className="product-delete-button"
+                        onClick={() => setDeletingId(produto.id)}
+                        aria-label={`Excluir produto ${produto.nome}`}
+                      >
+                        <FiTrash2 aria-hidden />
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+        </>
         )}
       </section>
+
+      {deletingProduct && (
+        <div className="product-modal-overlay" role="presentation" onClick={() => setDeletingId(null)}>
+          <div
+            className="product-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="delete-product-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <h3 id="delete-product-title">Excluir produto</h3>
+            <p>
+              Tem certeza que deseja excluir <strong>{deletingProduct.nome}</strong>?
+            </p>
+            <p className="app-muted">
+              Essa ação remove o produto da lista cadastrada e não pode ser desfeita.
+            </p>
+            <div className="product-modal-actions">
+              <button
+                type="button"
+                className="product-modal-cancel"
+                onClick={() => setDeletingId(null)}
+                disabled={saving}
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                className="product-modal-confirm"
+                onClick={handleDelete}
+                disabled={saving}
+              >
+                Excluir
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
