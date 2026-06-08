@@ -10,15 +10,27 @@
 | 5       | Isaac Kozuchovski | 2f9c875 | 04/05/26 | 24/05/26 | 7,7  | 10   |
 | 5       | Isadora Eidt      | 2f9c875 | 04/05/26 | 24/05/26 | 7,6  | 10   |
 | 5       | Lucas Gabriel     | 2f9c875 | 04/05/26 | 24/05/26 | 7,5  | 10   |
+| 6       | Haydee Murara     | 13fdc75 | 15/05/26 | 27/05/26 | 4,8  | 10   |
+| 6       | Isaac Kozuchovski | 13fdc75 | 15/05/26 | 27/05/26 | 5,0  | 10   |
+| 6       | Isadora Eidt      | 13fdc75 | 15/05/26 | 27/05/26 | 3,5  | 10   |
+| 6       | Lucas Gabriel     | 13fdc75 | 15/05/26 | 27/05/26 | 4,5  | 10   |
+| 7       | Haydee Murara     | 50aa521 | 28/05/26 | 03/06/26 | 7,4  | 10   |
+| 7       | Isaac Kozuchovski | 50aa521 | 28/05/26 | 03/06/26 | 7,6  | 10   |
+| 7       | Isadora Eidt      | 50aa521 | 28/05/26 | 03/06/26 | 7,0  | 10   |
+| 7       | Lucas Gabriel     | 50aa521 | 28/05/26 | 03/06/26 | 0,0  | 10   |
+| 8       |                   |         |          |          |      | 10   |
+| 9       |                   |         |          |          |      | 10   |
+| 10      |                   |         |          |          |      | 10   |
+| 11/12   |                   |         |          |          |      | 30   |
 
 ## Nota parcial
 
 | aluno             | nota parcial |
 | ----------------- | ------------ |
-| Haydee Murara     | 8,4          |
-| Isaac Kozuchovski | 8,5          |
-| Isadora Eidt      | 8,5          |
-| Lucas Gabriel     | 8,4          |
+| Haydee Murara     | 7,2          |
+| Isaac Kozuchovski | 7,4          |
+| Isadora Eidt      | 6,9          |
+| Lucas Gabriel     | 5,3          |
 
 ## Comentários
 
@@ -26,92 +38,129 @@
 
 1. Equipe formada: atendido.
 2. Tema definido: atendido.
-3. MVP: atendido.
-4. Governança mínima: atendido.
+3. MVP inicial: atendido.
+4. Repositório, README e governança mínima: atendido.
 
 ### Entrega 2
 
-1. Visão do produto: atendido
-2. Definição do MVP: atendido
-3. Backlog inicial com critérios de aceitação: parcial
-   - Há sete funcionalidades definidas no MVP, mas apenas quatro delas estão no backlog/board.
-   - Não foram definidas prioridades para as funcionalidades.
-   - Não foi utilizado o formato: Como [`tipo de usuário`], quero [`funcionalidade`], para [`benefício`].
-4. Definition of Done (DoD): atendido.
+1. Visão do produto: atendido.
+2. Definição do MVP: atendido.
+3. Backlog inicial com critérios de aceitação: parcial.
+   - Há sete funcionalidades definidas no MVP, mas apenas quatro delas estavam no backlog/board.
+   - Não foram definidas prioridades para todas as funcionalidades.
+   - As histórias não seguiram de forma consistente o formato: Como [`tipo de usuário`], quero [`funcionalidade`], para [`benefício`].
+4. Definition of Done: atendido.
 5. ADRs iniciais: atendido.
-6. Atualização do README: atendido.
-
-- A equipe apenas definiu algumas regras de proteção da ramificação principal que ainda não estão em vigor.
+6. README atualizado: atendido.
+7. Governança: parcial.
+   - A equipe definiu regras de proteção da branch principal, mas elas ainda não estavam evidenciadas como ativas.
 
 ### Entrega 3
 
-1. Planejamento inicial e baseline: parcial
-   - Informar a data de registro do baseline
-2. Registro da abordagem de estimativa: atendido
-3. Capacidade planejada da equipe: atendido
-4. Definição das métricas que serão acompanhadas: atendido
-5. Ficha de cada métrica: parcial
-   - Separar as fichas de cada métrica em arquivos diferentes
-      - Em cada uma adicionar data do acompanhamento e valor coletado
-   - Utilzar nomes mais consagrados para melhor reconhecimento das métricas:
-      - #1 - Percentual de Conclusão do MVP ou Taxa de Conclusão de Funcionalidades do MVP (_Feature Completion Rate_)
-      - #2 - Contagem de Defeitos (_Defect Count_)
-      - #3 - Taxa de Aprovação nos Testes (_Test Pass Rate_)
-      - #4 - Velocidade (_Velocity_)
-      - #5 - Taxa de Conclusão da Sprint (_Sprint Completion Rate_)
-      - #6 - Lead Time Médio (_Average Lead Time_)
-      - #7 - Capacidade da Equipe (_Team Capacity_)
-      - #8 - Variação Planejado vs. Realizado (_Planned vs. Completed Variance_)
-      - #9 - Taxa de Tarefas Atrasadas (_Overdue Task Rate_)
+1. Planejamento inicial e baseline: parcial.
+   - O baseline foi registrado, mas faltou informar claramente a data do registro.
+2. Abordagem de estimativa: atendido.
+3. Capacidade planejada da equipe: atendido.
+4. Definição das métricas acompanhadas: atendido.
+5. Fichas das métricas: parcial.
+   - As fichas deveriam estar separadas por métrica, com data do acompanhamento e valor coletado.
+   - A nomenclatura das métricas poderia usar nomes mais consagrados, como `Feature Completion Rate`, `Defect Count`, `Test Pass Rate`, `Velocity`, `Sprint Completion Rate`, `Average Lead Time`, `Team Capacity`, `Planned vs. Completed Variance` e `Overdue Task Rate`.
 
 ### Entrega 4
 
-1. Registro inicial de riscos do projeto: atendido
-2. Análise e priorização dos riscos: atendido
-3. Plano de resposta aos riscos: atendido
-4. Consolidação do fluxo de trabalho no repositório: não atendido
-   - A equipe apenas definiu algumas regras de proteção da ramificação principal que ainda não estão em vigor, apesar da comunicação na entrega 1.
-   - As definições em `fluxo-de-trabalho.md` não foram implementadas no repositório.
-5. Definição inicial de critérios de qualidade do projeto: atendido
-6. Relação entre riscos e qualidade: atendido
-7. Definição preliminar de avaliação da qualidade: atendido
-8. Atualização da documentação do projeto: atendido
+1. Registro inicial de riscos: atendido.
+2. Análise e priorização dos riscos: atendido.
+3. Plano de resposta aos riscos: atendido.
+4. Consolidação do fluxo de trabalho no repositório: não atendido.
+   - As regras de proteção da branch principal e o fluxo descrito em `fluxo-de-trabalho.md` ainda não estavam implementados/evidenciados no repositório.
+5. Critérios de qualidade: atendido.
+6. Relação entre riscos e qualidade: atendido.
+7. Definição preliminar de avaliação da qualidade: atendido.
+8. Documentação do projeto: atendido.
 
 ### Entrega 5
 
-1. Primeiro incremento funcional do sistema: parcial.
-   - Foi implementado um vertical slice de autenticação de usuários, com telas de login/cadastro, endpoints `POST /login` e `POST /register`, lógica de aplicação e persistência de usuários.
-   - A escolha é coerente com o MVP e com a priorização registrada no baseline, pois autenticação aparece como item de alta prioridade e maior esforço estimado.
-   - O incremento atravessa frontend, backend e persistência em H2, mas não fica plenamente demonstrável pelos comandos documentados porque `./mvnw spring-boot:run` falha na tag `v0.1.0` pela ausência de `backend/.mvn/wrapper/maven-wrapper.properties`.
-   - A autenticação armazena e compara senha em texto puro em `AuthService`, sem hash, o que é uma fragilidade técnica relevante mesmo para um MVP.
-2. Testes de unidade automatizados: parcial.
-   - Há testes versionados para `AuthService`, cobrindo cadastro, login, duplicidade e cenários de falha.
-   - O comando documentado `./mvnw test` falha na tag avaliada pela ausência dos arquivos do Maven Wrapper.
-   - Maven não está instalado no ambiente para executar `mvn test` como alternativa; porém o problema principal da entrega é que o próprio wrapper versionado está incompleto, apesar de `mvnw` estar presente.
-   - Não há testes de frontend versionados na Sprint 1.
-3. Escopo da Sprint 1 explicitado e justificado: atendido.
-   - O documento `sprint-1.md` informa issues planejadas, concluídas, justificativa do vertical slice e incremento entregue.
-   - O recorte da autenticação é coerente com a priorização registrada no baseline.
-4. Backlog e board atualizados: parcial.
-   - O documento informa o board e referencia as issues `#17`, `#36`, `#38`, `#40` e `#42`.
-   - As issues possuem critérios de aceitação no GitHub, embora alguns itens estejam simples ou não marcados individualmente como concluídos.
-   - A vinculação entre issues, commits e PRs existe em parte pelos títulos/branches, mas não está consolidada com links para cada PR/commit no relatório da sprint.
-5. Fluxo de trabalho evidenciado no repositório: parcial.
-   - Houve desenvolvimento por branches e PRs relevantes: `#37`, `#39`, `#41`, `#43` e `#44`.
-   - Os PRs verificados não têm aprovação registrada no GitHub, apesar de `sprint-1.md` afirmar revisão e aprovação conforme o fluxo definido.
-6. Registro das contribuições individuais: atendido.
-   - `sprint-1.md` registra objetivamente as contribuições de Isadora, Haydee, Isaac e Lucas.
-   - As contribuições descritas são confirmadas, em linhas gerais, pelos commits e PRs.
-   - Contribuições individuais:
-      - Haydee: contribuiu com persistência de usuários, `UsuarioRepository`, configuração inicial de banco H2/PostgreSQL e estrutura do backend. A participação é relevante, mas limitada pelo papel de DevOps/Infra e pelo problema de reprodutibilidade do backend na entrega.
-      - Isaac: contribuiu com a lógica central de autenticação (`AuthService`), API REST (`AuthController`) e atualização do README. Centralidade no slice, mas limitada por a documentação de execução não funcionar e pela fragilidade de senha em texto puro.
-      - Isadora: contribuiu com as telas de login/cadastro, integração HTTP com a API, documentação final da Sprint 1 e release. A contribuição é relevante, mas limitada por falha de lint no frontend e por as aprovações/revisões declaradas não aparecerem nos PRs verificados.
-      - Lucas: contribuiu com testes unitários de autenticação e verificação da DoD. A contribuição é coerente com o papel de qualidade, mas limitada porque a suíte não é executável pelo comando documentado na tag.
-7. Documentação atualizada: parcial.
-   - O README contém instruções de execução da aplicação e dos testes.
-   - As instruções do backend e dos testes não funcionam na tag `v0.1.0` por ausência dos arquivos do Maven Wrapper.
-   - O registro do que já funciona no MVP aparece em `sprint-1.md`, mas o README não resume claramente o estado entregue na Sprint 1.
-8. Release do marco: atendido com atraso.
-   - A tag `v0.1.0` existe no commit `2f9c875`.
-   - A release `Sprint 1` foi publicada no GitHub em 04/05/2026, após o prazo previsto de 30/04/2026.
+1. Primeiro incremento funcional: parcial.
+   - Foi implementado um vertical slice de autenticação, com telas de login/cadastro, endpoints `POST /login` e `POST /register`, lógica de aplicação e persistência em H2.
+   - O incremento era coerente com o MVP, mas a execução documentada com `./mvnw spring-boot:run` falhava pela ausência de arquivos do Maven Wrapper.
+   - A autenticação armazenava e comparava senha em texto puro em `AuthService`, fragilidade técnica relevante mesmo para MVP.
+2. Testes automatizados: parcial.
+   - Havia testes de `AuthService`, mas o comando documentado `./mvnw test` falhava pela ausência do wrapper completo.
+   - Não havia testes de frontend.
+3. Escopo da sprint: atendido.
+4. Backlog e board: parcial.
+   - As issues tinham critérios de aceitação, mas a rastreabilidade entre issue, PR, revisão e commit ainda era incompleta.
+5. Fluxo de trabalho: parcial.
+   - Houve uso de branches e PRs, mas os PRs verificados não tinham aprovação registrada.
+6. Registro individual: atendido.
+   - Haydee: persistência de usuários, `UsuarioRepository`, banco H2/PostgreSQL e estrutura do backend; nota limitada pelo problema de reprodutibilidade.
+   - Isaac: lógica central de autenticação, API REST e README; nota limitada pela execução documentada e senha em texto puro.
+   - Isadora: telas de login/cadastro, integração HTTP, documentação e release; nota limitada por falha de lint e revisões não evidenciadas.
+   - Lucas: testes unitários de autenticação e verificação da DoD; nota limitada porque a suíte não era executável pelo comando documentado na tag.
+7. Release: atendido com atraso.
+   - A tag `v0.1.0` existia no commit `2f9c875`, com release publicada em 04/05/2026.
 
+### Entrega 6
+
+1. Incremento funcional do MVP: parcial.
+   - As funcionalidades declaradas eram cadastro de entidades e registro de entrada de doações.
+   - Cadastro/listagem de entidades estava implementado no backend, mas não era utilizável no frontend da tag avaliada.
+   - Registro/listagem de doações não estava funcionalmente entregue: não havia controller/endpoints de doações nem telas finais de doações no frontend.
+   - A documentação e a release afirmavam telas e endpoints que não existiam no estado final.
+2. Testes automatizados: parcial.
+   - Havia testes para entidades e parte das regras de entrada de doações, mas não havia `EntradaDoacaoControllerIntegrationTest` nem testes de frontend.
+3. Integração contínua mínima: parcial.
+   - O workflow rodava apenas para PRs contra `dev`; PRs relevantes contra `main` não tiveram checks.
+   - O pipeline não executava build/lint/testes do frontend.
+   - `npm run lint` falhava na tag por variável não usada em `frontend/src/pages/Cadastro.jsx`.
+4. Pull requests com revisão: não atendido.
+   - A maioria dos PRs verificados não tinha aprovação registrada; alguns checklists deixavam revisão desmarcada.
+5. Padrões OO: parcial.
+   - Repository Pattern e Service Layer foram documentados e aplicados, mas de forma básica e sem ADR própria no diretório `adrs/`.
+6. Métricas: não atendido.
+   - Seis das nove métricas ainda tinham valores em branco e faltava análise planejado versus executado.
+7. Riscos: atendido.
+8. Release: parcial.
+   - A release `v0.2.0` existia, mas descrevia funcionalidades de frontend e endpoints de doações que não estavam presentes.
+9. Registro individual: parcial.
+   - Haydee: CI, documentação da sprint, riscos e release; limitada por CI incompleto e documentação divergente.
+   - Isaac: backend e documentação de padrões; contribuição relevante, mas limitada por ausência de controller de doações e documentação superestimada.
+   - Isadora: telas que foram removidas/revertidas antes da tag `v0.2.0`; no estado avaliado o frontend não entregava as funcionalidades centrais.
+   - Lucas: testes e métricas; contribuição relevante, mas parte dos testes foi revertida e as métricas permaneceram incompletas.
+
+### Entrega 7
+
+1. Incremento funcional da Sprint 3: parcial.
+   - Funcionalidades declaradas para entrega na Sprint 3:
+     - #10 — Cadastro de Produtos
+     - #19 — Registro de Distribuições
+     - #13 — Consulta de Estoque
+   - Foram entregues backend e frontend para produtos, distribuições e consulta de estoque.
+   - Existem endpoints `GET/POST /produtos`, `GET/POST /distribuicoes` e `GET /estoque`.
+   - A listagem/cadastro de doações declarada não está completa: o frontend chama `GET /doacoes` e `POST /doacoes`, mas não existe controller/endpoints `/doacoes` no backend.
+   - O cadastro de produto no frontend tenta registrar uma doação inicial em `POST /doacoes`; portanto o fluxo de produto pode criar o produto e depois falhar ao registrar a doação, deixando comportamento inconsistente para o usuário.
+   - A consulta de estoque mistura `Produto.quantidadeEstoque`, entradas de `EntradaDoacaoRepository` e distribuições; como não há endpoint para entradas/doações, o saldo calculado pode não refletir corretamente o fluxo disponível pela interface.
+   - A issue `#19` marca endpoint de listagem de doações como concluído, mas esse endpoint não existe no backend.
+   - Os PRs `#75` e `#77` tiveram checks verdes, mas não tinham aprovação registrada em `latestReviews`.
+2. Documentação de arquitetura: atendido.
+3. ADRs consolidados: parcial.
+   - A justificativa não aparece como seção explícita e a revisão dos ADRs existentes é pouco substancial, mas há evidência suficiente de consolidação básica.
+4. Atualização das métricas: parcial.
+   - As nove métricas foram separadas em arquivos e receberam valores coletados em 28/05/2026.
+   - Falta comparação consistente com os valores anteriores e análise planejado versus executado; algumas seções ainda estão intituladas como `Análise da Sprint 2`.
+   - Há valores pouco críveis ou mal explicados, como `Percentual de Conclusão do MVP` de 100% apesar do endpoint de doações ausente e `Capacidade da Equipe` de 3 horas.
+   - A interpretação para a métrica 3 (`Taxa de Aprovação nos Testes`) deve ser "Se chegar perto de 100%, quer dizer que quase tudo que foi **testado** está funcionando."
+   - A definição para a métrica 4 (`Velocidade`) deve ser "Soma dos story points das tarefas concluídas **na sprint**."
+5. Testes automatizados integrados ao pipeline: parcial.
+   - Há testes de unidade e integração no backend para produtos/distribuições e testes de componentes no frontend.
+   - A cobertura não detecta a ausência real dos endpoints `/doacoes`, pois os testes de frontend usam mocks de `fetch` e não validam contrato com o backend.
+6. Integração contínua mínima: atendido.
+   - O CI não executa `npm run lint`; por isso os problemas estáticos do frontend não bloqueiam PRs.
+7. Release/tag do marco: atendido.
+   - A tag `v0.3.0` existe e a release `Sprint 3` descreve incremento, testes, CI e documentação.
+   - A descrição da release superestima a entrega ao afirmar listagem de doações integrada, pois o backend não expõe `/doacoes`.
+8. Registro de contribuição individual: parcial.
+   - Haydee: contribuição relevante em CI, configuração de testes frontend e testes backend de produto/distribuição. Nota limitada porque PRs próprios sem aprovação registrada reduzem a evidência de revisão e os testes não capturam a quebra de contrato `/doacoes`.
+   - Isaac: principal contribuição em backend de produto/distribuição, correção de estoque, documentação C4/ADRs, métricas, README, sprint e release. Nota limitada pela ausência dos endpoints de doações, inconsistência funcional do estoque/doações e métricas frágeis.
+   - Isadora: contribuição relevante em frontend, roteamento e testes de componentes. Nota limitada porque parte importante do frontend depende de endpoints inexistentes, o lint falha com muitos erros e os testes usam mocks que não evidenciam integração real com a API.
+   - Lucas: não há commits de Lucas no intervalo `v0.2.0..v0.3.0`, ele não aparece no registro de contribuições de `docs/entregas/sprint-3.md` e não foram encontradas evidências de PRs, reviews, testes ou documentação atribuídos a ele nesta entrega.
