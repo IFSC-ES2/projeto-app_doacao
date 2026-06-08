@@ -349,8 +349,9 @@
 }
 
 .app-feedback {
-  min-height: 20px;
+  min-height: 1.5rem;
   font-size: 13px;
+  line-height: 1.35;
   color: #fca5a5;
 }
 

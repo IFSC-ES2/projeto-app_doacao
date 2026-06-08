@@ -23,6 +23,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="estoque" element={<Estoque />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
+        <Route path="/cadastro" element={<App />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

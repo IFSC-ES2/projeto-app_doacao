@@ -1,8 +1,9 @@
 import { useMemo, useState } from 'react';
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { NavLink, Outlet, Navigate, useLocation } from 'react-router-dom';
 import { FiHome, FiUsers, FiInbox, FiBox, FiShare2, FiArchive } from 'react-icons/fi';
 import './App.css';
 import { Login } from './pages/Login.jsx';
+import { Register } from './pages/Cadastro.jsx';
 
 const NAV_ITEMS = [
   {
@@ -79,13 +80,21 @@ export function App() {
     return HEADER_COPY[normalized] || HEADER_COPY['/'];
   }, [location.pathname]);
 
+  const isCadastroRoute = location.pathname === '/cadastro';
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     setToken(null);
   };
 
   if (!token) {
-    return <Login onSuccess={() => setToken(localStorage.getItem('token'))} />;
+    return isCadastroRoute
+      ? <Register />
+      : <Login onSuccess={() => setToken(localStorage.getItem('token'))} />;
+  }
+
+  if (isCadastroRoute) {
+    return <Navigate to="/" replace />;
   }
 
   return (
