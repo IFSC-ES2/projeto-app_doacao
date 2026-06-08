@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 import { useCallback, useEffect, useState } from 'react';
 import { Pagination } from '../components/Pagination.jsx';
+=======
+import { useEffect, useState } from 'react';
+>>>>>>> 7cf92ea (fix: ajustando arquivos para que passem no lint)
 
 const API_URL = 'http://localhost:8080';
 const PAGE_SIZE = 6;
@@ -17,7 +21,7 @@ export function Entidades() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const loadEntidades = useCallback(async () => {
+  const loadEntidades = async () => {
     setLoading(true);
     setError('');
     try {
@@ -28,16 +32,48 @@ export function Entidades() {
         return;
       }
       setItems(Array.isArray(data) ? data : []);
-    } catch (err) {
+    } catch {
       setError('Erro de conexão com o servidor');
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
   useEffect(() => {
-    loadEntidades();
-  }, [loadEntidades]);
+    let cancelled = false;
+
+    const loadInitialEntidades = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        const response = await fetch(`${API_URL}/entidades`);
+        const data = await response.json();
+        if (!response.ok) {
+          if (!cancelled) {
+            setError(data.mensagem || 'Não foi possível carregar as entidades');
+          }
+          return;
+        }
+        if (!cancelled) {
+          setItems(Array.isArray(data) ? data : []);
+        }
+      } catch {
+        if (!cancelled) {
+          setError('Erro de conexão com o servidor');
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    void loadInitialEntidades();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
 
@@ -70,7 +106,7 @@ export function Entidades() {
 
       setForm({ nome: '', cnpj: '', endereco: '', telefone: '', email: '' });
       await loadEntidades();
-    } catch (err) {
+    } catch {
       setError('Erro de conexão com o servidor');
     }
   };

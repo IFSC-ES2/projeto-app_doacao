@@ -24,7 +24,7 @@ export function Estoque() {
           return;
         }
         setItems(Array.isArray(data) ? data : []);
-      } catch (err) {
+      } catch {
         setStatus({ type: 'error', message: 'Erro de conexão com o servidor' });
       } finally {
         setLoading(false);
