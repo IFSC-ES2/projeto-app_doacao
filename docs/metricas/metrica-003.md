@@ -32,9 +32,9 @@ Houve aumento da estabilidade do sistema em relação à Sprint 1, com testes co
 **Valor anterior (Sprint 3):** 100%  
 **Valor atual (Sprint 4):** 100%
 
-**O que foi planejado:** Manter 100% dos testes passando após a refatoração da autenticação para BCrypt e a adição de testes para o fluxo de doações.
+**O que foi planejado:** Manter 100% dos testes passando após a refatoração da autenticação para BCrypt e a adição de testes para o fluxo de doações. No final da sprint, a partir do feedback do professor, foi identificada a ausência de teste de integração para o contrato HTTP de /doacoes e o teste foi adicionado como melhoria não prevista nas issues inicias da sprint.
 
-**O que foi executado:** Os testes de autenticação foram atualizados para o novo fluxo com armazenamento de senha via BCryptPasswordEncoder (AuthServiceTest). Foram criados testes de controller e service para o fluxo de doações (EntradaDoacaoControllerTest e EntradaDoacaoServiceTest). No frontend, o teste Doacoes.test.jsx foi estabilizado junto com os demais testes de componente.
+**O que foi executado:** Os testes de autenticação foram atualizados para o novo fluxo com armazenamento de senha via BCryptPasswordEncoder (AuthServiceTest). Foram criados testes de controller e service para o fluxo de doações (EntradaDoacaoControllerTest e EntradaDoacaoServiceTest), além de teste de integração via HTTP para cobrir o contrato dos endpoints GET /doacoes e POST /doacoes (EntradaDoacaoControllerIntegrationTest). No frontend, o teste Doacoes.test.jsx foi estabilizado junto com os demais testes de componente.
 
 **O que influenciou o resultado:** A refatoração para BCrypt exigiu reescrita dos testes de autenticação, já que a comparação de senha mudou de texto puro para hash. O CI impediu merges enquanto algum teste estivesse falhando, garantindo que a integração só ocorresse com todos os testes passando.
 
