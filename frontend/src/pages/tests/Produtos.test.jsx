@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react';
-import { afterEach, beforeEach, it, vi } from 'vitest';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { Produtos } from '../Produtos.jsx';
 
 beforeEach(() => {
@@ -10,65 +10,133 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-it('renderiza os campos do formulario', async () => {
-  global.fetch.mockImplementation((url) => {
-    if (url.includes('/entidades')) {
+function mockProdutosApi(produtos = [], entidades = []) {
+  global.fetch.mockImplementation((url, options = {}) => {
+    if (url.includes('/produtos') && (!options.method || options.method === 'GET')) {
       return Promise.resolve({
         ok: true,
-        json: async () => [{ id: 1, nome: 'Casa Solidaria' }],
+        json: async () => produtos,
       });
     }
-    if (url.includes('/produtos')) {
+
+    if (url.includes('/entidades') && (!options.method || options.method === 'GET')) {
       return Promise.resolve({
         ok: true,
-        json: async () => [],
+        json: async () => entidades,
       });
     }
+
+    if (url.includes('/produtos') && options.method === 'POST') {
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({ mensagem: 'Produto cadastrado com sucesso' }),
+      });
+    }
+
+    if (url.includes('/doacoes') && options.method === 'POST') {
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({ mensagem: 'Doação registrada com sucesso' }),
+      });
+    }
+
     return Promise.resolve({
       ok: true,
       json: async () => [],
     });
   });
+}
+
+it('renderiza o formulario com os dois caminhos de doador', async () => {
+  mockProdutosApi();
 
   render(<Produtos />);
 
   expect(screen.getByPlaceholderText('Nome do produto')).toBeTruthy();
   expect(screen.getByPlaceholderText('Descrição')).toBeTruthy();
   expect(screen.getByPlaceholderText('Unidade de medida')).toBeTruthy();
-  expect(await screen.findByLabelText('Entidade')).toBeTruthy();
+  expect(screen.getByPlaceholderText('Nome do doador')).toBeTruthy();
   expect(screen.getByPlaceholderText('Quantidade inicial')).toBeTruthy();
+
+  fireEvent.click(screen.getByRole('button', { name: /entidade/i }));
+
+  expect(await screen.findByLabelText('Entidade')).toBeTruthy();
 });
 
-it('exibe lista de produtos apos carregamento', async () => {
-  global.fetch.mockImplementation((url) => {
-    if (url.includes('/entidades')) {
-      return Promise.resolve({
-        ok: true,
-        json: async () => [{ id: 1, nome: 'Casa Solidaria' }],
-      });
-    }
-    if (url.includes('/produtos')) {
-      return Promise.resolve({
-        ok: true,
-        json: async () => [
-          {
-            id: 1,
-            nome: 'Arroz',
-            descricao: 'Pacote 5kg',
-            unidade: 'kg',
-            quantidadeEstoque: 10,
-          },
-        ],
-      });
-    }
-    return Promise.resolve({
-      ok: true,
-      json: async () => [],
-    });
-  });
+it('cadastra produto com doador avulso', async () => {
+  mockProdutosApi([], [{ id: 1, nome: 'Casa Solidaria' }]);
 
   render(<Produtos />);
 
-  expect(await screen.findByText('Arroz')).toBeTruthy();
-  expect(screen.getByText('Pacote 5kg')).toBeTruthy();
+  fireEvent.change(screen.getByPlaceholderText('Nome do produto'), {
+    target: { value: 'Arroz' },
+  });
+  fireEvent.change(screen.getByPlaceholderText('Descrição'), {
+    target: { value: 'Pacote 5kg' },
+  });
+  fireEvent.change(screen.getByPlaceholderText('Unidade de medida'), {
+    target: { value: 'kg' },
+  });
+  fireEvent.change(screen.getByPlaceholderText('Nome do doador'), {
+    target: { value: 'Joao Silva' },
+  });
+  fireEvent.change(screen.getByPlaceholderText('Quantidade inicial'), {
+    target: { value: '10' },
+  });
+
+  fireEvent.click(screen.getByRole('button', { name: /cadastrar produto/i }));
+
+  expect(await screen.findByText('Produto cadastrado com sucesso')).toBeTruthy();
+
+  const doacaoPost = fetch.mock.calls.find(
+    ([url, options]) => url === 'http://localhost:8080/doacoes' && options?.method === 'POST'
+  );
+
+  expect(JSON.parse(doacaoPost[1].body)).toMatchObject({
+    produto: 'Arroz',
+    quantidade: 10,
+    doador: 'Joao Silva',
+    observacao: 'Entrada registrada com doador avulso Joao Silva',
+  });
+});
+
+it('cadastra produto com entidade selecionada', async () => {
+  mockProdutosApi([], [{ id: 1, nome: 'Casa Solidaria' }]);
+
+  render(<Produtos />);
+
+  fireEvent.click(screen.getByRole('button', { name: /entidade/i }));
+
+  expect(await screen.findByText('Casa Solidaria')).toBeTruthy();
+
+  fireEvent.change(screen.getByPlaceholderText('Nome do produto'), {
+    target: { value: 'Feijao' },
+  });
+  fireEvent.change(screen.getByPlaceholderText('Descrição'), {
+    target: { value: 'Pacote 1kg' },
+  });
+  fireEvent.change(screen.getByPlaceholderText('Unidade de medida'), {
+    target: { value: 'kg' },
+  });
+  fireEvent.change(screen.getByLabelText('Entidade'), {
+    target: { value: '1' },
+  });
+  fireEvent.change(screen.getByPlaceholderText('Quantidade inicial'), {
+    target: { value: '5' },
+  });
+
+  fireEvent.click(screen.getByRole('button', { name: /cadastrar produto/i }));
+
+  expect(await screen.findByText('Produto cadastrado com sucesso')).toBeTruthy();
+
+  const doacaoPost = fetch.mock.calls.find(
+    ([url, options]) => url === 'http://localhost:8080/doacoes' && options?.method === 'POST'
+  );
+
+  expect(JSON.parse(doacaoPost[1].body)).toMatchObject({
+    produto: 'Feijao',
+    quantidade: 5,
+    doador: 'Casa Solidaria',
+    observacao: 'Entrada vinculada a entidade Casa Solidaria',
+  });
 });

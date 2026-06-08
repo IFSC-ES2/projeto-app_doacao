@@ -8,6 +8,8 @@ const initialForm = {
   descricao: '',
   unidade: '',
   quantidadeEstoque: '',
+  doadorTipo: 'avulso',
+  doador: '',
   entidadeId: '',
 };
 
@@ -69,6 +71,22 @@ export function Produtos() {
     setStatus({ type: '', message: '' });
 
     try {
+      const doadorNome =
+        form.doadorTipo === 'entidade'
+          ? entidades.find((entidade) => String(entidade.id) === String(form.entidadeId))?.nome || ''
+          : form.doador.trim();
+
+      if (!doadorNome) {
+        setStatus({
+          type: 'error',
+          message:
+            form.doadorTipo === 'entidade'
+              ? 'Selecione uma entidade válida'
+              : 'Informe o nome do doador',
+        });
+        return;
+      }
+
       const response = await fetch(`${API_URL}/produtos`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -86,15 +104,6 @@ export function Produtos() {
         return;
       }
 
-      const entidadeSelecionada = entidades.find(
-        (entidade) => String(entidade.id) === String(form.entidadeId)
-      );
-
-      if (!entidadeSelecionada) {
-        setStatus({ type: 'error', message: 'Selecione uma entidade válida' });
-        return;
-      }
-
       const doacaoResponse = await fetch(`${API_URL}/doacoes`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -102,8 +111,11 @@ export function Produtos() {
           produto: form.nome,
           quantidade: Number(form.quantidadeEstoque),
           dataEntrada: new Date().toISOString().slice(0, 10),
-          doador: entidadeSelecionada.nome,
-          observacao: `Entrada vinculada a entidade ${entidadeSelecionada.nome}`,
+          doador: doadorNome,
+          observacao:
+            form.doadorTipo === 'entidade'
+              ? `Entrada vinculada a entidade ${doadorNome}`
+              : `Entrada registrada com doador avulso ${doadorNome}`,
         }),
       });
 
@@ -154,22 +166,48 @@ export function Produtos() {
             onChange={handleChange('descricao')}
             required
           />
-          <label className="page-field">
-            Entidade
-            <select
-              className="app-input"
-              value={form.entidadeId}
-              onChange={handleChange('entidadeId')}
-              required
+          <div className="page-toggle-group" role="group" aria-label="Tipo de doador">
+            <button
+              type="button"
+              className={`page-toggle ${form.doadorTipo === 'avulso' ? 'active' : ''}`}
+              onClick={() => setForm((prev) => ({ ...prev, doadorTipo: 'avulso', entidadeId: '' }))}
             >
-              <option value="">Selecione uma entidade</option>
-              {entidades.map((entidade) => (
-                <option key={entidade.id} value={entidade.id}>
-                  {entidade.nome}
-                </option>
-              ))}
-            </select>
-          </label>
+              Doador avulso
+            </button>
+            <button
+              type="button"
+              className={`page-toggle ${form.doadorTipo === 'entidade' ? 'active' : ''}`}
+              onClick={() => setForm((prev) => ({ ...prev, doadorTipo: 'entidade', doador: '' }))}
+            >
+              Entidade
+            </button>
+          </div>
+          {form.doadorTipo === 'avulso' ? (
+            <input
+              className="app-input"
+              placeholder="Nome do doador"
+              value={form.doador}
+              onChange={handleChange('doador')}
+              required
+            />
+          ) : (
+            <label className="page-field">
+              Entidade
+              <select
+                className="app-input"
+                value={form.entidadeId}
+                onChange={handleChange('entidadeId')}
+                required
+              >
+                <option value="">Selecione uma entidade</option>
+                {entidades.map((entidade) => (
+                  <option key={entidade.id} value={entidade.id}>
+                    {entidade.nome}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
           <input
             className="app-input"
             type="number"
