@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import './css/Login.css';
 
-const API_URL = 'http://localhost:8080';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
 function getAuthErrorMessage(response, data, mode) {
   const rawMessage = String(data?.mensagem || data?.message || '').trim();

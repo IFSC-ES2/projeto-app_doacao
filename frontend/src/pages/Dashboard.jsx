@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { FiBox, FiHeart, FiUsers, FiStar } from 'react-icons/fi';
 
-const API_URL = 'http://localhost:8080';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
 export function Dashboard() {
   const [entidades, setEntidades] = useState([]);

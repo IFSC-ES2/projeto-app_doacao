@@ -3,7 +3,7 @@ import { FiTrash2 } from 'react-icons/fi';
 import { Pagination } from '../components/Pagination.jsx';
 import './css/Produtos.css';
 
-const API_URL = 'http://localhost:8080';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 const PAGE_SIZE = 6;
 
 const initialForm = {
