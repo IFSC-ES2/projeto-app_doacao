@@ -1,17 +1,17 @@
 import { render, screen } from '@testing-library/react';
-import { afterEach, beforeEach, it, vi } from 'vitest';
+import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { Estoque } from '../Estoque.jsx';
 
 beforeEach(() => {
-  global.fetch = vi.fn();
+  vi.stubGlobal('fetch', vi.fn());
 });
 
 afterEach(() => {
   vi.restoreAllMocks();
 });
 
-it('renderiza os produtos retornados pelo estoque', async () => {
-  global.fetch.mockResolvedValueOnce({
+it('consulta a rota de estoque e exibe o saldo calculado pela API', async () => {
+  fetch.mockResolvedValueOnce({
     ok: true,
     json: async () => [
       { id: 1, produto: 'Cesta basica', unidade: 'un', quantidadeAtual: 0 },
@@ -21,6 +21,9 @@ it('renderiza os produtos retornados pelo estoque', async () => {
 
   render(<Estoque />);
 
+  expect(fetch).toHaveBeenCalledWith('http://localhost:8080/estoque');
   expect(await screen.findByText('Cesta basica')).toBeTruthy();
   expect(screen.getByText('Agua')).toBeTruthy();
+  expect(screen.getByText('Zerado')).toBeTruthy();
+  expect(screen.getByText('Disponível')).toBeTruthy();
 });

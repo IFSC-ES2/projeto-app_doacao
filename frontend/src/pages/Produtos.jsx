@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './css/Produtos.css';
 
 const API_URL = 'http://localhost:8080';
@@ -19,7 +19,7 @@ export function Produtos() {
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState({ type: '', message: '' });
 
-  const loadProdutos = useCallback(async (options = { resetStatus: true }) => {
+  const loadProdutos = async (options = { resetStatus: true }) => {
     setLoading(true);
     if (options.resetStatus) {
       setStatus({ type: '', message: '' });
@@ -32,31 +32,71 @@ export function Produtos() {
         return;
       }
       setItems(Array.isArray(data) ? data : []);
-    } catch (err) {
+    } catch {
       setStatus({ type: 'error', message: 'Erro de conexão com o servidor' });
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
   useEffect(() => {
-    loadProdutos();
-  }, [loadProdutos]);
+    let cancelled = false;
 
-  useEffect(() => {
-    const loadEntidades = async () => {
+    const loadInitialProdutos = async () => {
+      setLoading(true);
+      setStatus({ type: '', message: '' });
       try {
-        const response = await fetch(`${API_URL}/entidades`);
+        const response = await fetch(`${API_URL}/produtos`);
         const data = await response.json();
-        if (response.ok) {
-          setEntidades(Array.isArray(data) ? data : []);
+        if (!response.ok) {
+          if (!cancelled) {
+            setStatus({ type: 'error', message: data.mensagem || 'Não foi possível carregar os produtos' });
+          }
+          return;
         }
-      } catch (err) {
-        setEntidades([]);
+        if (!cancelled) {
+          setItems(Array.isArray(data) ? data : []);
+        }
+      } catch {
+        if (!cancelled) {
+          setStatus({ type: 'error', message: 'Erro de conexão com o servidor' });
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     };
 
-    loadEntidades();
+    void loadInitialProdutos();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadInitialEntidades = async () => {
+      try {
+        const response = await fetch(`${API_URL}/entidades`);
+        const data = await response.json();
+        if (response.ok && !cancelled) {
+          setEntidades(Array.isArray(data) ? data : []);
+        }
+      } catch {
+        if (!cancelled) {
+          setEntidades([]);
+        }
+      }
+    };
+
+    void loadInitialEntidades();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const handleChange = (field) => (event) => {
@@ -119,7 +159,7 @@ export function Produtos() {
       setStatus({ type: 'success', message: data.mensagem || 'Produto cadastrado com sucesso' });
       setForm(initialForm);
       await loadProdutos({ resetStatus: false });
-    } catch (err) {
+    } catch {
       setStatus({ type: 'error', message: 'Erro de conexão com o servidor' });
     } finally {
       setSaving(false);

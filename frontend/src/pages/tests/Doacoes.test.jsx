@@ -1,17 +1,17 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { afterEach, beforeEach, it, vi } from 'vitest';
+import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { Doacoes } from '../Doacoes.jsx';
 
 beforeEach(() => {
-  global.fetch = vi.fn();
+  vi.stubGlobal('fetch', vi.fn());
 });
 
 afterEach(() => {
   vi.restoreAllMocks();
 });
 
-it('renderiza a lista de doacoes', async () => {
-  global.fetch.mockResolvedValueOnce({
+it('consulta a rota de doacoes e renderiza os dados retornados', async () => {
+  fetch.mockResolvedValueOnce({
     ok: true,
     json: async () => [
       { id: 1, produto: 'Arroz', quantidade: 5, dataEntrada: '2026-05-20', doador: 'Maria' },
@@ -21,12 +21,13 @@ it('renderiza a lista de doacoes', async () => {
 
   render(<Doacoes />);
 
+  expect(fetch).toHaveBeenCalledWith('http://localhost:8080/doacoes');
   expect(await screen.findByText('Arroz')).toBeTruthy();
   expect(screen.getByText('Feijao')).toBeTruthy();
 });
 
 it('filtra resultados ao buscar por produto ou doador', async () => {
-  global.fetch.mockResolvedValueOnce({
+  fetch.mockResolvedValueOnce({
     ok: true,
     json: async () => [
       { id: 1, produto: 'Arroz', quantidade: 5, dataEntrada: '2026-05-20', doador: 'Maria' },

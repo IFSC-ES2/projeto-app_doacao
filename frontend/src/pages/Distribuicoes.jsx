@@ -20,26 +20,6 @@ export function Distribuicoes() {
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState({ type: '', message: '' });
 
-  const loadOptions = useCallback(async () => {
-    try {
-      const [produtosResponse, entidadesResponse] = await Promise.all([
-        fetch(`${API_URL}/produtos`),
-        fetch(`${API_URL}/entidades`),
-      ]);
-      const produtosData = await produtosResponse.json();
-      const entidadesData = await entidadesResponse.json();
-
-      if (produtosResponse.ok) {
-        setProdutos(Array.isArray(produtosData) ? produtosData : []);
-      }
-      if (entidadesResponse.ok) {
-        setEntidades(Array.isArray(entidadesData) ? entidadesData : []);
-      }
-    } catch (err) {
-      setStatus({ type: 'error', message: 'Erro de conexao com o servidor' });
-    }
-  }, []);
-
   const loadDistribuicoes = useCallback(async (options = { resetStatus: true }) => {
     setLoading(true);
     if (options.resetStatus) {
@@ -53,7 +33,7 @@ export function Distribuicoes() {
         return;
       }
       setItems(Array.isArray(data) ? data : []);
-    } catch (err) {
+    } catch {
       setStatus({ type: 'error', message: 'Erro de conexão com o servidor' });
     } finally {
       setLoading(false);
@@ -61,9 +41,56 @@ export function Distribuicoes() {
   }, []);
 
   useEffect(() => {
-    loadOptions();
-    loadDistribuicoes();
-  }, [loadOptions, loadDistribuicoes]);
+    let cancelled = false;
+
+    const loadInitialData = async () => {
+      setLoading(true);
+      setStatus({ type: '', message: '' });
+      try {
+        const [produtosResponse, entidadesResponse, distribuicoesResponse] = await Promise.all([
+          fetch(`${API_URL}/produtos`),
+          fetch(`${API_URL}/entidades`),
+          fetch(`${API_URL}/distribuicoes`),
+        ]);
+
+        const [produtosData, entidadesData, distribuicoesData] = await Promise.all([
+          produtosResponse.json(),
+          entidadesResponse.json(),
+          distribuicoesResponse.json(),
+        ]);
+
+        if (!cancelled && produtosResponse.ok) {
+          setProdutos(Array.isArray(produtosData) ? produtosData : []);
+        }
+        if (!cancelled && entidadesResponse.ok) {
+          setEntidades(Array.isArray(entidadesData) ? entidadesData : []);
+        }
+        if (!cancelled && distribuicoesResponse.ok) {
+          setItems(Array.isArray(distribuicoesData) ? distribuicoesData : []);
+        } else if (!cancelled) {
+          setStatus({
+            type: 'error',
+            message:
+              distribuicoesData.mensagem || 'Não foi possível carregar as distribuições',
+          });
+        }
+      } catch {
+        if (!cancelled) {
+          setStatus({ type: 'error', message: 'Erro de conexão com o servidor' });
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    void loadInitialData();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const produtoLookup = useMemo(() => {
     return new Map(produtos.map((produto) => [String(produto.id), produto.nome]));
@@ -104,7 +131,7 @@ export function Distribuicoes() {
       setStatus({ type: 'success', message: data.mensagem || 'Distribuição registrada com sucesso' });
       setForm(initialForm);
       await loadDistribuicoes({ resetStatus: false });
-    } catch (err) {
+    } catch {
       setStatus({ type: 'error', message: 'Erro de conexao com o servidor' });
     } finally {
       setSaving(false);
