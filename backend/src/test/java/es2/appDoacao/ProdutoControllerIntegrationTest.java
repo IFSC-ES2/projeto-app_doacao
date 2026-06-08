@@ -75,4 +75,28 @@ class ProdutoControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()", greaterThanOrEqualTo(1)));
     }
+
+    @Test
+    void deveExcluirProduto() throws Exception {
+        String json = """
+                {
+                    "nome": "Arroz",
+                    "unidade": "kg",
+                    "quantidadeEstoque": 10
+                }
+                """;
+
+        mockMvc.perform(post("/produtos")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json));
+
+        Long id = produtoRepository.findAll().get(0).getId();
+
+        mockMvc.perform(delete("/produtos/{id}", id))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(get("/produtos"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(0));
+    }
 }

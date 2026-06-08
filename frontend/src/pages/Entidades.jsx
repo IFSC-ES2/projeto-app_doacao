@@ -1,6 +1,8 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Pagination } from '../components/Pagination.jsx';
 
 const API_URL = 'http://localhost:8080';
+const PAGE_SIZE = 6;
 
 export function Entidades() {
   const [form, setForm] = useState({
@@ -11,10 +13,11 @@ export function Entidades() {
     email: '',
   });
   const [items, setItems] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const loadEntidades = useCallback(async () => {
+  const loadEntidades = async () => {
     setLoading(true);
     setError('');
     try {
@@ -25,16 +28,53 @@ export function Entidades() {
         return;
       }
       setItems(Array.isArray(data) ? data : []);
-    } catch (err) {
+    } catch {
       setError('Erro de conexão com o servidor');
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
   useEffect(() => {
-    loadEntidades();
-  }, [loadEntidades]);
+    let cancelled = false;
+
+    const loadInitialEntidades = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        const response = await fetch(`${API_URL}/entidades`);
+        const data = await response.json();
+        if (!response.ok) {
+          if (!cancelled) {
+            setError(data.mensagem || 'Não foi possível carregar as entidades');
+          }
+          return;
+        }
+        if (!cancelled) {
+          setItems(Array.isArray(data) ? data : []);
+        }
+      } catch {
+        if (!cancelled) {
+          setError('Erro de conexão com o servidor');
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    void loadInitialEntidades();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+
+  const visibleItems = items.slice((safeCurrentPage - 1) * PAGE_SIZE, safeCurrentPage * PAGE_SIZE);
 
   const handleChange = (field) => (event) => {
     setForm((prev) => ({ ...prev, [field]: event.target.value }));
@@ -59,7 +99,7 @@ export function Entidades() {
 
       setForm({ nome: '', cnpj: '', endereco: '', telefone: '', email: '' });
       await loadEntidades();
-    } catch (err) {
+    } catch {
       setError('Erro de conexão com o servidor');
     }
   };
@@ -122,26 +162,29 @@ export function Entidades() {
         {items.length === 0 ? (
           <p className="app-muted">Nenhuma entidade registrada ainda.</p>
         ) : (
-          <table className="app-table">
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>CNPJ</th>
-                <th>Email</th>
-                <th>Telefone</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((entidade) => (
-                <tr key={entidade.id}>
-                  <td>{entidade.nome}</td>
-                  <td>{entidade.cnpj}</td>
-                  <td>{entidade.email}</td>
-                  <td>{entidade.telefone}</td>
+          <>
+            <table className="app-table">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>CNPJ</th>
+                  <th>Email</th>
+                  <th>Telefone</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {visibleItems.map((entidade) => (
+                  <tr key={entidade.id}>
+                    <td>{entidade.nome}</td>
+                    <td>{entidade.cnpj}</td>
+                    <td>{entidade.email}</td>
+                    <td>{entidade.telefone}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <Pagination currentPage={safeCurrentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+          </>
         )}
       </section>
     </div>

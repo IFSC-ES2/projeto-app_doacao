@@ -1,11 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Pagination } from '../components/Pagination.jsx';
 import './css/Doacoes.css';
 
 const API_URL = 'http://localhost:8080';
+const PAGE_SIZE = 6;
 
 export function Doacoes() {
   const [items, setItems] = useState([]);
   const [query, setQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState({ type: '', message: '' });
 
@@ -21,7 +24,7 @@ export function Doacoes() {
           return;
         }
         setItems(Array.isArray(data) ? data : []);
-      } catch (err) {
+      } catch {
         setStatus({ type: 'error', message: 'Erro de conexão com o servidor' });
       } finally {
         setLoading(false);
@@ -41,6 +44,14 @@ export function Doacoes() {
     });
   }, [items, query]);
 
+  const totalPages = Math.max(1, Math.ceil(filteredItems.length / PAGE_SIZE));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+
+  const visibleItems = useMemo(() => {
+    const start = (safeCurrentPage - 1) * PAGE_SIZE;
+    return filteredItems.slice(start, start + PAGE_SIZE);
+  }, [filteredItems, safeCurrentPage]);
+
   return (
     <div className="app-grid">
       <section className="app-section">
@@ -53,7 +64,10 @@ export function Doacoes() {
             className="app-input page-search"
             placeholder="Buscar por produto ou doador"
             value={query}
-            onChange={(event) => setQuery(event.target.value)}
+            onChange={(event) => {
+              setQuery(event.target.value);
+              setCurrentPage(1);
+            }}
           />
         </div>
         {status.message && (
@@ -64,29 +78,32 @@ export function Doacoes() {
         ) : filteredItems.length === 0 ? (
           <p className="app-muted">Nenhuma doação encontrada.</p>
         ) : (
-          <table className="app-table">
-            <thead>
-              <tr>
-                <th>Produto</th>
-                <th>Quantidade</th>
-                <th>Data</th>
-                <th>Doador</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredItems.map((doacao) => {
-                const data = doacao.dataEntrada ?? doacao.data;
-                return (
-                  <tr key={doacao.id ?? `${doacao.produto}-${data}`}>
-                    <td>{doacao.produto}</td>
-                    <td>{doacao.quantidade}</td>
-                    <td>{data}</td>
-                    <td>{doacao.doador}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          <>
+            <table className="app-table">
+              <thead>
+                <tr>
+                  <th>Produto</th>
+                  <th>Quantidade</th>
+                  <th>Data</th>
+                  <th>Doador</th>
+                </tr>
+              </thead>
+              <tbody>
+                {visibleItems.map((doacao) => {
+                  const data = doacao.dataEntrada ?? doacao.data;
+                  return (
+                    <tr key={doacao.id ?? `${doacao.produto}-${data}`}>
+                      <td>{doacao.produto}</td>
+                      <td>{doacao.quantidade}</td>
+                      <td>{data}</td>
+                      <td>{doacao.doador}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            <Pagination currentPage={safeCurrentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+          </>
         )}
       </section>
     </div>

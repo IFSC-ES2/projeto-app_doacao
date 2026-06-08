@@ -8,41 +8,18 @@
 - [Definition of Done](docs/dod.md)
 - [ADRs](docs/adrs/)
 - [Estimativas](docs/estimativas.md)
-- [Métricas](docs/metricas.md)
+- [Métricas](docs/metricas/)
 - [Baseline](docs/baseline.md)
 - [Registro de Riscos](docs/riscos.md)
 - [Critérios de Qualidade](docs/qualidade.md)
 - [Fluxo de Trabalho](docs/fluxo-de-trabalho.md)
+- [Deploy](docs/DEPLOY.md)
 
 ---
 
 ## Como rodar o projeto
 
-### Back-end
-1. Ter o Java 17+ e Maven instalados
-2. Entrar na pasta backend/
-3. Rodar: mvn spring-boot:run
-4. O servidor roda em: http://localhost:8080
-
-### Testes (back-end)
-1. Entrar na pasta backend/
-2. Rodar: mvn test
-
-### Testes (front-end)
-1. Entrar na pasta frontend/
-2. Rodar: npm test
-
-### Front-end
-1. Ter o Node.js instalado
-2. Entrar na pasta onde está o front
-3. Rodar: npm install e depois npm run dev
-4. O front roda em: http://localhost:5173
-
-### Endpoint de login
-- POST: http://localhost:8080/login
-- Body JSON: { "login": "...", "senha": "..." }
-- Sucesso: 200 com "Login bem-sucedido"
-- Falha: 401 com "Login/email ou senha inválidos"
+Consulte [docs/DEPLOY.md](docs/DEPLOY.md) para pré-requisitos, execução e validação do ambiente.
 
 ---
 
@@ -54,5 +31,5 @@
 - Lucas Gabriel  
 
 **Engenheiro de Qualidade/DevOps/Infra:** Haydée Murara  
-**Scrum Master da terceira Sprint/Arquiteto de Software:** Isaac Kozuchovski  
-**Desenvolvedora frontend/Engenheiro de Qualidade:** Isadora Eidt
+**Arquiteto de Software:** Isaac Kozuchovski  
+**Desenvolvedora frontend/Engenheiro de Qualidade/Scrum Master da quarta Sprint:** Isadora Eidt
