@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, it, vi } from 'vitest';
 import { Estoque } from '../Estoque.jsx';
 
@@ -23,4 +23,44 @@ it('renderiza os produtos retornados pelo estoque', async () => {
 
   expect(await screen.findByText('Cesta basica')).toBeTruthy();
   expect(screen.getByText('Agua')).toBeTruthy();
+});
+
+it('filtra produtos pelo nome digitado', async () => {
+  global.fetch.mockResolvedValueOnce({
+    ok: true,
+    json: async () => [
+      { id: 1, produto: 'Cesta basica', unidade: 'un', quantidadeAtual: 0 },
+      { id: 2, produto: 'Agua', unidade: 'L', quantidadeAtual: 12 },
+    ],
+  });
+
+  render(<Estoque />);
+
+  await screen.findByText('Cesta basica');
+
+  fireEvent.change(screen.getByPlaceholderText('Buscar por nome do produto'), {
+    target: { value: 'Agua' },
+  });
+
+  expect(screen.queryByText('Cesta basica')).toBeNull();
+  expect(screen.getByText('Agua')).toBeTruthy();
+});
+
+it('mostra mensagem quando a busca nao encontra resultados', async () => {
+  global.fetch.mockResolvedValueOnce({
+    ok: true,
+    json: async () => [
+      { id: 1, produto: 'Cesta basica', unidade: 'un', quantidadeAtual: 0 },
+    ],
+  });
+
+  render(<Estoque />);
+
+  await screen.findByText('Cesta basica');
+
+  fireEvent.change(screen.getByPlaceholderText('Buscar por nome do produto'), {
+    target: { value: 'Arroz' },
+  });
+
+  expect(screen.getByText('Nenhum produto encontrado para essa busca.')).toBeTruthy();
 });

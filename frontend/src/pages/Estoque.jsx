@@ -5,6 +5,7 @@ const API_URL = 'http://localhost:8080';
 
 export function Estoque() {
   const [items, setItems] = useState([]);
+  const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState({ type: '', message: '' });
 
@@ -30,6 +31,11 @@ export function Estoque() {
     loadEstoque();
   }, []);
 
+  const filteredItems = items.filter((item) => {
+    const nome = String(item.produto || item.nome || '').toLowerCase();
+    return nome.includes(search.trim().toLowerCase());
+  });
+
   return (
     <div className="app-grid">
       <section className="app-section">
@@ -38,6 +44,13 @@ export function Estoque() {
             <h2>Consulta de estoque</h2>
             <p className="app-muted">Acompanhe a quantidade disponível de cada item.</p>
           </div>
+          <input
+            className="app-input estoque-search"
+            type="search"
+            placeholder="Buscar por nome do produto"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+          />
         </div>
         {status.message && (
           <p className={`page-feedback ${status.type}`}>{status.message}</p>
@@ -46,6 +59,8 @@ export function Estoque() {
           <p className="app-muted">Carregando estoque...</p>
         ) : items.length === 0 ? (
           <p className="app-muted">Nenhum item em estoque no momento.</p>
+        ) : filteredItems.length === 0 ? (
+          <p className="app-muted">Nenhum produto encontrado para essa busca.</p>
         ) : (
           <table className="app-table">
             <thead>
@@ -57,7 +72,7 @@ export function Estoque() {
               </tr>
             </thead>
             <tbody>
-              {items.map((item) => {
+              {filteredItems.map((item) => {
                 const quantidade = Number(
                   item.quantidadeEstoque ?? item.quantidadeAtual ?? item.quantidade ?? 0
                 );
