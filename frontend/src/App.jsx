@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { NavLink, Outlet, Navigate, useLocation } from 'react-router-dom';
 import { FiHome, FiUsers, FiInbox, FiBox, FiShare2, FiArchive } from 'react-icons/fi';
 import './App.css';
@@ -71,8 +71,12 @@ const HEADER_COPY = {
   },
 };
 
+const AUTH_SESSION_KEY = 'auth-session';
+
 export function App() {
-  const [token, setToken] = useState(() => localStorage.getItem('token'));
+  const [token, setToken] = useState(() => {
+    return sessionStorage.getItem(AUTH_SESSION_KEY) === 'true' ? 'authenticated' : null;
+  });
   const location = useLocation();
 
   const header = useMemo(() => {
@@ -82,15 +86,27 @@ export function App() {
 
   const isCadastroRoute = location.pathname === '/cadastro';
 
-  const handleLogout = () => {
+  useEffect(() => {
     localStorage.removeItem('token');
+  }, []);
+
+  useEffect(() => {
+    if (token) {
+      sessionStorage.setItem(AUTH_SESSION_KEY, 'true');
+      return;
+    }
+
+    sessionStorage.removeItem(AUTH_SESSION_KEY);
+  }, [token]);
+
+  const handleLogout = () => {
     setToken(null);
   };
 
   if (!token) {
     return isCadastroRoute
       ? <Register />
-      : <Login onSuccess={() => setToken(localStorage.getItem('token'))} />;
+      : <Login onSuccess={() => setToken('authenticated')} />;
   }
 
   if (isCadastroRoute) {

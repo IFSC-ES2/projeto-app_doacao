@@ -90,7 +90,6 @@ export function Login({ onSuccess }) {
 
         if (response.ok) {
           setMessage('Login realizado com sucesso.');
-          localStorage.setItem('token', data.token || 'logado');
           setTimeout(() => {
             if (typeof onSuccess === 'function') {
               onSuccess();
