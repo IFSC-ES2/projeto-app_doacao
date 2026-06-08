@@ -39,20 +39,13 @@ export function Estoque() {
     return nome.includes(search.trim().toLowerCase());
   });
 
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [search]);
-
   const totalPages = Math.max(1, Math.ceil(filteredItems.length / PAGE_SIZE));
-
-  useEffect(() => {
-    setCurrentPage((page) => Math.min(page, totalPages));
-  }, [totalPages]);
+  const safeCurrentPage = Math.min(currentPage, totalPages);
 
   const visibleItems = useMemo(() => {
-    const start = (currentPage - 1) * PAGE_SIZE;
+    const start = (safeCurrentPage - 1) * PAGE_SIZE;
     return filteredItems.slice(start, start + PAGE_SIZE);
-  }, [filteredItems, currentPage]);
+  }, [filteredItems, safeCurrentPage]);
 
   return (
     <div className="app-grid">
@@ -67,7 +60,10 @@ export function Estoque() {
             type="search"
             placeholder="Buscar por nome do produto"
             value={search}
-            onChange={(event) => setSearch(event.target.value)}
+            onChange={(event) => {
+              setSearch(event.target.value);
+              setCurrentPage(1);
+            }}
           />
         </div>
         {status.message && (
@@ -111,7 +107,7 @@ export function Estoque() {
                 })}
               </tbody>
             </table>
-            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+            <Pagination currentPage={safeCurrentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
           </>
         )}
       </section>

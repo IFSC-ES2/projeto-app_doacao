@@ -48,7 +48,7 @@ it('filtra resultados ao buscar por produto ou doador', async () => {
 });
 
 it('pagina a lista quando ha mais registros do que o limite', async () => {
-  global.fetch.mockResolvedValueOnce({
+  globalThis.fetch.mockResolvedValueOnce({
     ok: true,
     json: async () => [
       { id: 1, produto: 'Arroz 1', quantidade: 5, dataEntrada: '2026-05-20', doador: 'Maria' },

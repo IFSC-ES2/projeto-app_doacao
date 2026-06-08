@@ -95,10 +95,7 @@ export function Distribuicoes() {
   }, []);
 
   const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
-
-  useEffect(() => {
-    setCurrentPage((page) => Math.min(page, totalPages));
-  }, [totalPages]);
+  const safeCurrentPage = Math.min(currentPage, totalPages);
 
   const produtoLookup = useMemo(() => {
     return new Map(produtos.map((produto) => [String(produto.id), produto.nome]));
@@ -109,9 +106,9 @@ export function Distribuicoes() {
   }, [entidades]);
 
   const visibleItems = useMemo(() => {
-    const start = (currentPage - 1) * PAGE_SIZE;
+    const start = (safeCurrentPage - 1) * PAGE_SIZE;
     return items.slice(start, start + PAGE_SIZE);
-  }, [items, currentPage]);
+  }, [items, safeCurrentPage]);
 
   const handleChange = (field) => (event) => {
     setForm((prev) => ({ ...prev, [field]: event.target.value }));
@@ -278,7 +275,7 @@ export function Distribuicoes() {
                 })}
               </tbody>
             </table>
-            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+            <Pagination currentPage={safeCurrentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
           </>
         )}
       </section>

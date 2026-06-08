@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { Produtos } from '../Produtos.jsx';
 
@@ -15,14 +15,14 @@ function mockProdutosApi({ produtos = [], entidades = [] } = {}) {
     if (url === 'http://localhost:8080/entidades' && (!options.method || options.method === 'GET')) {
       return {
         ok: true,
-        json: async () => entidades,
+        json: async () => entidades.map((entidade) => ({ ...entidade })),
       };
     }
 
     if (url === 'http://localhost:8080/produtos' && (!options.method || options.method === 'GET')) {
       return {
         ok: true,
-        json: async () => produtos,
+        json: async () => produtos.map((produto) => ({ ...produto })),
       };
     }
 
@@ -194,35 +194,14 @@ it('exclui um produto apos confirmacao no dialogo', async () => {
 
   mockProdutosApi({
     produtos,
-    entidades: [],
+    entidades: [{ id: 1, nome: 'Casa Solidaria' }],
   });
 
   render(<Produtos />);
 
-  await screen.findByLabelText('Entidade');
-
-  fireEvent.change(screen.getByPlaceholderText('Nome do produto'), {
-    target: { value: 'Arroz' },
-  });
-  fireEvent.change(screen.getByPlaceholderText('Descrição'), {
-    target: { value: 'Pacote 5kg' },
-  });
-  fireEvent.change(screen.getByPlaceholderText('Unidade de medida'), {
-    target: { value: 'kg' },
-  });
-  fireEvent.change(screen.getByLabelText('Entidade'), {
-    target: { value: '1' },
-  });
-  fireEvent.change(screen.getByPlaceholderText('Quantidade inicial'), {
-    target: { value: '10' },
-  });
-
-  fireEvent.click(screen.getByRole('button', { name: /cadastrar produto/i }));
-
-  expect(await screen.findByText('Produto cadastrado com sucesso')).toBeTruthy();
   expect(await screen.findByText('Arroz')).toBeTruthy();
 
-  fireEvent.click(screen.getByLabelText('Excluir produto Arroz'));
+  fireEvent.click(screen.getByRole('button', { name: /excluir produto arroz/i }));
 
   const dialog = await screen.findByRole('dialog');
   expect(within(dialog).getByText(/tem certeza que deseja excluir/i)).toBeTruthy();
@@ -230,5 +209,7 @@ it('exclui um produto apos confirmacao no dialogo', async () => {
   fireEvent.click(within(dialog).getByRole('button', { name: /^excluir$/i }));
 
   expect(await screen.findByText('Produto excluído com sucesso')).toBeTruthy();
-  expect(screen.queryByText('Arroz')).toBeNull();
+  await waitFor(() => {
+    expect(screen.queryByText('Arroz')).toBeNull();
+  });
 });

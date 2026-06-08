@@ -1,9 +1,9 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { afterEach, beforeEach, it, vi } from 'vitest';
+import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { Entidades } from '../Entidades.jsx';
 
 beforeEach(() => {
-  global.fetch = vi.fn();
+  vi.stubGlobal('fetch', vi.fn());
 });
 
 afterEach(() => {
@@ -11,7 +11,7 @@ afterEach(() => {
 });
 
 it('pagina a lista de entidades quando ha mais registros que o limite', async () => {
-  global.fetch.mockResolvedValueOnce({
+  globalThis.fetch.mockResolvedValueOnce({
     ok: true,
     json: async () => [
       { id: 1, nome: 'Entidade 1', cnpj: '1', email: 'e1@email.com', telefone: '111' },

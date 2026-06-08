@@ -44,20 +44,13 @@ export function Doacoes() {
     });
   }, [items, query]);
 
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [query]);
-
   const totalPages = Math.max(1, Math.ceil(filteredItems.length / PAGE_SIZE));
-
-  useEffect(() => {
-    setCurrentPage((page) => Math.min(page, totalPages));
-  }, [totalPages]);
+  const safeCurrentPage = Math.min(currentPage, totalPages);
 
   const visibleItems = useMemo(() => {
-    const start = (currentPage - 1) * PAGE_SIZE;
+    const start = (safeCurrentPage - 1) * PAGE_SIZE;
     return filteredItems.slice(start, start + PAGE_SIZE);
-  }, [filteredItems, currentPage]);
+  }, [filteredItems, safeCurrentPage]);
 
   return (
     <div className="app-grid">
@@ -71,7 +64,10 @@ export function Doacoes() {
             className="app-input page-search"
             placeholder="Buscar por produto ou doador"
             value={query}
-            onChange={(event) => setQuery(event.target.value)}
+            onChange={(event) => {
+              setQuery(event.target.value);
+              setCurrentPage(1);
+            }}
           />
         </div>
         {status.message && (
@@ -106,7 +102,7 @@ export function Doacoes() {
                 })}
               </tbody>
             </table>
-            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+            <Pagination currentPage={safeCurrentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
           </>
         )}
       </section>

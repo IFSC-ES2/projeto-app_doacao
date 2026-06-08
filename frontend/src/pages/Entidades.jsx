@@ -72,12 +72,9 @@ export function Entidades() {
   }, []);
 
   const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
 
-  useEffect(() => {
-    setCurrentPage((page) => Math.min(page, totalPages));
-  }, [totalPages]);
-
-  const visibleItems = items.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  const visibleItems = items.slice((safeCurrentPage - 1) * PAGE_SIZE, safeCurrentPage * PAGE_SIZE);
 
   const handleChange = (field) => (event) => {
     setForm((prev) => ({ ...prev, [field]: event.target.value }));
@@ -186,7 +183,7 @@ export function Entidades() {
                 ))}
               </tbody>
             </table>
-            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+            <Pagination currentPage={safeCurrentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
           </>
         )}
       </section>
