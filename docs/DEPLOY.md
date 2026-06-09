@@ -1,12 +1,42 @@
 # Documentação de Deploy
 
-## Ambiente de execução
+## Ambiente de produção
 
-O sistema não possui hospedagem web externa. A execução local reprodutível descrita neste documento é o equivalente ao ambiente de staging: qualquer pessoa com os pré-requisitos instalados consegue subir e validar o MVP completo seguindo os passos abaixo, sem dependências externas.
+**Para testar a aplicação:** acesse https://projeto-app-doacao.vercel.app, faça login com as credenciais da tabela e use normalmente. O backend é chamado automaticamente pelo frontend e não precisa ser acessado diretamente.
+
+**Para rodar localmente:** siga as instruções da seção [Execução local](#execução-local) mais abaixo.
+
+
+| Serviço | Plataforma | URL |
+|---------|------------|-----|
+| Frontend (acesso principal) | Vercel | https://projeto-app-doacao.vercel.app |
+| Backend (API) | Railway | https://projeto-appdoacao-production.up.railway.app |
+
+O banco de dados é H2 em memória: os dados são resetados quando o backend reinicia.
+
+### Credenciais de acesso
+
+| Login | E-mail | Senha |
+|-------|--------|-------|
+| `teste` | `teste@example.com` | `Senha123!` |
+| `admin` | `admin@example.com` | `Admin123!` |
+| `joao` | `joao@example.com` | `Joao1234!` |
 
 ---
 
-## Pré-requisitos
+## Variáveis de ambiente
+
+| Variável | Onde | Valor em produção |
+|----------|------|-------------------|
+| `VITE_API_URL` | Vercel | `https://projeto-appdoacao-production.up.railway.app` |
+
+Localmente nenhuma variável é necessária. O frontend usa `http://localhost:8080` como fallback quando `VITE_API_URL` não está definida.
+
+---
+
+## Execução local
+
+### Pré-requisitos
 
 | Ferramenta | Versão mínima | Verificação |
 |------------|--------------|-------------|
@@ -17,14 +47,6 @@ O sistema não possui hospedagem web externa. A execução local reprodutível d
 | Git | qualquer | `git --version` |
 
 ---
-
-## Variáveis de ambiente
-
-Nenhuma variável de ambiente é necessária. O backend usa banco H2 em memória, configurado em `backend/src/main/resources/application.properties`.
-
----
-
-## Processo de deploy
 
 ### 1. Clonar o repositório
 
@@ -74,18 +96,6 @@ npm run dev
 ```
 
 Interface disponível em: `http://localhost:5173`
-
----
-
-## Credenciais de teste
-
-Criadas automaticamente pelo `DataLoader` ao iniciar o backend:
-
-| Login | E-mail | Senha |
-|-------|--------|-------|
-| `teste` | `teste@example.com` | `Senha123!` |
-| `admin` | `admin@example.com` | `Admin123!` |
-| `joao` | `joao@example.com` | `Joao1234!` |
 
 ---
 
