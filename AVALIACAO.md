@@ -18,7 +18,10 @@
 | 7       | Isaac Kozuchovski | 50aa521 | 28/05/26 | 03/06/26 | 7,6  | 10   |
 | 7       | Isadora Eidt      | 50aa521 | 28/05/26 | 03/06/26 | 7,0  | 10   |
 | 7       | Lucas Gabriel     | 50aa521 | 28/05/26 | 03/06/26 | 0,0  | 10   |
-| 8       |                   |         |          |          |      | 10   |
+| 8       | Haydee Murara     | 89fe3ef | 08/06/26 | 11/06/26 | 8,6  | 10   |
+| 8       | Isaac Kozuchovski | 89fe3ef | 08/06/26 | 11/06/26 | 8,8  | 10   |
+| 8       | Isadora Eidt      | 89fe3ef | 08/06/26 | 11/06/26 | 8,7  | 10   |
+| 8       | Lucas Gabriel     | 89fe3ef | 08/06/26 | 11/06/26 | 0,0  | 10   |
 | 9       |                   |         |          |          |      | 10   |
 | 10      |                   |         |          |          |      | 10   |
 | 11/12   |                   |         |          |          |      | 30   |
@@ -27,10 +30,10 @@
 
 | aluno             | nota parcial |
 | ----------------- | ------------ |
-| Haydee Murara     | 7,2          |
-| Isaac Kozuchovski | 7,4          |
-| Isadora Eidt      | 6,9          |
-| Lucas Gabriel     | 5,3          |
+| Haydee Murara     | 7,5          |
+| Isaac Kozuchovski | 7,7          |
+| Isadora Eidt      | 7,2          |
+| Lucas Gabriel     | 4,3          |
 
 ## Comentários
 
@@ -163,4 +166,41 @@
    - Haydee: contribuição relevante em CI, configuração de testes frontend e testes backend de produto/distribuição. Nota limitada porque PRs próprios sem aprovação registrada reduzem a evidência de revisão e os testes não capturam a quebra de contrato `/doacoes`.
    - Isaac: principal contribuição em backend de produto/distribuição, correção de estoque, documentação C4/ADRs, métricas, README, sprint e release. Nota limitada pela ausência dos endpoints de doações, inconsistência funcional do estoque/doações e métricas frágeis.
    - Isadora: contribuição relevante em frontend, roteamento e testes de componentes. Nota limitada porque parte importante do frontend depende de endpoints inexistentes, o lint falha com muitos erros e os testes usam mocks que não evidenciam integração real com a API.
-   - Lucas: não há commits de Lucas no intervalo `v0.2.0..v0.3.0`, ele não aparece no registro de contribuições de `docs/entregas/sprint-3.md` e não foram encontradas evidências de PRs, reviews, testes ou documentação atribuídos a ele nesta entrega.
+   - Lucas: não há commits de Lucas no intervalo `v0.2.0..v0.3.0`, ele não aparece no registro de contribuições de `entregas/sprint-3.md` e não foram encontradas evidências de PRs, reviews, testes ou documentação atribuídos a ele nesta entrega.
+
+### Entrega 8
+
+1. Ambiente de staging ou equivalente acessível: atendido.
+   - `DEPLOY.md` informa frontend em Vercel (`https://projeto-app-doacao.vercel.app`) e backend em Railway (`https://projeto-appdoacao-production.up.railway.app`).
+   - O frontend público respondeu e o login documentado no backend (`admin` / `Admin123!`) retornou `Login bem-sucedido`.
+   - A raiz do backend retorna 404, o que é aceitável para API sem rota raiz, pois os endpoints documentados estão sob caminhos específicos.
+2. Manutenção e atualização da integração contínua: atendido.
+   - `.github/workflows/ci.yml` roda em PRs para `dev` e `main`, separando jobs de backend e frontend.
+   - O workflow executa `mvn compile`, `mvn test`, `npm run lint`, `npm run build` e `npm test`.
+   - Verificação local: `mvn test -f backend/pom.xml` passou com 84 testes; `npm run lint`, `npm test` (5 arquivos, 15 testes) e `npm run build` passaram.
+   - Não foi possível confirmar aprovações/checks diretamente via GitHub porque `gh` falhou por timeout de rede durante a correção; localmente há histórico de merges de PRs da Sprint 4.
+3. Documentação de deploy: atendido.
+   - `DEPLOY.md` registra URLs, credenciais, variável `VITE_API_URL`, pré-requisitos, comandos de build/execução, testes e validação por API.
+4. Atualização das métricas do projeto: parcial.
+   - As métricas foram atualizadas para 08/06/2026 e incluem comparação com Sprint 3.
+   - Alguns arquivos ainda mantêm seções antigas intituladas `Análise da Sprint 2`, e valores como 100% de conclusão do MVP e 44 pontos dependem de evidências externas do board, não verificáveis localmente.
+5. Manutenção/reengenharia: atendido.
+   - A refatoração de autenticação para BCrypt resolve problema real de segurança e manutenção identificado anteriormente.
+   - `adrs/ADR-0007-armazenamento-seguro-de-senhas.md` registra contexto, decisão, alternativas e consequências.
+   - A evidência é tecnicamente relevante, embora o `PasswordEncoder` seja instanciado diretamente em `AuthService` em vez de ser configurado como bean, o que reduz flexibilidade/testabilidade.
+   - Como evidência funcional associada, foram adicionados endpoints `GET /doacoes` e `POST /doacoes`, corrigindo a inconsistência registrada na Entrega 7.
+   - A autenticação passou a usar BCrypt em `AuthService`, removendo a fragilidade de senha em texto puro para novos cadastros e usuários criados pelo `DataLoader`.
+   - O frontend foi ajustado para lint limpo, paginação, busca, exclusão de produtos, sessão em `sessionStorage` e fluxo de doações/produtos mais consistente.
+6. Comparação de métrica antes/depois: parcial.
+   - Há comparação antes/depois da refatoração em `metrica-003.md`, mas ela mede adaptação dos testes ao BCrypt, não uma métrica direta de design/manutenibilidade ou segurança.
+7. Release/tag do marco: atendido.
+   - A tag `v0.4.0` existe e aponta para `89fe3ef`, commit de merge da entrega.
+   - A descrição da release não pôde ser consultada por `gh` devido a timeout de rede, mas `entregas/sprint-4.md` registra a publicação da release.
+8. Registro de contribuição individual: parcial.
+   - `entregas/sprint-4.md` discrimina contribuições de Haydeé, Isaac e Isadora e registra Lucas sem atribuição formal.
+   - A ausência/inatividade de Lucas deveria ter sido explicitamente registrada também como impacto na capacidade da equipe: `metrica-007.md` calcula a Sprint 4 com apenas 3 integrantes ativos, embora `estimativas.md` assumisse a permanência dos 4 integrantes. A equipe absorveu o impacto e concluiu as issues planejadas, mas faltou registrar de forma clara a quebra dessa premissa, a redistribuição do trabalho e o impacto produtivo em `entregas/sprint-4.md`, nas métricas e/ou no registro de riscos.
+   - Contribuições individuais:
+     - Haydee: responsável por deploy, CI, métricas, documentação de padrões e teste de integração de doações; nota limitada por métricas ainda parcialmente frágeis e por não haver confirmação de reviews/checks via GitHub no momento da correção.
+     - Isaac: responsável pela entrega central de backend, endpoints de doações, refatoração de autenticação para BCrypt e ADR; nota limitada pela implementação ainda simples da autenticação e por não configurar `PasswordEncoder` como componente reutilizável.
+     - Isadora: responsável pelo volume de correções no frontend, lint, testes, documentação da sprint, README e preparação da release; nota limitada porque parte das evidências de release/review não pôde ser validada via GitHub e algumas mudanças de frontend extrapolam o foco obrigatório.
+     - Lucas: nota zero na entrega porque a própria documentação da equipe registra ausência de atribuição formal e não foram encontradas evidências rastreáveis de commits, PRs, reviews, testes ou documentação atribuídos a ele na Sprint 4.
