@@ -141,9 +141,10 @@ Documento de registro:
 As limitações abaixo devem ser confirmadas ou atualizadas antes da publicação da RC:
 
 1. **Proteção da API por token/sessão**
-   - Situação atual: pendente de decisão técnica.
-   - A avaliação apontou que a autenticação controla principalmente a navegação no frontend.
-   - A equipe deve implementar proteção nos endpoints ou registrar formalmente a limitação como risco aceito da RC.
+   - Situação atual: limitação conhecida e aceita.
+   - A autenticação controla apenas a navegação no frontend. Os endpoints da API não validam token nas requisições, ou seja, acesso direto via Postman ou curl não é bloqueado.
+   - Decisão técnica: a equipe optou por não implementar autenticação stateful na API dado o escopo acadêmico do projeto. A limitação está registrada como R6 em docs/riscos.md.
+   - Mitigação futura: implementar filtro de token simples ou Spring Security.
 
 2. **Consistência entre doações, produtos e estoque**
    - Situação atual: pendente de revisão técnica.

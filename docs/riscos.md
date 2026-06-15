@@ -159,3 +159,17 @@ Os riscos **R4 e R5**, embora tenham um impacto Alto na integridade do software,
 ### Ações de mitigação para a Sprint 3
 - Implementar autenticação JWT e proteger os endpoints da API
 - Mapear a disponibilidade da equipe no início da sprint considerando o calendário acadêmico
+
+---
+
+## Atualização Sprint 9
+
+### Riscos que permanecem ativos
+- **R6 – Endpoints sem proteção JWT:** risco aceito. A equipe avaliou a implementação de autenticação stateful na API e optou por documentar formalmente a limitação por conta do escopo acadêmico do projeto. A proteção de rotas é feita exclusivamente pelo frontend. Acesso direto à API via ferramentas externas não é bloqueado. Mitigação futura: implementar filtro de token ou Spring Security em versão pós-RC.
+
+### Riscos mitigados
+### Riscos mitigados
+- **R2 – Atraso por subestimação:** parcialmente realizado. A entrega atrasou por desconhecimento do prazo final por parte da equipe, e não por subestimação das tarefas em si.
+
+### Riscos aceitos
+- **R6 – Endpoints sem proteção:** limitação conhecida, documentada e aceita para o escopo da RC. Registrada também em docs/entregas/release-candidate.md.
