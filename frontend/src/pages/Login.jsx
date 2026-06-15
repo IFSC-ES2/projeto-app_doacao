@@ -158,7 +158,7 @@ export function Login({ onSuccess }) {
                 />
               </svg>
             </div>
-            <h1 className="login-title">DoaOps</h1>
+            <h1 className="login-title">Onganizer</h1>
             <p className="login-subtitle">
               {isLogin ? 'Bem-vindo de volta' : 'Crie sua conta'}
             </p>
