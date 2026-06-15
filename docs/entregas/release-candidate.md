@@ -130,7 +130,11 @@ Fluxos mínimos a validar:
 - Consulta de estoque após entradas e saídas
 - Acesso ao sistema pelo ambiente público
 
-Status dos testes de aceitação: **pendente de execução e registro.**
+Status dos testes de aceitação: **aprovados.**
+
+Documento de registro:
+
+- [Testes de Aceitação da RC](testes-aceitacao-rc.md)
 
 ## Limitações conhecidas
 
