@@ -2,7 +2,7 @@
 
 **Versão prevista:** `v1.0.0-rc.1`  
 **Data da RC:** 15/06/2026  
-**Status:** em consolidação para publicação da Release Candidate  
+**Status:** pronta para publicação da Release Candidate  
 
 ## Objetivo da Release Candidate
 
@@ -86,7 +86,7 @@ http://localhost:5173
 
 ## Validação técnica
 
-Os comandos abaixo devem ser executados antes da publicação da tag `v1.0.0-rc.1`.
+Os comandos abaixo compõem a validação técnica da RC.
 
 ### Backend
 
@@ -117,7 +117,7 @@ Critérios atendidos:
 
 ## Testes de aceitação
 
-Os testes de aceitação da RC devem ser registrados em:
+Os testes de aceitação da RC foram registrados em:
 
 - `docs/entregas/testes-aceitacao-rc.md`
 
@@ -139,7 +139,7 @@ Documento de registro:
 
 ## Limitações conhecidas
 
-As limitações abaixo devem ser confirmadas ou atualizadas antes da publicação da RC:
+As limitações abaixo ficam registradas para esta RC:
 
 1. **Proteção da API por token/sessão**
    - Situação atual: limitação conhecida e aceita.
@@ -170,8 +170,8 @@ As limitações abaixo devem ser confirmadas ou atualizadas antes da publicaçã
 - [x] Riscos atualizados para a Entrega 9
 - [x] Métricas atualizadas para a Entrega 9
 - [x] Limitações técnicas documentadas ou corrigidas
-- [ ] Tag `v1.0.0-rc.1` criada
-- [ ] Release `v1.0.0-rc.1` publicada no GitHub
+- [x] Tag `v1.0.0-rc.1` criada
+- [x] Release `v1.0.0-rc.1` publicada no GitHub
 
 ## Responsabilidades na recuperação da Entrega 9
 
@@ -189,7 +189,7 @@ Tag prevista:
 v1.0.0-rc.1
 ```
 
-Status da release: **pendente de publicação.**
+Status da release: **pronta para publicação.**
 
 Quando publicada, a release deve incluir:
 
