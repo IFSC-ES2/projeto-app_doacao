@@ -60,6 +60,7 @@ O banco utilizado no ambiente atual é H2 em memória. Por isso, os dados podem 
 ### Backend
 
 ```bash
+mvn clean -f backend/pom.xml
 mvn spring-boot:run -f backend/pom.xml
 ```
 
@@ -105,9 +106,9 @@ npm test
 
 ### Integração contínua
 
-Status da CI da RC: **pendente de confirmação após ajuste do workflow para `push` na branch `main`.**
+Status da CI da RC: **configurada.**
 
-Critérios esperados:
+Critérios atendidos:
 
 - CI executando em pull requests para `dev` e `main`
 - CI executando em push para `main`
@@ -162,13 +163,13 @@ As limitações abaixo devem ser confirmadas ou atualizadas antes da publicaçã
 
 ## Critérios de aceitação da RC
 
-- [ ] MVP descrito e consolidado neste documento
-- [ ] Ambiente público validado
-- [ ] Testes de aceitação executados e registrados
-- [ ] CI executando em PR e push para `main`
-- [ ] Riscos atualizados para a Entrega 9
-- [ ] Métricas atualizadas para a Entrega 9
-- [ ] Limitações técnicas documentadas ou corrigidas
+- [x] MVP descrito e consolidado neste documento
+- [x] Ambiente público validado
+- [x] Testes de aceitação executados e registrados
+- [x] CI executando em PR e push para `main`
+- [x] Riscos atualizados para a Entrega 9
+- [x] Métricas atualizadas para a Entrega 9
+- [x] Limitações técnicas documentadas ou corrigidas
 - [ ] Tag `v1.0.0-rc.1` criada
 - [ ] Release `v1.0.0-rc.1` publicada no GitHub
 
