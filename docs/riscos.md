@@ -137,25 +137,15 @@ Os riscos **R4 e R5**, embora tenham um impacto Alto na integridade do software,
 
 ---
 
-## Atualização Sprint 2
+## Atualização Sprint 9
 
 ### Riscos que permanecem ativos
-- **R2 (Atraso por subestimação):** continua ativo. Projetos e demandas de outras disciplinas reduziram a disponibilidade da equipe durante a sprint, exigindo maior concentração do esforço nos dias finais.
+- **R6 – Endpoints sem proteção JWT:** risco aceito. A equipe avaliou a implementação de autenticação stateful na API e optou por documentar formalmente a limitação por conta do escopo acadêmico do projeto. A proteção de rotas é feita exclusivamente pelo frontend. Acesso direto à API via ferramentas externas não é bloqueado. Mitigação futura: implementar filtro de token ou Spring Security em versão pós-RC.
+- **R7 – Inconsistência no cálculo de estoque:** risco aceito. O saldo de estoque é calculado a partir de três fontes diferentes: o campo quantidadeEstoque do modelo Produto, entradas de doação vinculadas por nome e distribuições vinculadas por ID. A correção exigiria mudanças em backend, frontend e testes, com risco de regressão. Mitigação futura: vincular EntradaDoacao a Produto por ID.
 
 ### Riscos mitigados
-- **R1 (Requisitos mal definidos):** mitigado. Critérios de aceitação foram definidos nas issues antes do início da sprint, garantindo alinhamento entre os integrantes.
-- **R4 (Dificuldade técnica):** mitigado. A configuração do CI exigiu ajustes pontuais, como a correção do limite de caracteres nos arquivos YAML, mas foi resolvida sem impacto significativo. O pipeline funcionou como esperado e permitiu identificar e corrigir problemas antes do merge.
+- **R2 – Atraso por subestimação:** parcialmente realizado. A entrega atrasou por desconhecimento do prazo final por parte da equipe, e não por subestimação das tarefas em si.
 
-### Riscos que se concretizaram
-- **R3 (Conflito com outras disciplinas):** concretizou-se parcialmente. A equipe teve projetos e entregas simultâneas em outras disciplinas, o que reduziu a disponibilidade em alguns momentos da sprint.
-
-### Novos riscos identificados
-- **R6 – Endpoints sem proteção JWT:** as rotas do sistema estão acessíveis sem autenticação. A implementação do login retorna sucesso ou falha, mas não gera token JWT, o que significa que qualquer requisição pode acessar os endpoints sem estar autenticada.
-  - **Probabilidade:** Alta
-  - **Impacto:** Alto
-  - **Prioridade:** Alta
-  - **Mitigação:** Implementar autenticação JWT na Sprint 3, protegendo todos os endpoints com verificação de token.
-
-### Ações de mitigação para a Sprint 3
-- Implementar autenticação JWT e proteger os endpoints da API
-- Mapear a disponibilidade da equipe no início da sprint considerando o calendário acadêmico
+### Riscos aceitos
+- **R6 – Endpoints sem proteção:** limitação conhecida, documentada e aceita para o escopo da RC. Registrada também em docs/entregas/release-candidate.md.
+- **R7 – Inconsistência no cálculo de estoque:** limitação conhecida, documentada e aceita para o escopo da RC. Registrada também em docs/entregas/release-candidate.md.

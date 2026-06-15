@@ -24,9 +24,6 @@ Haydeé Murara
 ## Interpretação
 Se chegar perto de 100%, quer dizer que quase tudo que foi testado está funcionando.
 
-## Análise da Sprint 2
-Houve aumento da estabilidade do sistema em relação à Sprint 1, com testes cobrindo autenticação, entidades, doações, repositories e controllers.
-
 ## Análise da Sprint 4
 
 **Valor anterior (Sprint 3):** 100%  
@@ -38,11 +35,14 @@ Houve aumento da estabilidade do sistema em relação à Sprint 1, com testes co
 
 **O que influenciou o resultado:** A refatoração para BCrypt exigiu reescrita dos testes de autenticação, já que a comparação de senha mudou de texto puro para hash. O CI impediu merges enquanto algum teste estivesse falhando, garantindo que a integração só ocorresse com todos os testes passando.
 
-**Comparação antes/depois da refatoração (BCrypt):**
+**Comparação antes/depois da refatoração de segurança:**
 
-| Momento | Situação dos testes de autenticação |
-|---|---|
-| Antes da refatoração (Sprint 3) | Testes validavam senha em texto puro |
-| Após a refatoração (Sprint 4) | Testes atualizados para BCrypt, todos passando |
+| Aspecto de segurança/qualidade | Antes da Sprint 4 (Sprint 3) | Após a Sprint 4 |
+|---|---|---|
+| Armazenamento de senha | Texto puro (`String.equals`) | Hash via `BCryptPasswordEncoder` |
+| Risco em caso de vazamento do banco | Alto — senha legível diretamente | Baixo — reversão computacionalmente inviável |
+| Vulnerabilidade de autenticação documentada | Presente (identificada na Entrega 5) | Eliminada |
+| Cenários cobertos pelos testes de autenticação | Login com senha em texto puro | Login com hash; registro seguro; rejeição de senha incorreta |
+| Taxa de aprovação nos testes de autenticação | 100% (sobre implementação insegura) | 100% (sobre implementação segura) |
 
-A refatoração não introduziu regressão: a taxa se manteve em 100%. A mudança representou uma reorganização necessária dos testes para refletir a nova implementação segura, não uma piora de qualidade.
+A taxa se manteve em 100%, mas o que os testes cobrem mudou: antes validavam uma autenticação vulnerável com senha em texto puro; após a Sprint 4, validam uma autenticação segura com hash de senha.

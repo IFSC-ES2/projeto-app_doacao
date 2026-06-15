@@ -91,7 +91,7 @@ export function Register() {
                 />
               </svg>
             </div>
-            <h1 className="login-title">DoaOps</h1>
+            <h1 className="login-title">Onganizer</h1>
             <p className="login-subtitle">Crie sua conta</p>
           </div>
 
