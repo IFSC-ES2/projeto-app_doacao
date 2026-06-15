@@ -14,6 +14,7 @@
 - [Critérios de Qualidade](docs/qualidade.md)
 - [Fluxo de Trabalho](docs/fluxo-de-trabalho.md)
 - [Deploy](docs/DEPLOY.md)
+- [Release Candidate - Entrega 9](docs/entregas/release-candidate.md)
 
 ---
 

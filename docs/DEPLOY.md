@@ -66,6 +66,7 @@ mvn compile -f backend/pom.xml
 Rodar em um terminal dedicado:
 
 ```bash
+mvn clean -f backend/pom.xml
 mvn spring-boot:run -f backend/pom.xml
 ```
 
