@@ -146,10 +146,10 @@ As limitações abaixo devem ser confirmadas ou atualizadas antes da publicaçã
    - Decisão técnica: a equipe optou por não implementar autenticação stateful na API dado o escopo acadêmico do projeto. A limitação está registrada como R6 em docs/riscos.md.
    - Mitigação futura: implementar filtro de token simples ou Spring Security.
 
-2. **Consistência entre doações, produtos e estoque**
-   - Situação atual: pendente de revisão técnica.
-   - A avaliação apontou que entradas de doação armazenam o produto como texto e que o cálculo de estoque pode misturar fontes diferentes.
-   - A equipe deve corrigir o fluxo ou documentar a regra usada e suas limitações.
+2. **Inconsistência no cálculo de estoque**
+   - Situação atual: limitação conhecida e aceita para esta RC.
+   - Entradas de doação vinculam produto por nome, enquanto distribuições vinculam por ID, o que pode gerar saldo incorreto.
+   - A equipe optou por não corrigir durante a RC devido ao risco de regressão. Registrada como R7 em docs/riscos.md.
 
 3. **Banco H2 em memória**
    - Situação aceita para a RC.
