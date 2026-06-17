@@ -1,6 +1,6 @@
 # Percentual de Conclusão do MVP (Feature Completion Rate)
 
-- **Data do acompanhamento:** 08/06/2026
+- **Data do acompanhamento:** 17/06/2026
 - **Valor coletado:** 100%
 
 ## Classificação
@@ -24,15 +24,6 @@ Isadora Eidt
 ## Interpretação
 Quanto maior o número, mais perto o sistema está de ficar pronto.
 
-## Análise da Sprint 4
-
-**Valor anterior (Sprint 3):** 100% (reportado, mas o endpoint de doações ainda estava incompleto)  
-**Valor atual (Sprint 4):** 100%
-
-**O que foi planejado:** Concluir as funcionalidades pendentes do MVP: API de doações, autenticação segura com BCrypt e polimento do frontend.
-
-**O que foi executado:** As 13 issues planejadas foram entregues (#84, #85, #86, #87, #88, #89, #90, #91, #92, #93, #94, #95, #103). O fluxo completo de doações foi exposto via `GET /doacoes` e `POST /doacoes`. A autenticação passou a armazenar senhas com hash. O frontend teve lint limpo, testes estabilizados e ajustes visuais realizados.
-
 **Funcionalidades do MVP e seu estado ao final da Sprint 4:**
 
 | Funcionalidade | Issue original | Entregue em | Evidência local |
@@ -45,4 +36,13 @@ Quanto maior o número, mais perto o sistema está de ficar pronto.
 | Consulta de estoque atual | #13 | Sprint 3 | `EstoqueController`, `GET /estoque` |
 | Listagem e consulta de doações | #19 | Sprint 4 | `EntradaDoacaoController`, `GET /doacoes` |
 
-**O que influenciou o resultado:** O CI atualizado garantiu que nenhuma entrega introduzisse regressão. A divisão de responsabilidades entre os membros evitou gargalos no final da sprint.
+## Atualização Entrega 9 — Release Candidate 
+
+**Valor anterior (Sprint 4):** 100%  
+**Valor atual (RC):** 100%
+
+**O que foi planejado:** Consolidar o MVP já completo, sem expandir escopo, fechando os itens de hardening, documentação e RC das issues #115 a #122.
+
+**O que foi executado:** As issues #115 (documento da RC), #116 (testes de aceitação), #117 (CI em push para `main`), #118 (riscos e métricas), #119 (limitação de segurança da API), #120 (consistência de estoque), #121 (validação do ambiente público) e #122 (publicação da tag `v1.0.0-rc.1`) foram concluídas. Nenhuma funcionalidade nova foi adicionada ao MVP.
+
+**O que influenciou o resultado:** Por se tratar de uma etapa de hardening e consolidação, o percentual de conclusão do MVP permaneceu em 100%, o esforço foi direcionado a estabilidade, documentação e evidências, não a novas funcionalidades.
