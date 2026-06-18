@@ -248,9 +248,25 @@ class EntidadeServiceTest {
         EntidadeRepository repo = Mockito.mock(EntidadeRepository.class);
         EntidadeService service = new EntidadeService(repo);
 
-        service.deletar(1L);
+        Mockito.when(repo.existsById(1L)).thenReturn(true);
 
+        boolean resultado = service.deletar(1L);
+
+        assertTrue(resultado);
         Mockito.verify(repo).deleteById(1L);
+    }
+
+    @Test
+    void naoDeveDeletarEntidadeInexistente() {
+        EntidadeRepository repo = Mockito.mock(EntidadeRepository.class);
+        EntidadeService service = new EntidadeService(repo);
+
+        Mockito.when(repo.existsById(1L)).thenReturn(false);
+
+        boolean resultado = service.deletar(1L);
+
+        assertFalse(resultado);
+        Mockito.verify(repo, Mockito.never()).deleteById(1L);
     }
 
     private Entidade criarEntidadeValida() {
