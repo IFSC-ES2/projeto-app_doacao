@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FiBox, FiHeart, FiUsers, FiStar } from 'react-icons/fi';
 import { APP_DATA_SYNC_EVENT } from '../utils/dataSync.js';
 
@@ -14,7 +14,9 @@ export function Dashboard() {
   const [estoque, setEstoque] = useState([]);
   const [error, setError] = useState('');
 
-  const loadDashboard = useCallback(async () => {
+  useEffect(() => {
+    let cancelled = false;
+
     const fetchJson = async (path) => {
       const response = await fetch(`${API_URL}${path}`);
       if (!response.ok) {
@@ -23,22 +25,30 @@ export function Dashboard() {
       return response.json();
     };
 
-    setError('');
-    try {
-      const [entidadesResponse, doacoesResponse, estoqueResponse] = await Promise.all([
-        fetchJson('/entidades'),
-        fetchJson('/doacoes'),
-        fetchJson('/estoque'),
-      ]);
-      setEntidades(Array.isArray(entidadesResponse) ? entidadesResponse : []);
-      setDoacoes(Array.isArray(doacoesResponse) ? doacoesResponse : []);
-      setEstoque(Array.isArray(estoqueResponse) ? estoqueResponse : []);
-    } catch (err) {
-      setError(err.message || 'Erro ao atualizar dados');
-    }
-  }, []);
+    const loadDashboard = async () => {
+      if (!cancelled) {
+        setError('');
+      }
 
-  useEffect(() => {
+      try {
+        const [entidadesResponse, doacoesResponse, estoqueResponse] = await Promise.all([
+          fetchJson('/entidades'),
+          fetchJson('/doacoes'),
+          fetchJson('/estoque'),
+        ]);
+
+        if (!cancelled) {
+          setEntidades(Array.isArray(entidadesResponse) ? entidadesResponse : []);
+          setDoacoes(Array.isArray(doacoesResponse) ? doacoesResponse : []);
+          setEstoque(Array.isArray(estoqueResponse) ? estoqueResponse : []);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(err.message || 'Erro ao atualizar dados');
+        }
+      }
+    };
+
     void loadDashboard();
 
     const handleDataSync = () => {
@@ -48,9 +58,10 @@ export function Dashboard() {
     window.addEventListener(APP_DATA_SYNC_EVENT, handleDataSync);
 
     return () => {
+      cancelled = true;
       window.removeEventListener(APP_DATA_SYNC_EVENT, handleDataSync);
     };
-  }, [loadDashboard]);
+  }, []);
 
   const totalEstoque = useMemo(
     () => estoque.reduce((sum, item) => sum + getStockQuantity(item), 0),

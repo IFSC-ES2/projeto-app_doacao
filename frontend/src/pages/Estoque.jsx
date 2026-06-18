@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Pagination } from '../components/Pagination.jsx';
 import './css/Estoque.css';
 import { APP_DATA_SYNC_EVENT } from '../utils/dataSync.js';
@@ -13,25 +13,38 @@ export function Estoque() {
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState({ type: '', message: '' });
 
-  const loadEstoque = useCallback(async () => {
-    setLoading(true);
-    setStatus({ type: '', message: '' });
-    try {
-      const response = await fetch(`${API_URL}/estoque`);
-      const data = await response.json();
-      if (!response.ok) {
-        setStatus({ type: 'error', message: data.mensagem || 'Não foi possível carregar o estoque' });
-        return;
-      }
-      setItems(Array.isArray(data) ? data : []);
-    } catch {
-      setStatus({ type: 'error', message: 'Erro de conexão com o servidor' });
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
   useEffect(() => {
+    let cancelled = false;
+
+    const loadEstoque = async () => {
+      if (!cancelled) {
+        setLoading(true);
+        setStatus({ type: '', message: '' });
+      }
+
+      try {
+        const response = await fetch(`${API_URL}/estoque`);
+        const data = await response.json();
+        if (!response.ok) {
+          if (!cancelled) {
+            setStatus({ type: 'error', message: data.mensagem || 'Não foi possível carregar o estoque' });
+          }
+          return;
+        }
+        if (!cancelled) {
+          setItems(Array.isArray(data) ? data : []);
+        }
+      } catch {
+        if (!cancelled) {
+          setStatus({ type: 'error', message: 'Erro de conexão com o servidor' });
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
     void loadEstoque();
 
     const handleDataSync = () => {
@@ -41,9 +54,10 @@ export function Estoque() {
     window.addEventListener(APP_DATA_SYNC_EVENT, handleDataSync);
 
     return () => {
+      cancelled = true;
       window.removeEventListener(APP_DATA_SYNC_EVENT, handleDataSync);
     };
-  }, [loadEstoque]);
+  }, []);
 
   const filteredItems = items.filter((item) => {
     const nome = String(item.produto || item.nome || '').toLowerCase();
