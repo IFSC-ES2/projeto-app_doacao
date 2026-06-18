@@ -1,6 +1,6 @@
 # Taxa de Conclusão da Sprint (Sprint Completion Rate)
 
-- **Data do acompanhamento:** 08/06/2026
+- **Data do acompanhamento:** 17/06/2026
 - **Valor coletado:** 100%
 
 ## Classificação
@@ -24,13 +24,13 @@ Lucas Gabriel
 ## Interpretação
 Quanto mais perto de 100%, melhor foi o planejamento.
 
-## Análise da Sprint 4
+## Atualização Entrega 9 — Release Candidate 
 
-**Valor anterior (Sprint 3):** 100%  
-**Valor atual (Sprint 4):** 100%
+**Valor anterior (Sprint 4):** 100%  
+**Valor atual (RC):** 100%
 
-**O que foi planejado:** Concluir as 13 issues da Sprint 4, distribuídas entre as frentes de deploy, CI, backend, frontend e documentação.
+**O que foi planejado:** Concluir as 8 issues planejadas para a RC (#115 a #122), distribuídas entre documentação da RC, testes de aceitação, CI, riscos/métricas, segurança da API, consistência de estoque, validação do ambiente e publicação da tag.
 
-**O que foi executado:** Todas as 13 issues foram entregues dentro da sprint. Nenhuma issue foi movida para backlog ou cancelada. Algumas issues precisaram aguardar a conclusão de outras antes de ser integradas, mas todas foram concluídas dentro do prazo.
+**O que foi executado:** As 8 issues foram entregues dentro da etapa. Nenhuma foi cancelada ou movida para o backlog.
 
-**O que influenciou o resultado:** O planejamento foi realista em relação à capacidade da equipe. A divisão das issues por responsável (Haydeé, Isaac, Isadora) possibilitou trabalho em paralelo nas frentes independentes.
+**O que influenciou o resultado:** A divisão das issues por responsável (Haydeé, Isaac, Isadora) e o escopo restrito a hardening/consolidação, sem novas funcionalidades, permitiram concluir todas as issues planejadas.

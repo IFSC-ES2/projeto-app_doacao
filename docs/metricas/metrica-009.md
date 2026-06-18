@@ -1,6 +1,6 @@
 # Taxa de Tarefas Atrasadas (Overdue Task Rate)
 
-- **Data do acompanhamento:** 08/06/2026
+- **Data do acompanhamento:** 17/06/2026
 - **Valor coletado:** 0%
 
 ## Classificação
@@ -24,13 +24,13 @@ Haydeé Murara
 ## Interpretação
 Quanto maior esse número, mais atrasado está o projeto.
 
-## Análise da Sprint 4
+## Atualização Entrega 9 — Release Candidate
 
-**Valor anterior (Sprint 3):** 0%  
-**Valor atual (Sprint 4):** 0%
+**Valor anterior (Sprint 4):** 0%  
+**Valor atual (RC):** entrega atrasada — prazo oficial era 13/06/2026, entregue em 15/06/2026 (2 dias de atraso)
 
-**O que foi planejado:** Entregar todas as issues dentro do prazo da sprint, sem deixar tarefas em aberto após a data de entrega.
+**O que foi planejado:** Entregar a RC até a data oficial de 13/06/2026.
 
-**O que foi executado:** Todas as 13 issues foram fechadas até o dia 08/06, data de entrega da sprint. Nenhuma tarefa ultrapassou o prazo.
+**O que foi executado:** A equipe só tomou conhecimento do prazo final em 15/06/2026 e, no mesmo dia, abriu e concluiu as issues #115 a #122, fechando a RC. O atraso já está registrado como risco R2 em `docs/riscos.md`.
 
-**O que influenciou o resultado:** A divisão clara de responsabilidades e o prazo definido desde o início da sprint ajudaram a manter o ritmo. Algumas issues precisaram aguardar outras para serem integradas, mas isso foi gerenciado sem atrasar a entrega final.
+**O que influenciou o resultado:** O atraso não veio de subestimar o tamanho das tarefas, assim que a equipe soube do prazo, no dia 15/06, o trabalho foi concluído no mesmo dia.

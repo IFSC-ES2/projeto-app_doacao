@@ -137,15 +137,15 @@ Os riscos **R4 e R5**, embora tenham um impacto Alto na integridade do software,
 
 ---
 
-## Atualização Sprint 9
+## Atualização Entrega 9 - Release Candidate
 
 ### Riscos que permanecem ativos
-- **R6 – Endpoints sem proteção JWT:** risco aceito. A equipe avaliou a implementação de autenticação stateful na API e optou por documentar formalmente a limitação por conta do escopo acadêmico do projeto. A proteção de rotas é feita exclusivamente pelo frontend. Acesso direto à API via ferramentas externas não é bloqueado. Mitigação futura: implementar filtro de token ou Spring Security em versão pós-RC.
-- **R7 – Inconsistência no cálculo de estoque:** risco aceito. O saldo de estoque é calculado a partir de três fontes diferentes: o campo quantidadeEstoque do modelo Produto, entradas de doação vinculadas por nome e distribuições vinculadas por ID. A correção exigiria mudanças em backend, frontend e testes, com risco de regressão. Mitigação futura: vincular EntradaDoacao a Produto por ID.
+- **R6 – Endpoints sem proteção JWT:** risco aceito. A equipe avaliou a implementação de autenticação stateful na API (issue #119) e optou por documentar formalmente a limitação por conta do escopo acadêmico do projeto. A proteção de rotas é feita exclusivamente pelo frontend. Acesso direto à API via ferramentas externas não é bloqueado. Mitigação futura: implementar filtro de token ou Spring Security em versão pós-RC.
+- **R7 – Inconsistência no cálculo de estoque:** risco aceito. O saldo de estoque é calculado a partir de três fontes diferentes: o campo quantidadeEstoque do modelo Produto, entradas de doação vinculadas por nome e distribuições vinculadas por ID (issue #120). A correção exigiria mudanças em backend, frontend e testes, com risco de regressão. Mitigação futura: vincular EntradaDoacao a Produto por ID.
 
 ### Riscos mitigados
-- **R2 – Atraso por subestimação:** parcialmente realizado. A entrega atrasou por desconhecimento do prazo final por parte da equipe, e não por subestimação das tarefas em si.
+- **R2 – Atraso por subestimação:** parcialmente realizado. A entrega atrasou por desconhecimento do prazo final por parte da equipe, e não por subestimação das tarefas em si. As issues #115 a #122 foram abertas e concluídas em 15/06/2026 para fechar a RC.
 
 ### Riscos aceitos
-- **R6 – Endpoints sem proteção:** limitação conhecida, documentada e aceita para o escopo da RC. Registrada também em docs/entregas/release-candidate.md.
-- **R7 – Inconsistência no cálculo de estoque:** limitação conhecida, documentada e aceita para o escopo da RC. Registrada também em docs/entregas/release-candidate.md.
+- **R6 – Endpoints sem proteção:** limitação conhecida, documentada e aceita para o escopo da RC (issue #119). Registrada também em docs/entregas/release-candidate.md.
+- **R7 – Inconsistência no cálculo de estoque:** limitação conhecida, documentada e aceita para o escopo da RC (issue #120). Registrada também em docs/entregas/release-candidate.md.

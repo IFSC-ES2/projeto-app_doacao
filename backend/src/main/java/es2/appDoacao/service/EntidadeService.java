@@ -39,8 +39,13 @@ public class EntidadeService {
         return Optional.empty();
     }
 
-    public void deletar(Long id) {
+    public boolean deletar(Long id) {
+        if (!entidadeRepository.existsById(id)) {
+            return false;
+        }
+
         entidadeRepository.deleteById(id);
+        return true;
     }
 
     private boolean nomeValido(String nome) {

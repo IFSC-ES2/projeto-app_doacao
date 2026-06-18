@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { FiTrash2 } from 'react-icons/fi';
 import { Pagination } from '../components/Pagination.jsx';
 import './css/Produtos.css';
+import { emitAppDataSync } from '../utils/dataSync.js';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 const PAGE_SIZE = 6;
@@ -180,6 +181,7 @@ export function Produtos() {
       setForm(initialForm);
       setCurrentPage(1);
       await loadProdutos({ resetStatus: false });
+      emitAppDataSync({ resource: 'produtos', action: 'create' });
     } catch {
       setStatus({ type: 'error', message: 'Erro de conexão com o servidor' });
     } finally {
@@ -210,6 +212,7 @@ export function Produtos() {
       setStatus({ type: 'success', message: 'Produto excluído com sucesso' });
       setDeletingId(null);
       await loadProdutos({ resetStatus: false });
+      emitAppDataSync({ resource: 'produtos', action: 'delete' });
     } catch {
       setStatus({ type: 'error', message: 'Erro de conexão com o servidor' });
     }

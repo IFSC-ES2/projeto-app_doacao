@@ -12,7 +12,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -123,6 +125,34 @@ class EntidadeControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()", greaterThanOrEqualTo(1)))
                 .andExpect(jsonPath("$[0].nome").value("ONG Vida"));
+    }
+
+    @Test
+    void deveExcluirEntidadeComSucesso() throws Exception {
+        Entidade entidade = entidadeRepository.save(criarEntidadeValida());
+
+        mockMvc.perform(delete("/entidades/{id}", entidade.getId()))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(get("/entidades"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(0));
+    }
+
+    @Test
+    void deveRetornarNotFoundAoExcluirEntidadeInexistente() throws Exception {
+        mockMvc.perform(delete("/entidades/{id}", 999L))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.mensagem").value("Entidade não encontrada"));
+    }
+
+    @Test
+    void devePermitirPreflightCorsParaExcluirEntidade() throws Exception {
+        mockMvc.perform(options("/entidades/{id}", 1L)
+                        .header("Origin", "http://localhost:5173")
+                        .header("Access-Control-Request-Method", "DELETE"))
+                .andExpect(status().isOk())
+                .andExpect(header().string("Access-Control-Allow-Origin", "*"));
     }
 
     private Entidade criarEntidadeValida() {

@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { Entidades } from '../Entidades.jsx';
 
@@ -33,4 +33,46 @@ it('pagina a lista de entidades quando ha mais registros que o limite', async ()
 
   expect(screen.getByText('Entidade 7')).toBeTruthy();
   expect(screen.queryByText('Entidade 1')).toBeNull();
+});
+
+it('exclui uma entidade apos confirmacao no dialogo', async () => {
+  const entidades = [
+    { id: 1, nome: 'Casa Solidaria', cnpj: '1', email: 'casa@email.com', telefone: '111' },
+  ];
+
+  fetch.mockImplementation(async (url, options = {}) => {
+    if (url === 'http://localhost:8080/entidades' && (!options.method || options.method === 'GET')) {
+      return {
+        ok: true,
+        json: async () => entidades.map((entidade) => ({ ...entidade })),
+      };
+    }
+
+    if (url === 'http://localhost:8080/entidades/1' && options.method === 'DELETE') {
+      entidades.splice(0, 1);
+      return {
+        ok: true,
+        status: 204,
+        json: async () => ({}),
+      };
+    }
+
+    throw new Error(`Unexpected request: ${options.method || 'GET'} ${url}`);
+  });
+
+  render(<Entidades />);
+
+  expect(await screen.findByText('Casa Solidaria')).toBeTruthy();
+
+  fireEvent.click(screen.getByRole('button', { name: /excluir entidade casa solidaria/i }));
+
+  const dialog = await screen.findByRole('dialog');
+  expect(within(dialog).getByText(/tem certeza que deseja excluir/i)).toBeTruthy();
+
+  fireEvent.click(within(dialog).getByRole('button', { name: /^excluir$/i }));
+
+  expect(await screen.findByText('Entidade excluída com sucesso')).toBeTruthy();
+  await waitFor(() => {
+    expect(screen.queryByText('Casa Solidaria')).toBeNull();
+  });
 });

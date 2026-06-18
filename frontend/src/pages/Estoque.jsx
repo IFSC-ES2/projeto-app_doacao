@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Pagination } from '../components/Pagination.jsx';
 import './css/Estoque.css';
+import { APP_DATA_SYNC_EVENT } from '../utils/dataSync.js';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 const PAGE_SIZE = 6;
@@ -13,25 +14,49 @@ export function Estoque() {
   const [status, setStatus] = useState({ type: '', message: '' });
 
   useEffect(() => {
+    let cancelled = false;
+
     const loadEstoque = async () => {
-      setLoading(true);
-      setStatus({ type: '', message: '' });
+      if (!cancelled) {
+        setLoading(true);
+        setStatus({ type: '', message: '' });
+      }
+
       try {
         const response = await fetch(`${API_URL}/estoque`);
         const data = await response.json();
         if (!response.ok) {
-          setStatus({ type: 'error', message: data.mensagem || 'Não foi possível carregar o estoque' });
+          if (!cancelled) {
+            setStatus({ type: 'error', message: data.mensagem || 'Não foi possível carregar o estoque' });
+          }
           return;
         }
-        setItems(Array.isArray(data) ? data : []);
+        if (!cancelled) {
+          setItems(Array.isArray(data) ? data : []);
+        }
       } catch {
-        setStatus({ type: 'error', message: 'Erro de conexão com o servidor' });
+        if (!cancelled) {
+          setStatus({ type: 'error', message: 'Erro de conexão com o servidor' });
+        }
       } finally {
-        setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     };
 
-    loadEstoque();
+    void loadEstoque();
+
+    const handleDataSync = () => {
+      void loadEstoque();
+    };
+
+    window.addEventListener(APP_DATA_SYNC_EVENT, handleDataSync);
+
+    return () => {
+      cancelled = true;
+      window.removeEventListener(APP_DATA_SYNC_EVENT, handleDataSync);
+    };
   }, []);
 
   const filteredItems = items.filter((item) => {
@@ -89,7 +114,7 @@ export function Estoque() {
               <tbody>
                 {visibleItems.map((item) => {
                   const quantidade = Number(
-                    item.quantidadeEstoque ?? item.quantidadeAtual ?? item.quantidade ?? 0
+                    item.saldoCalculado ?? item.quantidadeAtual ?? item.quantidadeEstoque ?? item.quantidade ?? 0
                   );
                   const zerado = quantidade <= 0;
                   return (

@@ -1,7 +1,7 @@
 # Lead Time Médio (Average Lead Time)
 
-- **Data do acompanhamento:** 08/06/2026
-- **Valor coletado:** 5 dias
+- **Data do acompanhamento:** 17/06/2026
+- **Valor coletado:** 1 dia
 
 ## Classificação
 Processo
@@ -24,13 +24,14 @@ Lucas Gabriel
 ## Interpretação
 Se estiver demorando muito, talvez as tarefas estejam grandes demais.
 
-## Análise da Sprint 4
+## Atualização Entrega 9 — Release Candidate 
 
-**Valor anterior (Sprint 3):** 7 dias  
-**Valor atual (Sprint 4):** 5 dias
 
-**O que foi planejado:** Manter um lead time baixo com issues bem delimitadas e responsáveis definidos desde o início da sprint.
+**Valor anterior (Sprint 4):** 5 dias  
+**Valor atual (RC):** 1 dia para o fechamento das issues, com revisão de documentação estendida nos dias seguintes
 
-**O que foi executado:** A divisão das tarefas foi feita no dia 01/06 pela scrum master (Isadora) e as issues foram abertas no dia 02/06. As de deploy e padrões tiveram commits e merge no próprio dia 02/06. As de backend (API de doações, BCrypt e ADR) tiveram commits em 04/06 e PRs mergeados em 07/06 (~5 dias). Frontend, CI e documentação fecharam em 08/06 (~6 dias). A média resultou em aproximadamente 5 dias.
+**O que foi planejado:** Fechar rapidamente as issues #115 a #122, já que a etapa concentrou hardening e documentação sobre uma base de código já estável, sem dependências externas de funcionalidades novas.
 
-**O que influenciou o resultado:** A definição clara de escopo por issue e a divisão de responsabilidades desde o primeiro dia da sprint reduziram o tempo de execução. O CI encurtou o ciclo de revisão ao automatizar a validação, diminuindo o tempo de espera por aprovação.
+**O que foi executado:** As issues #115 a #122 foram abertas e fechadas no mesmo dia, 15/06/2026, integradas pelo PR #124. A documentação (métricas e seções de riscos/RC) passou por revisões adicionais nos dias seguintes para cobrir pontos que estavam parciais.
+
+**O que influenciou o resultado:** O escopo restrito (sem novas funcionalidades) reduziu o tempo para fechar as issues.

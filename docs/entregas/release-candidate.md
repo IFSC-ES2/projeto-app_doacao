@@ -137,6 +137,13 @@ Documento de registro:
 
 - [Testes de Aceitação da RC](testes-aceitacao-rc.md)
 
+## Riscos e métricas
+
+Documentos de registro atualizados para a Entrega 9:
+
+- [Registro de Riscos](../riscos.md) — inclui a atualização "Entrega 9 — Release Candidate", com R6 e R7 documentados como riscos aceitos e R2 com a causa do atraso da entrega.
+- [Métricas](../metricas/) — cada uma das nove fichas (`metrica-001.md` a `metrica-009.md`) recebeu a seção "Atualização Entrega 9 — Release Candidate", com valores e evidências da RC.
+
 ## Limitações conhecidas
 
 As limitações abaixo ficam registradas para esta RC:
