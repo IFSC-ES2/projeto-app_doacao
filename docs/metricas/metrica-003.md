@@ -1,6 +1,6 @@
 # Taxa de Aprovação nos Testes (Test Pass Rate)
 
-- **Data do acompanhamento:** 08/06/2026
+- **Data do acompanhamento:** 17/06/2026
 - **Valor coletado:** 100%
 
 ## Classificação
@@ -24,17 +24,6 @@ Haydeé Murara
 ## Interpretação
 Se chegar perto de 100%, quer dizer que quase tudo que foi testado está funcionando.
 
-## Análise da Sprint 4
-
-**Valor anterior (Sprint 3):** 100%  
-**Valor atual (Sprint 4):** 100%
-
-**O que foi planejado:** Manter 100% dos testes passando após a refatoração da autenticação para BCrypt e a adição de testes para o fluxo de doações. No final da sprint, a partir do feedback do professor, foi identificada a ausência de teste de integração para o contrato HTTP de /doacoes e o teste foi adicionado como melhoria não prevista nas issues inicias da sprint.
-
-**O que foi executado:** Os testes de autenticação foram atualizados para o novo fluxo com armazenamento de senha via BCryptPasswordEncoder (AuthServiceTest). Foram criados testes de controller e service para o fluxo de doações (EntradaDoacaoControllerTest e EntradaDoacaoServiceTest), além de teste de integração via HTTP para cobrir o contrato dos endpoints GET /doacoes e POST /doacoes (EntradaDoacaoControllerIntegrationTest). No frontend, o teste Doacoes.test.jsx foi estabilizado junto com os demais testes de componente.
-
-**O que influenciou o resultado:** A refatoração para BCrypt exigiu reescrita dos testes de autenticação, já que a comparação de senha mudou de texto puro para hash. O CI impediu merges enquanto algum teste estivesse falhando, garantindo que a integração só ocorresse com todos os testes passando.
-
 **Comparação antes/depois da refatoração de segurança:**
 
 | Aspecto de segurança/qualidade | Antes da Sprint 4 (Sprint 3) | Após a Sprint 4 |
@@ -46,3 +35,14 @@ Se chegar perto de 100%, quer dizer que quase tudo que foi testado está funcion
 | Taxa de aprovação nos testes de autenticação | 100% (sobre implementação insegura) | 100% (sobre implementação segura) |
 
 A taxa se manteve em 100%, mas o que os testes cobrem mudou: antes validavam uma autenticação vulnerável com senha em texto puro; após a Sprint 4, validam uma autenticação segura com hash de senha.
+
+## Atualização Entrega 9 — RC (15/06/2026)
+
+**Valor anterior (Sprint 4):** 100%  
+**Valor atual (RC):** 100%
+
+**O que foi planejado:** Executar os testes automatizados de backend e frontend e os testes de aceitação da RC (issue #116), mantendo a taxa de aprovação em 100% sem expandir escopo.
+
+**O que foi executado:** Os 10 casos de teste de aceitação registrados em `docs/entregas/testes-aceitacao-rc.md` (login, bloqueio de login inválido, cadastro de entidade, cadastro de produto com doação inicial, listagem de doações, distribuição, consulta de estoque, navegação, logout e validação técnica automatizada) foram executados e resultaram em "Aprovado". O pipeline de CI, ajustado pela issue #117 para também executar em push para `main`, confirmou build, lint e testes automatizados passando.
+
+**O que influenciou o resultado:** A execução do CI antes do merge final e a checagem manual dos fluxos principais pela equipe garantiram que a RC fosse fechada sem nenhum teste reprovado.

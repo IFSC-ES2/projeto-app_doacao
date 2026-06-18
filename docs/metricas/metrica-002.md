@@ -1,6 +1,6 @@
 # Contagem de Defeitos (Defect Count)
 
-- **Data do acompanhamento:** 08/06/2026
+- **Data do acompanhamento:** 17/06/2026
 - **Valor coletado:** 0
 
 ## Classificação
@@ -24,13 +24,13 @@ Haydeé Murara
 ## Interpretação
 Se aparecer muito bug, alguma parte do sistema precisa de mais testes.
 
-## Análise da Sprint 4
+## Atualização Entrega 9 — Release Candidate 
 
-**Valor anterior (Sprint 3):** 0  
-**Valor atual (Sprint 4):** 0
+**Valor anterior (Sprint 4):** 0  
+**Valor atual (RC):** 0
 
-**O que foi planejado:** Manter zero defeitos registrados, mesmo com a refatoração da autenticação para BCrypt e a adição da API de doações.
+**O que foi planejado:** Manter zero defeitos com a label `bug` durante o fechamento da RC, e tratar formalmente como limitação as questões já conhecidas (proteção da API e consistência de estoque), em vez de deixá-las como bugs não documentados.
 
-**O que foi executado:** Nenhuma issue foi aberta com a label `bug` durante a Sprint 4. Correções pontuais foram realizadas diretamente via commits de fix sem a abertura formal de issues de defeito.
+**O que foi executado:** Nenhuma issue foi aberta com a label `bug`. As duas questões técnicas conhecidas: ausência de validação de token nos endpoints da API (issue #119) e inconsistência no cálculo de estoque (issue #120), foram registradas como riscos aceitos (R6 e R7 em `docs/riscos.md`) e como limitações conhecidas em `docs/entregas/release-candidate.md`, não como defeitos em aberto.
 
-**O que influenciou o resultado:** O CI exigiu que todos os testes passassem antes de qualquer merge, funcionando como barreira automática contra regressões. A cobertura de testes de backend e frontend foi mantida e ampliada na sprint.
+**O que influenciou o resultado:** A equipe optou por documentar formalmente as limitações em vez de corrigi-las sob risco de regressão tão perto da entrega, mantendo a contagem de defeitos em zero sem mascarar problemas reais.

@@ -1,7 +1,7 @@
 # Velocidade (Velocity)
 
-- **Data do acompanhamento:** 08/06/2026
-- **Valor coletado:** Não aplicável — o valor de 39 pontos já havia sido coletado na Sprint 3, referente ao backlog original do MVP estimado via Planning Poker. As issues da Sprint 4 não passaram por estimativa formal, portanto a velocidade em story points não se aplica a esta sprint.
+- **Data do acompanhamento:** 17/06/2026
+- **Valor coletado:** Não aplicável. As issues de hardening e RC da Entrega 9 (#115 a #122) não passaram por estimativa formal em story points.
 
 ## Classificação
 Processo
@@ -24,13 +24,13 @@ Isaac Kozuchovski
 ## Interpretação
 Ajuda a saber quantos pontos a equipe consegue fazer nas próximas sprints.
 
-## Análise da Sprint 4
+## Atualização Entrega 9 — Release Candidate 
 
-**Valor anterior (Sprint 3):** 39 pontos  
-**Valor atual (Sprint 4):** Não aplicável
+**Valor anterior (Sprint 4):** Não aplicável (39 pontos do backlog original já estavam concluídos desde a Sprint 3)  
+**Valor atual (RC):** Não aplicável. Os 39 pontos do backlog original permanecem concluídos; nenhum ponto novo foi somado nesta etapa
 
-**O que foi planejado:** Entregar as 13 issues operacionais da Sprint 4 (#84, #85, #86, #87, #88, #89, #90, #91, #92, #93, #94, #95, #103), organizadas em três frentes: Deploy/CI (Haydeé), backend com API de doações e hash de senha (Isaac) e frontend/documentação (Isadora). Essas issues não foram estimadas via Planning Poker.
+**O que foi planejado:** Fechar as issues #115 a #122, de hardening e RC, itens operacionais de consolidação do MVP já completo, sem necessidade de estimativa em story points.
 
-**O que foi executado:** Todas as 13 issues foram concluídas. Os destaques foram #88 (API de doações) e #89 (autenticação segura com BCrypt), que encerraram as funcionalidades pendentes do MVP. O backlog original de 39 pontos, estimado via Planning Poker, já estava registrado na Sprint 3 e não se repete na contagem da Sprint 4.
+**O que foi executado:** As issues #115 a #122 foram concluídas e integradas pelo PR #124, mergeado em 15/06/2026 e marcado pela tag `v1.0.0-rc.1` no commit `21ab4db`. O backlog original de 39 pontos, estimado via Planning Poker e registrado em `docs/baseline.md`, não foi alterado.
 
-**O que influenciou o resultado:** A divisão clara de responsabilidades evitou bloqueios e o CI reduziu o retrabalho ao capturar falhas cedo.
+**O que influenciou o resultado:** Como o foco da etapa foi hardening e documentação, e não novas funcionalidades do backlog, não houve necessidade de estimar novos story points.

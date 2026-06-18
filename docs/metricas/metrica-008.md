@@ -1,7 +1,7 @@
 # Variação Planejado vs. Realizado (Planned vs. Completed Variance)
 
-- **Data do acompanhamento:** 08/06/2026
-- **Valor coletado:** +1 tarefa
+- **Data do acompanhamento:** 17/06/2026
+- **Valor coletado:** 0 tarefas
 
 ## Classificação
 Projeto
@@ -25,13 +25,13 @@ Isadora Eidt
 Número negativo = faltou coisa  
 Número positivo = fizeram mais do que o esperado
 
-## Análise da Sprint 4
+## Atualização Entrega 9 — Release Candidate 
 
-**Valor anterior (Sprint 3):** 10 tarefas  
-**Valor atual (Sprint 4):** +1 tarefa (13 planejadas, 14 concluídas)
+**Valor anterior (Sprint 4):** +1 tarefa  
+**Valor atual (RC):** 0 
 
-**O que foi planejado:** Concluir as 13 issues definidas no início da sprint, sem deixar nada para trás.
+**O que foi planejado:** Concluir as 8 issues (#115 a #122) definidas para o fechamento da RC, sem adicionar itens fora do escopo de hardening e documentação.
 
-**O que foi executado:** As 13 issues planejadas foram entregues. Além disso, foi adicionado um teste de integração para o contrato HTTP de /doacoes a partir do feedback do professor, resultando em variação positiva de +1 tarefa em relação ao planejado.
+**O que foi executado:** As 8 issues planejadas (#115 a #122) foram entregues. Nenhuma tarefa extra foi adicionada nem removida do escopo da RC.
 
-**O que influenciou o resultado:** O escopo da sprint foi bem definido antes do início. A divisão de tarefas por responsável deixou claro o que cada um precisava entregar, reduzindo o risco de alguma issue ficar sem responsável. O CI ajudou a identificar problemas cedo, evitando que issues travassem no final da sprint.
+**O que influenciou o resultado:** O escopo restrito a hardening e consolidação, sem espaço para itens não previstos, manteve a variação em zero.

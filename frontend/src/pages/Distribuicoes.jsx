@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Pagination } from '../components/Pagination.jsx';
 import './css/Distribuicoes.css';
+import { emitAppDataSync } from '../utils/dataSync.js';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 const PAGE_SIZE = 6;
@@ -142,6 +143,7 @@ export function Distribuicoes() {
       setForm(initialForm);
       setCurrentPage(1);
       await loadDistribuicoes({ resetStatus: false });
+      emitAppDataSync({ resource: 'distribuicoes', action: 'create' });
     } catch {
       setStatus({ type: 'error', message: 'Erro de conexão com o servidor' });
     } finally {

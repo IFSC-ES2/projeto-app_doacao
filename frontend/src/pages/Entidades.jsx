@@ -1,5 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { FiTrash2 } from 'react-icons/fi';
 import { Pagination } from '../components/Pagination.jsx';
+import { emitAppDataSync } from '../utils/dataSync.js';
+import './css/Produtos.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 const PAGE_SIZE = 6;
@@ -15,21 +18,25 @@ export function Entidades() {
   const [items, setItems] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
+  const [status, setStatus] = useState({ type: '', message: '' });
 
-  const loadEntidades = async () => {
+  const loadEntidades = async (options = { resetStatus: true }) => {
     setLoading(true);
-    setError('');
+    if (options.resetStatus) {
+      setStatus({ type: '', message: '' });
+    }
     try {
       const response = await fetch(`${API_URL}/entidades`);
       const data = await response.json();
       if (!response.ok) {
-        setError(data.mensagem || 'Não foi possível carregar as entidades');
+        setStatus({ type: 'error', message: data.mensagem || 'Não foi possível carregar as entidades' });
         return;
       }
       setItems(Array.isArray(data) ? data : []);
     } catch {
-      setError('Erro de conexão com o servidor');
+      setStatus({ type: 'error', message: 'Erro de conexão com o servidor' });
     } finally {
       setLoading(false);
     }
@@ -40,13 +47,13 @@ export function Entidades() {
 
     const loadInitialEntidades = async () => {
       setLoading(true);
-      setError('');
+      setStatus({ type: '', message: '' });
       try {
         const response = await fetch(`${API_URL}/entidades`);
         const data = await response.json();
         if (!response.ok) {
           if (!cancelled) {
-            setError(data.mensagem || 'Não foi possível carregar as entidades');
+            setStatus({ type: 'error', message: data.mensagem || 'Não foi possível carregar as entidades' });
           }
           return;
         }
@@ -55,7 +62,7 @@ export function Entidades() {
         }
       } catch {
         if (!cancelled) {
-          setError('Erro de conexão com o servidor');
+          setStatus({ type: 'error', message: 'Erro de conexão com o servidor' });
         }
       } finally {
         if (!cancelled) {
@@ -75,6 +82,9 @@ export function Entidades() {
   const safeCurrentPage = Math.min(currentPage, totalPages);
 
   const visibleItems = items.slice((safeCurrentPage - 1) * PAGE_SIZE, safeCurrentPage * PAGE_SIZE);
+  const deletingEntity = useMemo(() => {
+    return items.find((entidade) => String(entidade.id) === String(deletingId)) || null;
+  }, [items, deletingId]);
 
   const handleChange = (field) => (event) => {
     setForm((prev) => ({ ...prev, [field]: event.target.value }));
@@ -82,7 +92,8 @@ export function Entidades() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setError('');
+    setSaving(true);
+    setStatus({ type: '', message: '' });
 
     try {
       const response = await fetch(`${API_URL}/entidades`, {
@@ -93,14 +104,51 @@ export function Entidades() {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.mensagem || 'Não foi possível salvar a entidade');
+        setStatus({ type: 'error', message: data.mensagem || 'Não foi possível salvar a entidade' });
         return;
       }
 
       setForm({ nome: '', cnpj: '', endereco: '', telefone: '', email: '' });
-      await loadEntidades();
+      setStatus({ type: 'success', message: data.mensagem || 'Entidade salva com sucesso' });
+      await loadEntidades({ resetStatus: false });
+      emitAppDataSync({ resource: 'entidades', action: 'create' });
     } catch {
-      setError('Erro de conexão com o servidor');
+      setStatus({ type: 'error', message: 'Erro de conexão com o servidor' });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!deletingId) {
+      return;
+    }
+
+    setSaving(true);
+    setStatus({ type: '', message: '' });
+
+    try {
+      const response = await fetch(`${API_URL}/entidades/${deletingId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        setStatus({
+          type: 'error',
+          message: data.mensagem || 'Não foi possível excluir a entidade',
+        });
+        return;
+      }
+
+      setDeletingId(null);
+      setStatus({ type: 'success', message: 'Entidade excluída com sucesso' });
+      await loadEntidades({ resetStatus: false });
+      emitAppDataSync({ resource: 'entidades', action: 'delete' });
+    } catch {
+      setStatus({ type: 'error', message: 'Erro de conexão com o servidor' });
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -148,9 +196,9 @@ export function Entidades() {
             onChange={handleChange('email')}
             required
           />
-          <div className="app-feedback">{error}</div>
-          <button className="app-button" type="submit" disabled={loading}>
-            {loading ? 'Salvando...' : 'Salvar entidade'}
+          {status.message && <p className={`page-feedback ${status.type}`}>{status.message}</p>}
+          <button className="app-button" type="submit" disabled={loading || saving}>
+            {saving ? 'Salvando...' : 'Salvar entidade'}
           </button>
         </form>
       </section>
@@ -170,6 +218,7 @@ export function Entidades() {
                   <th>CNPJ</th>
                   <th>Email</th>
                   <th>Telefone</th>
+                  <th>Ações</th>
                 </tr>
               </thead>
               <tbody>
@@ -179,6 +228,16 @@ export function Entidades() {
                     <td>{entidade.cnpj}</td>
                     <td>{entidade.email}</td>
                     <td>{entidade.telefone}</td>
+                    <td>
+                      <button
+                        type="button"
+                        className="product-delete-button"
+                        onClick={() => setDeletingId(entidade.id)}
+                        aria-label={`Excluir entidade ${entidade.nome}`}
+                      >
+                        <FiTrash2 aria-hidden />
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -187,6 +246,44 @@ export function Entidades() {
           </>
         )}
       </section>
+
+      {deletingEntity && (
+        <div className="product-modal-overlay" role="presentation" onClick={() => setDeletingId(null)}>
+          <div
+            className="product-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="delete-entity-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <h3 id="delete-entity-title">Excluir entidade</h3>
+            <p>
+              Tem certeza que deseja excluir <strong>{deletingEntity.nome}</strong>?
+            </p>
+            <p className="app-muted">
+              Essa ação remove a entidade da lista cadastrada e não pode ser desfeita.
+            </p>
+            <div className="product-modal-actions">
+              <button
+                type="button"
+                className="product-modal-cancel"
+                onClick={() => setDeletingId(null)}
+                disabled={saving}
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                className="product-modal-confirm"
+                onClick={handleDelete}
+                disabled={saving}
+              >
+                Excluir
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,7 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
 import { FiBox, FiHeart, FiUsers, FiStar } from 'react-icons/fi';
+import { APP_DATA_SYNC_EVENT } from '../utils/dataSync.js';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
+function getStockQuantity(item) {
+  return Number(item.saldoCalculado ?? item.quantidadeAtual ?? item.quantidadeEstoque ?? item.quantidade ?? 0);
+}
 
 export function Dashboard() {
   const [entidades, setEntidades] = useState([]);
@@ -10,6 +15,8 @@ export function Dashboard() {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    let cancelled = false;
+
     const fetchJson = async (path) => {
       const response = await fetch(`${API_URL}${path}`);
       if (!response.ok) {
@@ -19,40 +26,57 @@ export function Dashboard() {
     };
 
     const loadDashboard = async () => {
-      setError('');
+      if (!cancelled) {
+        setError('');
+      }
+
       try {
         const [entidadesResponse, doacoesResponse, estoqueResponse] = await Promise.all([
           fetchJson('/entidades'),
           fetchJson('/doacoes'),
           fetchJson('/estoque'),
         ]);
-        setEntidades(Array.isArray(entidadesResponse) ? entidadesResponse : []);
-        setDoacoes(Array.isArray(doacoesResponse) ? doacoesResponse : []);
-        setEstoque(Array.isArray(estoqueResponse) ? estoqueResponse : []);
+
+        if (!cancelled) {
+          setEntidades(Array.isArray(entidadesResponse) ? entidadesResponse : []);
+          setDoacoes(Array.isArray(doacoesResponse) ? doacoesResponse : []);
+          setEstoque(Array.isArray(estoqueResponse) ? estoqueResponse : []);
+        }
       } catch (err) {
-        setError(err.message || 'Erro ao atualizar dados');
+        if (!cancelled) {
+          setError(err.message || 'Erro ao atualizar dados');
+        }
       }
     };
 
-    loadDashboard();
+    void loadDashboard();
+
+    const handleDataSync = () => {
+      void loadDashboard();
+    };
+
+    window.addEventListener(APP_DATA_SYNC_EVENT, handleDataSync);
+
+    return () => {
+      cancelled = true;
+      window.removeEventListener(APP_DATA_SYNC_EVENT, handleDataSync);
+    };
   }, []);
 
   const totalEstoque = useMemo(
-    () => estoque.reduce((sum, item) => sum + Number(item.quantidadeEstoque || 0), 0),
+    () => estoque.reduce((sum, item) => sum + getStockQuantity(item), 0),
     [estoque]
   );
   const totalDoacoes = doacoes.length;
   const totalEntidades = entidades.length;
   const doadoresUnicos = new Set(doacoes.map((item) => item.doador)).size;
 
-  const produtos = doacoes.reduce((acc, item) => {
-    const key = item.produto || 'Sem nome';
-    acc[key] = (acc[key] || 0) + Number(item.quantidade || 0);
-    return acc;
-  }, {});
-
-  const topProdutos = Object.entries(produtos)
-    .sort((a, b) => b[1] - a[1])
+  const topProdutos = estoque
+    .map((item) => [
+      item.produto || item.nome || 'Sem nome',
+      getStockQuantity(item),
+    ])
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
     .slice(0, 5);
 
   const recentes = [...doacoes]

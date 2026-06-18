@@ -36,4 +36,15 @@ public class EntidadeController {
         }
     }
 
+    @DeleteMapping("/entidades/{id}")
+    public ResponseEntity<?> excluir(@PathVariable Long id) {
+        boolean removida = entidadeService.deletar(id);
+        if (removida) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.status(404)
+                .body(Map.of("mensagem", "Entidade não encontrada"));
+    }
+
 }
