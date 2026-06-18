@@ -26,17 +26,17 @@
 | 9       | Isaac Kozuchovski | 89fe3ef | 08/06/26 | 14/06/26 | 5,3  | 10   |
 | 9       | Isadora Eidt      | 89fe3ef | 08/06/26 | 14/06/26 | 5,2  | 10   |
 | 9       | Lucas Gabriel     | 89fe3ef | 08/06/26 | 14/06/26 | 0,0  | 10   |
-| 10      |                   |         |          |          |      | 10   |
+| 10      | equipe            | --      | 15/06/26 | 15/06/26 | 8    | 10   |
 | 11/12   |                   |         |          |          |      | 30   |
 
 ## Nota parcial
 
 | aluno             | nota parcial |
 | ----------------- | ------------ |
-| Haydee Murara     | 7,1          |
-| Isaac Kozuchovski | 7,3          |
-| Isadora Eidt      | 6,9          |
-| Lucas Gabriel     | 3,6          |
+| Haydee Murara     | 7,2          |
+| Isaac Kozuchovski | 7,4          |
+| Isadora Eidt      | 7,0          |
+| Lucas Gabriel     | 4,2          |
 
 ## Comentários
 
@@ -167,9 +167,9 @@
    - A descrição da release superestima a entrega ao afirmar listagem de doações integrada, pois o backend não expõe `/doacoes`.
 8. Registro de contribuição individual: parcial.
    - Haydee: contribuição relevante em CI, configuração de testes frontend e testes backend de produto/distribuição. Nota limitada porque PRs próprios sem aprovação registrada reduzem a evidência de revisão e os testes não capturam a quebra de contrato `/doacoes`.
-    - Isaac: principal contribuição em backend de produto/distribuição, correção de estoque, documentação C4/ADRs, métricas, README, sprint e release. Nota limitada pela ausência dos endpoints de doações, inconsistência funcional do estoque/doações e métricas frágeis.
-    - Isadora: contribuição relevante em frontend, roteamento e testes de componentes. Nota limitada porque parte importante do frontend depende de endpoints inexistentes, o lint falha com muitos erros e os testes usam mocks que não evidenciam integração real com a API.
-    - Lucas: não há commits de Lucas no intervalo `v0.2.0..v0.3.0`, ele não aparece no registro de contribuições de `entregas/sprint-3.md` e não foram encontradas evidências de PRs, reviews, testes ou documentação atribuídos a ele nesta entrega.
+   - Isaac: principal contribuição em backend de produto/distribuição, correção de estoque, documentação C4/ADRs, métricas, README, sprint e release. Nota limitada pela ausência dos endpoints de doações, inconsistência funcional do estoque/doações e métricas frágeis.
+   - Isadora: contribuição relevante em frontend, roteamento e testes de componentes. Nota limitada porque parte importante do frontend depende de endpoints inexistentes, o lint falha com muitos erros e os testes usam mocks que não evidenciam integração real com a API.
+   - Lucas: não há commits de Lucas no intervalo `v0.2.0..v0.3.0`, ele não aparece no registro de contribuições de `entregas/sprint-3.md` e não foram encontradas evidências de PRs, reviews, testes ou documentação atribuídos a ele nesta entrega.
 
 ### Entrega 8
 
@@ -205,11 +205,11 @@
    - `entregas/sprint-4.md` discrimina contribuições de Haydeé, Isaac e Isadora e registra Lucas sem atribuição formal.
    - Commits no intervalo `v0.3.0..v0.4.0` confirmam contribuições de Haydeé em deploy/CI/métricas/teste de integração, Isaac em API de doações/BCrypt/ADR e Isadora em frontend/documentação/ajustes de lint.
    - Não há commits, atribuição formal ou evidência local de participação de Lucas na Sprint 4.
-Notas individuais:
+     Notas individuais:
    - Haydee: responsável por deploy, CI, métricas, documentação de padrões e teste de integração de doações; nota limitada por métricas ainda parcialmente frágeis e por não haver confirmação de reviews/checks via GitHub no momento da correção.
    - Isaac: responsável pela entrega central de backend, endpoints de doações, refatoração de autenticação para BCrypt e ADR; nota limitada pela implementação ainda simples da autenticação e por não configurar `PasswordEncoder` como componente reutilizável.
-    - Isadora: responsável pelo volume de correções no frontend, lint, testes, documentação da sprint, README e preparação da release; nota limitada porque parte das evidências de release/review não pôde ser validada via GitHub e algumas mudanças de frontend extrapolam o foco obrigatório.
-    - Lucas: nota zero na entrega porque a própria documentação da equipe registra ausência de atribuição formal e não foram encontradas evidências rastreáveis de commits, PRs, reviews, testes ou documentação atribuídos a ele na Sprint 4.
+   - Isadora: responsável pelo volume de correções no frontend, lint, testes, documentação da sprint, README e preparação da release; nota limitada porque parte das evidências de release/review não pôde ser validada via GitHub e algumas mudanças de frontend extrapolam o foco obrigatório.
+   - Lucas: nota zero na entrega porque a própria documentação da equipe registra ausência de atribuição formal e não foram encontradas evidências rastreáveis de commits, PRs, reviews, testes ou documentação atribuídos a ele na Sprint 4.
 
 ### Entrega 9
 
@@ -249,10 +249,21 @@ Notas individuais:
    - Não há descrição de RC com funcionalidades entregues, correções, limitações conhecidas e ambiente de teste.
 
 Registro de contribuição individual: parcial para a base herdada, não atendido para a Entrega 9.
-   - Não há contribuições de estudantes depois de `v0.4.0`; portanto, não há evidência rastreável de trabalho específico para Release Candidate.
-   - No intervalo `v0.4.0..main` há apenas o commit de avaliação anterior (`ca10953`).
-   - As notas consideram a base funcional herdada da Sprint 4, mas são limitadas pela ausência da entrega formal de RC, dos testes de aceitação e de documentação final.
-   - Haydee: contribuição anterior relevante em deploy, CI, métricas, documentação de padrões e testes de integração; nota limitada porque não há contribuição ou evidência específica de RC.
-   - Isaac: contribuição anterior central no backend, endpoints de doações, BCrypt e ADR de segurança; recebe nota ligeiramente maior pela importância dessas partes para o MVP integrado, mas também sem evidência específica de RC.
-   - Isadora: contribuição anterior relevante no frontend, lint, testes, ajustes visuais, README, documentação e release da Sprint 4; nota limitada pela ausência da release candidate e dos testes de aceitação.
-   - Lucas: nota zero porque a documentação da Sprint 4 já indicava ausência de atribuição formal e novamente não foram encontrados commits, PRs, reviews, testes, documentação ou qualquer evidência rastreável de participação na Entrega 9.
+
+- Não há contribuições de estudantes depois de `v0.4.0`; portanto, não há evidência rastreável de trabalho específico para Release Candidate.
+- No intervalo `v0.4.0..main` há apenas o commit de avaliação anterior (`ca10953`).
+- As notas consideram a base funcional herdada da Sprint 4, mas são limitadas pela ausência da entrega formal de RC, dos testes de aceitação e de documentação final.
+- Haydee: contribuição anterior relevante em deploy, CI, métricas, documentação de padrões e testes de integração; nota limitada porque não há contribuição ou evidência específica de RC.
+- Isaac: contribuição anterior central no backend, endpoints de doações, BCrypt e ADR de segurança; recebe nota ligeiramente maior pela importância dessas partes para o MVP integrado, mas também sem evidência específica de RC.
+- Isadora: contribuição anterior relevante no frontend, lint, testes, ajustes visuais, README, documentação e release da Sprint 4; nota limitada pela ausência da release candidate e dos testes de aceitação.
+- Lucas: nota zero porque a documentação da Sprint 4 já indicava ausência de atribuição formal e novamente não foram encontrados commits, PRs, reviews, testes, documentação ou qualquer evidência rastreável de participação na Entrega 9.
+
+### Entrega 10
+
+| critério                  | peso | nota |
+| ------------------------- | ---- | ---- |
+| Identificação do projeto  | 1    | 10   |
+| Resumo do MVP             | 2    | 7    |
+| Demonstração do sistema   | 4    | 7    |
+| Situação final do projeto | 1,5  | 10   |
+| Objetividade e perguntas  | 0,5  | 10   |
