@@ -17,26 +17,29 @@
 | 7       | Haydee Murara     | 50aa521 | 28/05/26 | 03/06/26 | 7,4  | 10   |
 | 7       | Isaac Kozuchovski | 50aa521 | 28/05/26 | 03/06/26 | 7,6  | 10   |
 | 7       | Isadora Eidt      | 50aa521 | 28/05/26 | 03/06/26 | 7,0  | 10   |
-| 7       | Lucas Gabriel     | 50aa521 | 28/05/26 | 03/06/26 | 0,0  | 10   |
+| 7       | Lucas Gabriel     | 50aa521 | 28/05/26 | 03/06/26 | 0    | 10   |
 | 8       | Haydee Murara     | 89fe3ef | 08/06/26 | 11/06/26 | 8,6  | 10   |
 | 8       | Isaac Kozuchovski | 89fe3ef | 08/06/26 | 11/06/26 | 8,8  | 10   |
 | 8       | Isadora Eidt      | 89fe3ef | 08/06/26 | 11/06/26 | 8,7  | 10   |
-| 8       | Lucas Gabriel     | 89fe3ef | 08/06/26 | 11/06/26 | 0,0  | 10   |
+| 8       | Lucas Gabriel     | 89fe3ef | 08/06/26 | 11/06/26 | 0    | 10   |
 | 9       | Haydee Murara     | 89fe3ef | 08/06/26 | 14/06/26 | 5,2  | 10   |
 | 9       | Isaac Kozuchovski | 89fe3ef | 08/06/26 | 14/06/26 | 5,3  | 10   |
 | 9       | Isadora Eidt      | 89fe3ef | 08/06/26 | 14/06/26 | 5,2  | 10   |
-| 9       | Lucas Gabriel     | 89fe3ef | 08/06/26 | 14/06/26 | 0,0  | 10   |
+| 9       | Lucas Gabriel     | 89fe3ef | 08/06/26 | 14/06/26 | 0    | 10   |
 | 10      | equipe            | --      | 15/06/26 | 15/06/26 | 8    | 10   |
-| 11/12   |                   |         |          |          |      | 30   |
+| 11/12   | Haydee Murara     | --      | 18/06/26 | 24/06/26 | 6,5  | 30   |
+| 11/12   | Isaac Kozuchovski | --      | 18/06/26 | 24/06/26 | 4,5  | 30   |
+| 11/12   | Isadora Eidt      | --      | 18/06/26 | 24/06/26 | 7,5  | 30   |
+| 11/12   | Lucas Gabriel     | --      | 18/06/26 | 24/06/26 | 0    | 30   |
 
-## Nota parcial
+## Nota final
 
-| aluno             | nota parcial |
-| ----------------- | ------------ |
-| Haydee Murara     | 7,2          |
-| Isaac Kozuchovski | 7,4          |
-| Isadora Eidt      | 7,0          |
-| Lucas Gabriel     | 4,2          |
+| aluno             | nota |
+| ----------------- | ---- |
+| Haydee Murara     | 7    |
+| Isaac Kozuchovski | 6,5  |
+| Isadora Eidt      | 7,2  |
+| Lucas Gabriel     | 2,9  |
 
 ## Comentários
 
@@ -267,3 +270,73 @@ Registro de contribuição individual: parcial para a base herdada, não atendid
 | Demonstração do sistema   | 4    | 7    |
 | Situação final do projeto | 1,5  | 10   |
 | Objetividade e perguntas  | 0,5  | 10   |
+
+### Entrega 11/12
+
+1. Produto e MVP: parcial.
+   - O MVP está claramente definido em `inception.md` e consolidado em `entregas/release-candidate.md`: autenticação, entidades, produtos, doações, distribuições e estoque.
+   - O produto é demonstrável e o deploy está documentado em Vercel/Railway.
+   - O escopo final ficou melhor documentado após a recuperação da RC, com itens fora do escopo e limitações conhecidas.
+   - Ainda há fragilidade no alinhamento entre produto e regra de negócio: o cálculo de estoque é aceito como risco por usar fontes/modelagens diferentes para entrada e saída.
+2. Arquitetura e decisões técnicas: parcial.
+   - Há ADRs para stack, tipo de aplicação, arquitetura, persistência, comunicação, testes frontend e armazenamento seguro de senhas.
+   - Há diagramas C4 de contexto e contêineres, mas eles são simples e pouco detalhados para explicar fluxos críticos, especialmente autenticação, estoque e deploy.
+   - A arquitetura em camadas Spring Boot + React está coerente com o MVP e com a restrição de aplicação web OO.
+   - A decisão de não proteger a API por token foi registrada apenas como risco/limitação, não como ADR, apesar de ser uma decisão arquitetural relevante.
+3. Projeto orientado a objetos e padrões: parcial.
+   - `Repository Pattern`, `Service Layer` e arquitetura em camadas estão documentados em `padroes-de-projeto.md` e aparecem no código por meio de controllers, services, repositories e models.
+   - A aplicação dos padrões é adequada para o escopo, mas corresponde majoritariamente à estrutura padrão do Spring, com pouca discussão de alternativas OO específicas do domínio.
+   - A modelagem de `EntradaDoacao` como produto textual, separada de `Produto`, enfraquece o design de domínio e gera o risco R7.
+4. Qualidade, testes e pipeline: atendido com ressalvas.
+   - Backend: `mvn test -f backend/pom.xml` passou localmente com 84 testes.
+   - Frontend: `npm run lint`, `npm run build` e `npm test` passaram localmente; a suíte tem 5 arquivos e 15 testes.
+   - O pipeline executa backend e frontend em PRs e push para `main`.
+   - Há testes de aceitação documentados para a RC, mas sem evidência independente de execução além do registro textual da própria equipe.
+   - Os testes ainda não cobrem suficientemente segurança de API nem cenários negativos/limites do cálculo de estoque.
+5. Deploy, staging e reprodutibilidade: atendido com ressalvas.
+   - `DEPLOY.md` e `release-candidate.md` informam frontend em Vercel e backend em Railway, com credenciais de teste e comandos locais.
+   - A execução local é reprodutível com Maven e npm; os comandos principais de teste/build foram validados.
+   - O uso de H2 em memória é adequado para demonstração acadêmica, mas a própria equipe registra que os dados reiniciam e que seria necessário banco persistente para uso real.
+6. Métricas, riscos e acompanhamento: parcial.
+   - As métricas existem em arquivos separados e foram atualizadas para a Sprint 4/RC, com melhoria na rastreabilidade do percentual de conclusão do MVP.
+   - Algumas métricas ainda usam valores pouco robustos ou dependentes de interpretação do board, como 100% de conclusão e 0 defeitos, mesmo com riscos técnicos aceitos.
+   - Os riscos foram atualizados tardiamente para a Entrega 9, registrando R6 e R7 como aceitos; isso melhora a transparência, mas evidencia que problemas importantes foram reconhecidos sem correção técnica.
+7. Manutenção e reengenharia: parcial.
+   - Houve refatoração relevante de autenticação para BCrypt, registrada em ADR, com testes atualizados.
+   - Houve correções de CI, lint, documentação e API de doações ao longo da Sprint 4 e recuperação da RC.
+   - A comparação antes/depois ainda é limitada: a principal métrica associada ao BCrypt mostra adaptação de testes, não uma métrica direta de design, segurança ou manutenibilidade.
+   - O problema estrutural do estoque foi identificado, mas não reengenheirado; ficou como limitação aceita.
+8. Colaboração e contribuição individual: parcial.
+   - Haydee tem contribuição consistente em CI, deploy, métricas, riscos, testes backend e documentação de processo. Os commits confirmam, em linhas gerais, o papel de qualidade/DevOps descrito no README e nos documentos da Sprint 4/RC.
+   - Isaac tem contribuição central no backend em autenticação, API de doações, BCrypt, ADR de segurança, padrões/arquitetura e atualização dos riscos técnicos. Os commits confirmam contribuição técnica relevante, embora parte da recuperação da RC tenha sido mais documental.
+   - Isadora tem contribuição forte em frontend, testes de componentes, lint, documentação de sprint/RC, testes de aceitação e consolidação de release. Os commits confirmam protagonismo no frontend e na finalização.
+   - Lucas teve participação rastreável nas entregas iniciais e em testes da Sprint 1/2, mas não há evidência de contribuição nas Sprints 3, 4 ou recuperação da RC; a própria documentação da Sprint 4 registra ausência de atribuição formal.
+
+#### Perguntas para a defesa
+
+Haydee:
+
+1. Comparando o workflow do projeto com o pipeline canônico de Integração Contínua visto em aula, quais etapas foram atendidas e quais ainda faltaram como critérios de entrada na `main`?
+   - Resposta esperada: deve citar checkout/setup, instalação determinística de dependências, build e testes do backend com Maven, lint/build/testes do frontend com npm, validação YAML e presença de arquivos obrigatórios. Deve reconhecer que a versão final passou a rodar em `push` para `main`, além de PRs para `dev` e `main`, mas ainda faltaram gates como teste end-to-end, cobertura mínima, análise estática/segurança, validação automatizada do deploy público e bloqueio explícito de problemas de segurança da API e inconsistências de estoque.
+2. As métricas indicam 100% de conclusão do MVP e 0 defeitos. Como esses valores foram calculados e como você justificaria esses números diante dos riscos R6 e R7 aceitos na RC?
+   - Resposta esperada: o 100% de conclusão veio do mapeamento das funcionalidades do MVP contra issues/documentos: autenticação, entidades, produtos, doações, distribuições, estoque e listagem de doações. O 0 defeitos veio da ausência de issues marcadas como bug. A resposta deve diferenciar medida, métrica e indicador, e reconhecer que esses números são frágeis: R6 e R7 mostram problemas técnicos conhecidos, então "0 defeitos" significa "0 bugs formalmente registrados", não ausência real de problemas. O percentual de MVP mede funcionalidades entregues, mas não necessariamente qualidade plena.
+3. Na sua atuação em deploy/DevOps, como a escolha por H2 em memória afeta reprodutibilidade, persistência e qualidade da release, e quais passos mínimos seriam necessários para migrar para banco persistente?
+   - Resposta esperada: H2 foi mantido por simplicidade acadêmica, facilidade de deploy gratuito e reprodutibilidade rápida com `DataLoader`, mas não atende bem persistência real nem confiabilidade de uma release operacional. Para migrar para banco persistente, seria necessário configurar PostgreSQL ou outro banco gerenciado, externalizar variáveis de ambiente, ajustar `application.properties`, criar migrations ou script de carga inicial, validar deploy no Railway, atualizar `DEPLOY.md` e rodar testes/regressão nos fluxos principais.
+
+Isaac:
+
+1. Explique a decisão de usar BCrypt no `AuthService`: o que mudou no armazenamento e na validação de senhas, e quais limitações de segurança ainda permaneceram?
+   - Resposta esperada: antes, a senha era salva e comparada em texto puro. Com BCrypt, a senha é armazenada como hash com salt e fator de custo, e a autenticação usa `matches` para comparar a senha informada com o hash salvo. Isso reduz exposição de credenciais em caso de vazamento do banco. Limitações restantes: a API não gera/valida token, endpoints continuam acessíveis diretamente, não há autorização por perfil e o `PasswordEncoder` poderia ser configurado como bean para melhor testabilidade/reuso.
+2. O risco R7 afirma que o cálculo de estoque pode ficar inconsistente porque entradas usam produto por nome e distribuições usam produto por ID. Como você trataria esse risco usando identificação, análise, mitigação e testes de regressão?
+   - Resposta esperada: deve classificar R7 como risco de produto/técnico com impacto na corretude funcional e na confiabilidade do estoque. A mitigação ideal seria alterar `EntradaDoacao` para referenciar `Produto` por relacionamento JPA, usando `produto_id`, e não por nome textual. A refatoração segura exigiria migration ou adaptação dos dados, DTOs novos/ajustados, atualização dos services/controllers, alteração do frontend para enviar ID do produto, testes unitários e de integração para entradas, distribuições e estoque, e validação de compatibilidade com dados existentes. O cálculo de estoque deveria usar uma única fonte consistente.
+3. Repository Pattern e Service Layer foram documentados como padrões. Em quais pontos do código eles realmente reduzem acoplamento, e onde a implementação ainda ficou apenas como estrutura padrão do Spring?
+   - Resposta esperada: o Repository reduz acoplamento ao concentrar acesso a dados em interfaces Spring Data, evitando consultas diretamente nos controllers/services. O Service Layer centraliza regras de negócio como validações de entidade, autenticação, doações, produtos e distribuições, deixando controllers focados em HTTP. A limitação é que parte disso é estrutura padrão do Spring; alguns services são pass-through e a documentação poderia justificar melhor decisões específicas do domínio, como estoque e doações.
+
+Isadora Eidt:
+
+1. Os testes frontend usam mocks para chamadas HTTP. Em termos de verificação e validação, o que esses testes conseguem garantir e o que ainda exigiria teste de integração ou aceitação?
+   - Resposta esperada: os testes com mocks fazem verificação do comportamento da interface: renderização, interação com formulários, paginação, busca, mensagens e chamadas esperadas ao `fetch`. Eles não validam, sozinhos, que o produto atende o usuário em fluxo real nem que backend real tenha endpoints corretos, contrato compatível, autenticação, CORS ou persistência funcionando. Para integração/validação real seriam necessários testes de contrato/API, end-to-end ou roteiro de aceitação do MVP.
+2. Como você conduziu os testes de aceitação da RC e como relacionou cada caso com os critérios de aceitação das funcionalidades do MVP?
+   - Resposta esperada: os testes de aceitação foram registrados em `entregas/testes-aceitacao-rc.md`, cobrindo login, cadastro/listagem de entidades, produtos, doações, distribuições, estoque, navegação, logout e validação técnica. Cada caso deveria estar ligado a uma funcionalidade do MVP descrita em `inception.md` e `release-candidate.md`. A resposta deve reconhecer que a evidência é documental/manual, sem logs automatizados ou prints, então serve como registro de validação, mas não substitui automação end-to-end.
+3. Quais decisões de frontend foram tomadas para controlar sessão e navegação, e quais riscos permanecem por a autenticação proteger apenas o frontend e não a API?
+   - Resposta esperada: o frontend usa controle de sessão/navegação no cliente, com login direcionando para área interna e logout removendo a sessão/retornando à tela de login. Isso melhora a experiência e impede navegação casual sem login, mas não protege a API. Como o backend não exige token, qualquer pessoa pode chamar endpoints diretamente via `curl` ou Postman. A mitigação correta seria implementar token JWT ou sessão no backend, interceptar requisições no frontend e proteger rotas/endpoints no servidor.
