@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { NavLink, Outlet, Navigate, useLocation } from 'react-router-dom';
-import { FiHome, FiUsers, FiInbox, FiBox, FiShare2, FiArchive } from 'react-icons/fi';
+import { FiActivity, FiHome, FiUsers, FiInbox, FiBox, FiShare2, FiArchive } from 'react-icons/fi';
 import './App.css';
 import { Login } from './pages/Login.jsx';
 import { Register } from './pages/Cadastro.jsx';
@@ -123,19 +123,22 @@ export function App() {
             <p className="app-subtitle">Gestão estratégica</p>
           </div>
         </div>
-        <nav className="app-nav">
-          {NAV_ITEMS.map((item) => (
-            <NavLink
-              key={item.id}
-              to={item.to}
-              end={item.to === '/'}
-              className={({ isActive }) => `app-nav-item ${isActive ? 'active' : ''}`}
-            >
-              <span className="app-nav-icon">{item.icon}</span>
-              <span>{item.label}</span>
-            </NavLink>
-          ))}
-        </nav>
+        <div className="app-nav-wrap">
+          <p className="app-nav-label">Workspace</p>
+          <nav className="app-nav">
+            {NAV_ITEMS.map((item) => (
+              <NavLink
+                key={item.id}
+                to={item.to}
+                end={item.to === '/'}
+                className={({ isActive }) => `app-nav-item ${isActive ? 'active' : ''}`}
+              >
+                <span className="app-nav-icon">{item.icon}</span>
+                <span>{item.label}</span>
+              </NavLink>
+            ))}
+          </nav>
+        </div>
         <div className="app-sidebar-footer">
           <div className="app-user">
             <div className="app-avatar">G</div>
@@ -155,7 +158,12 @@ export function App() {
             <p className="app-eyebrow">{header.eyebrow}</p>
             <h1>{header.title}</h1>
           </div>
-          <div className="app-actions" />
+          <div className="app-header-meta">
+            <span className="app-status"><FiActivity aria-hidden /> Painel ativo</span>
+            <span className="app-header-date">
+              {new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date())}
+            </span>
+          </div>
         </header>
         <Outlet />
       </main>
