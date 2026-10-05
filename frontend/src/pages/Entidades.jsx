@@ -3,6 +3,7 @@ import { FiTrash2 } from 'react-icons/fi';
 import { Pagination } from '../components/Pagination.jsx';
 import { emitAppDataSync } from '../utils/dataSync.js';
 import './css/Produtos.css';
+import { apiFetch } from '../utils/api.js';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 const PAGE_SIZE = 6;
@@ -28,7 +29,7 @@ export function Entidades() {
       setStatus({ type: '', message: '' });
     }
     try {
-      const response = await fetch(`${API_URL}/entidades`);
+      const response = await apiFetch(`${API_URL}/entidades`);
       const data = await response.json();
       if (!response.ok) {
         setStatus({ type: 'error', message: data.mensagem || 'Não foi possível carregar as entidades' });
@@ -49,7 +50,7 @@ export function Entidades() {
       setLoading(true);
       setStatus({ type: '', message: '' });
       try {
-        const response = await fetch(`${API_URL}/entidades`);
+        const response = await apiFetch(`${API_URL}/entidades`);
         const data = await response.json();
         if (!response.ok) {
           if (!cancelled) {
@@ -96,7 +97,7 @@ export function Entidades() {
     setStatus({ type: '', message: '' });
 
     try {
-      const response = await fetch(`${API_URL}/entidades`, {
+      const response = await apiFetch(`${API_URL}/entidades`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
@@ -128,7 +129,7 @@ export function Entidades() {
     setStatus({ type: '', message: '' });
 
     try {
-      const response = await fetch(`${API_URL}/entidades/${deletingId}`, {
+      const response = await apiFetch(`${API_URL}/entidades/${deletingId}`, {
         method: 'DELETE',
       });
 

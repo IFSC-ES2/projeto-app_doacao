@@ -3,6 +3,7 @@ import { FiTrash2 } from 'react-icons/fi';
 import { Pagination } from '../components/Pagination.jsx';
 import './css/Produtos.css';
 import { emitAppDataSync } from '../utils/dataSync.js';
+import { apiFetch } from '../utils/api.js';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 const PAGE_SIZE = 6;
@@ -34,7 +35,7 @@ export function Produtos() {
       setStatus({ type: '', message: '' });
     }
     try {
-      const response = await fetch(`${API_URL}/produtos`);
+      const response = await apiFetch(`${API_URL}/produtos`);
       const data = await response.json();
       if (!response.ok) {
         setStatus({ type: 'error', message: data.mensagem || 'Não foi possível carregar os produtos' });
@@ -55,7 +56,7 @@ export function Produtos() {
       setLoading(true);
       setStatus({ type: '', message: '' });
       try {
-        const response = await fetch(`${API_URL}/produtos`);
+        const response = await apiFetch(`${API_URL}/produtos`);
         const data = await response.json();
         if (!response.ok) {
           if (!cancelled) {
@@ -89,7 +90,7 @@ export function Produtos() {
 
     const loadInitialEntidades = async () => {
       try {
-        const response = await fetch(`${API_URL}/entidades`);
+        const response = await apiFetch(`${API_URL}/entidades`);
         const data = await response.json();
         if (response.ok && !cancelled) {
           setEntidades(Array.isArray(data) ? data : []);
@@ -137,7 +138,7 @@ export function Produtos() {
         return;
       }
 
-      const response = await fetch(`${API_URL}/produtos`, {
+      const response = await apiFetch(`${API_URL}/produtos`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -154,7 +155,7 @@ export function Produtos() {
         return;
       }
 
-      const doacaoResponse = await fetch(`${API_URL}/doacoes`, {
+      const doacaoResponse = await apiFetch(`${API_URL}/doacoes`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -197,7 +198,7 @@ export function Produtos() {
 
     try {
       setStatus({ type: '', message: '' });
-      const response = await fetch(`${API_URL}/produtos/${deletingId}`, {
+      const response = await apiFetch(`${API_URL}/produtos/${deletingId}`, {
         method: 'DELETE',
       });
 

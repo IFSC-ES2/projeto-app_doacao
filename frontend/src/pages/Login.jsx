@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import './css/Login.css';
+import { AUTH_TOKEN_KEY } from '../utils/api.js';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
@@ -89,10 +90,16 @@ export function Login({ onSuccess }) {
         const data = await response.json();
 
         if (response.ok) {
+          if (!data.token) {
+            setError('O servidor não retornou um token de acesso.');
+            return;
+          }
+
+          sessionStorage.setItem(AUTH_TOKEN_KEY, data.token);
           setMessage('Login realizado com sucesso.');
           setTimeout(() => {
             if (typeof onSuccess === 'function') {
-              onSuccess();
+              onSuccess(data.token);
               return;
             }
 

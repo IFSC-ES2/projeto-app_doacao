@@ -33,8 +33,13 @@ O banco de dados usado pela aplicação é PostgreSQL persistente. Os dados perm
 | `SPRING_DATASOURCE_URL` | Railway | URL JDBC do PostgreSQL provisionado |
 | `SPRING_DATASOURCE_USERNAME` | Railway | usuário do PostgreSQL |
 | `SPRING_DATASOURCE_PASSWORD` | Railway | senha do PostgreSQL |
+| `JWT_SECRET` | Railway/Render | chave aleatória com pelo menos 32 caracteres |
+| `JWT_EXPIRATION_MS` | Railway/Render | `86400000` |
+| `APP_CORS_ALLOWED_ORIGINS` | Railway/Render | URL do frontend, por exemplo `https://seu-projeto.vercel.app` |
 
 Localmente, o `docker compose` fornece o PostgreSQL com os valores padrão usados pelo backend. O frontend usa `http://localhost:8080` como fallback quando `VITE_API_URL` não está definida.
+
+O backend usa JWT: `/login` e `/register` são públicos; as demais rotas exigem o header `Authorization: Bearer <token>`. Em produção, configure obrigatoriamente `JWT_SECRET` e inclua a URL final do frontend em `APP_CORS_ALLOWED_ORIGINS`.
 No Railway, adicione um serviço PostgreSQL ao mesmo projeto e copie dele os valores `PGHOST`, `PGPORT`, `PGDATABASE`, `PGUSER` e `PGPASSWORD` para as variáveis `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME` e `SPRING_DATASOURCE_PASSWORD` do backend. A URL deve seguir o formato `jdbc:postgresql://<host>:<porta>/<banco>`.
 
 ### Usar o pooler do Supabase localmente

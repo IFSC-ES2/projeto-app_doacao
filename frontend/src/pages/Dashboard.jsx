@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { FiBox, FiHeart, FiUsers, FiStar } from 'react-icons/fi';
 import { APP_DATA_SYNC_EVENT } from '../utils/dataSync.js';
+import { apiFetch } from '../utils/api.js';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
@@ -18,7 +19,7 @@ export function Dashboard() {
     let cancelled = false;
 
     const fetchJson = async (path) => {
-      const response = await fetch(`${API_URL}${path}`);
+      const response = await apiFetch(`${API_URL}${path}`);
       if (!response.ok) {
         throw new Error('Falha ao carregar dados');
       }

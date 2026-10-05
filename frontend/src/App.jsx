@@ -4,6 +4,7 @@ import { FiActivity, FiHome, FiUsers, FiInbox, FiBox, FiShare2, FiArchive } from
 import './App.css';
 import { Login } from './pages/Login.jsx';
 import { Register } from './pages/Cadastro.jsx';
+import { AUTH_EXPIRED_EVENT, AUTH_TOKEN_KEY } from './utils/api.js';
 
 const NAV_ITEMS = [
   {
@@ -71,11 +72,9 @@ const HEADER_COPY = {
   },
 };
 
-const AUTH_SESSION_KEY = 'auth-session';
-
 export function App() {
   const [token, setToken] = useState(() => {
-    return sessionStorage.getItem(AUTH_SESSION_KEY) === 'true' ? 'authenticated' : null;
+    return sessionStorage.getItem(AUTH_TOKEN_KEY);
   });
   const location = useLocation();
 
@@ -91,22 +90,20 @@ export function App() {
   }, []);
 
   useEffect(() => {
-    if (token) {
-      sessionStorage.setItem(AUTH_SESSION_KEY, 'true');
-      return;
-    }
-
-    sessionStorage.removeItem(AUTH_SESSION_KEY);
+    const handleAuthExpired = () => setToken(null);
+    window.addEventListener(AUTH_EXPIRED_EVENT, handleAuthExpired);
+    return () => window.removeEventListener(AUTH_EXPIRED_EVENT, handleAuthExpired);
   }, [token]);
 
   const handleLogout = () => {
+    sessionStorage.removeItem(AUTH_TOKEN_KEY);
     setToken(null);
   };
 
   if (!token) {
     return isCadastroRoute
       ? <Register />
-      : <Login onSuccess={() => setToken('authenticated')} />;
+      : <Login onSuccess={(authToken) => setToken(authToken)} />;
   }
 
   if (isCadastroRoute) {

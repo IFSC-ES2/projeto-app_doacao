@@ -1,20 +1,22 @@
 package es2.appDoacao.controller;
 
 import es2.appDoacao.service.AuthService;
+import es2.appDoacao.security.JwtService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = "*")
 public class AuthController {
 
     private final AuthService authService;
+    private final JwtService jwtService;
 
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, JwtService jwtService) {
         this.authService = authService;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/login")
@@ -33,7 +35,11 @@ public class AuthController {
         boolean autenticado = authService.autenticar(loginOuEmail, senha);
 
         if (autenticado) {
-            return ResponseEntity.ok(Map.of("mensagem", "Login bem-sucedido"));
+            return ResponseEntity.ok(Map.of(
+                    "mensagem", "Login bem-sucedido",
+                    "token", jwtService.generateToken(loginOuEmail),
+                    "expiresIn", jwtService.getExpirationSeconds()
+            ));
         } else {
             return ResponseEntity
                     .status(401)

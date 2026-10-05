@@ -140,7 +140,7 @@ Os riscos **R4 e R5**, embora tenham um impacto Alto na integridade do software,
 ## Atualização Entrega 9 - Release Candidate
 
 ### Riscos que permanecem ativos
-- **R6 – Endpoints sem proteção JWT:** risco aceito. A equipe avaliou a implementação de autenticação stateful na API (issue #119) e optou por documentar formalmente a limitação por conta do escopo acadêmico do projeto. A proteção de rotas é feita exclusivamente pelo frontend. Acesso direto à API via ferramentas externas não é bloqueado. Mitigação futura: implementar filtro de token ou Spring Security em versão pós-RC.
+- **R6 – Proteção JWT da API:** risco mitigado na implementação atual. O login emite JWT e as rotas de negócio exigem `Authorization: Bearer <token>`. A chave deve ser mantida exclusivamente nas variáveis de ambiente do backend.
 - **R7 – Inconsistência no cálculo de estoque:** risco aceito. O saldo de estoque é calculado a partir de três fontes diferentes: o campo quantidadeEstoque do modelo Produto, entradas de doação vinculadas por nome e distribuições vinculadas por ID (issue #120). A correção exigiria mudanças em backend, frontend e testes, com risco de regressão. Mitigação futura: vincular EntradaDoacao a Produto por ID.
 
 ### Riscos mitigados

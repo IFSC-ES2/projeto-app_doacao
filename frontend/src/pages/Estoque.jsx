@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Pagination } from '../components/Pagination.jsx';
 import './css/Estoque.css';
 import { APP_DATA_SYNC_EVENT } from '../utils/dataSync.js';
+import { apiFetch } from '../utils/api.js';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 const PAGE_SIZE = 6;
@@ -23,7 +24,7 @@ export function Estoque() {
       }
 
       try {
-        const response = await fetch(`${API_URL}/estoque`);
+        const response = await apiFetch(`${API_URL}/estoque`);
         const data = await response.json();
         if (!response.ok) {
           if (!cancelled) {

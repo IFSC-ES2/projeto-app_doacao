@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Pagination } from '../components/Pagination.jsx';
 import './css/Doacoes.css';
+import { apiFetch } from '../utils/api.js';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 const PAGE_SIZE = 6;
@@ -17,7 +18,7 @@ export function Doacoes() {
       setLoading(true);
       setStatus({ type: '', message: '' });
       try {
-        const response = await fetch(`${API_URL}/doacoes`);
+        const response = await apiFetch(`${API_URL}/doacoes`);
         const data = await response.json();
         if (!response.ok) {
           setStatus({ type: 'error', message: data.mensagem || 'Não foi possível carregar as doações' });

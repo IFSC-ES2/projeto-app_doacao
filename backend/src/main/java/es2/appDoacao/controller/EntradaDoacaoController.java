@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = "*")
 public class EntradaDoacaoController {
 
     private final EntradaDoacaoService entradaDoacaoService;

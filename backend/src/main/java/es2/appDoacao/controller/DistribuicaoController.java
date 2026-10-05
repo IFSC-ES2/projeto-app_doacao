@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = "*")
 public class DistribuicaoController {
 
     private final DistribuicaoService distribuicaoService;

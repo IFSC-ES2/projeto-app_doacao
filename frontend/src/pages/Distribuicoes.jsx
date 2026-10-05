@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Pagination } from '../components/Pagination.jsx';
 import './css/Distribuicoes.css';
 import { emitAppDataSync } from '../utils/dataSync.js';
+import { apiFetch } from '../utils/api.js';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 const PAGE_SIZE = 6;
@@ -31,7 +32,7 @@ export function Distribuicoes() {
       setStatus({ type: '', message: '' });
     }
     try {
-      const response = await fetch(`${API_URL}/distribuicoes`);
+      const response = await apiFetch(`${API_URL}/distribuicoes`);
       const data = await response.json();
       if (!response.ok) {
         setStatus({ type: 'error', message: data.mensagem || 'Não foi possível carregar as distribuições' });
@@ -53,9 +54,9 @@ export function Distribuicoes() {
       setStatus({ type: '', message: '' });
       try {
         const [produtosResponse, entidadesResponse, distribuicoesResponse] = await Promise.all([
-          fetch(`${API_URL}/produtos`),
-          fetch(`${API_URL}/entidades`),
-          fetch(`${API_URL}/distribuicoes`),
+          apiFetch(`${API_URL}/produtos`),
+          apiFetch(`${API_URL}/entidades`),
+          apiFetch(`${API_URL}/distribuicoes`),
         ]);
 
         const [produtosData, entidadesData, distribuicoesData] = await Promise.all([
@@ -126,7 +127,7 @@ export function Distribuicoes() {
     setStatus({ type: '', message: '' });
 
     try {
-      const response = await fetch(`${API_URL}/distribuicoes`, {
+      const response = await apiFetch(`${API_URL}/distribuicoes`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
