@@ -109,6 +109,18 @@ export function Login({ onSuccess }) {
           setError(getAuthErrorMessage(response, data, 'login'));
         }
       } else {
+        if (!/^\S+@\S+\.\S+$/.test(email)) {
+          setError('Informe um e-mail válido para criar sua conta.');
+          setLoading(false);
+          return;
+        }
+
+        if (!/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{6,}/.test(password)) {
+          setError('A senha deve ter 6 caracteres, maiúscula, minúscula, número e símbolo.');
+          setLoading(false);
+          return;
+        }
+
         if (password !== confirmPassword) {
           setError('As senhas informadas não conferem.');
           setLoading(false);
@@ -203,11 +215,12 @@ export function Login({ onSuccess }) {
           <form onSubmit={handleSubmit} className="login-form">
             <div className="login-field">
               <label htmlFor="email" className="login-label">
-                Email ou usuario
+                {isLogin ? 'Email ou usuário' : 'Email'}
               </label>
               <input
                 id="email"
-                type="text"
+                type={isLogin ? 'text' : 'email'}
+                autoComplete={isLogin ? 'username' : 'email'}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="login-input"

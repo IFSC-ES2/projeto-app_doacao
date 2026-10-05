@@ -42,6 +42,8 @@ Localmente, o `docker compose` fornece o PostgreSQL com os valores padrão usado
 O backend usa JWT: `/login` e `/register` são públicos; as demais rotas exigem o header `Authorization: Bearer <token>`. Em produção, configure obrigatoriamente `JWT_SECRET` e inclua a URL final do frontend em `APP_CORS_ALLOWED_ORIGINS`.
 No Railway, adicione um serviço PostgreSQL ao mesmo projeto e copie dele os valores `PGHOST`, `PGPORT`, `PGDATABASE`, `PGUSER` e `PGPASSWORD` para as variáveis `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME` e `SPRING_DATASOURCE_PASSWORD` do backend. A URL deve seguir o formato `jdbc:postgresql://<host>:<porta>/<banco>`.
 
+Os produtos, entidades, doações e distribuições são salvos com o proprietário da conta autenticada. As listagens, exclusões e cálculos de estoque sempre usam esse proprietário; portanto, uma conta não visualiza os dados de outra. Ao atualizar um banco PostgreSQL existente, registros antigos sem proprietário permanecem ocultos até serem atribuídos manualmente a uma conta, evitando que continuem compartilhados.
+
 ### Usar o pooler do Supabase localmente
 
 O backend aceita o pooler compartilhado do Supabase pelas mesmas variáveis de ambiente. O exemplo seguro está em `backend/.env.example`; copie-o para um arquivo local não versionado e preencha a senha apenas na sua máquina:

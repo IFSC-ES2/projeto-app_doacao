@@ -5,12 +5,20 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import java.util.List;
+import java.util.Optional;
 
 public interface DistribuicaoRepository extends JpaRepository<Distribuicao, Long> {
     
     List<Distribuicao> findByEntidadeId(Long entidadeId);
     List<Distribuicao> findByProdutoId(Long produtoId);
+    List<Distribuicao> findAllByUsuario_Id(Long usuarioId);
+    Optional<Distribuicao> findByIdAndUsuario_Id(Long id, Long usuarioId);
 
     @Query("SELECT COALESCE(SUM(d.quantidade), 0) FROM Distribuicao d WHERE d.produto.id = :produtoId")
     Integer sumQuantidadeByProdutoId(@Param("produtoId") Long produtoId);
+
+    @Query("SELECT COALESCE(SUM(d.quantidade), 0) FROM Distribuicao d "
+            + "WHERE d.produto.id = :produtoId AND d.usuario.id = :usuarioId")
+    Integer sumQuantidadeByProdutoIdAndUsuarioId(@Param("produtoId") Long produtoId,
+                                                  @Param("usuarioId") Long usuarioId);
 }

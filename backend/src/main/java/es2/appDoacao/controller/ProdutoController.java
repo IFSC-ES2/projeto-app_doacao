@@ -1,6 +1,7 @@
 package es2.appDoacao.controller;
 
 import es2.appDoacao.model.Produto;
+import es2.appDoacao.security.CurrentUserService;
 import es2.appDoacao.service.ProdutoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,20 +12,22 @@ import java.util.Map;
 public class ProdutoController {
 
     private final ProdutoService produtoService;
+    private final CurrentUserService currentUserService;
 
-    public ProdutoController(ProdutoService produtoService) {
+    public ProdutoController(ProdutoService produtoService, CurrentUserService currentUserService) {
         this.produtoService = produtoService;
+        this.currentUserService = currentUserService;
     }
 
     @GetMapping("/produtos")
     public ResponseEntity<?> listar() {
-        List<Produto> produtos = produtoService.listarTodos();
+        List<Produto> produtos = produtoService.listarTodos(currentUserService.requireUser());
         return ResponseEntity.ok(produtos);
     }
 
     @PostMapping("/produtos")
     public ResponseEntity<?> criar(@RequestBody Produto produto) {
-        var erro = produtoService.salvar(produto);
+        var erro = produtoService.salvar(produto, currentUserService.requireUser());
         if (erro.isEmpty()) {
             return ResponseEntity.ok(Map.of("mensagem", "Produto cadastrado com sucesso"));
         } else {
@@ -35,7 +38,7 @@ public class ProdutoController {
 
     @DeleteMapping("/produtos/{id}")
     public ResponseEntity<?> excluir(@PathVariable Long id) {
-        boolean removido = produtoService.deletar(id);
+        boolean removido = produtoService.deletar(id, currentUserService.requireUser());
         if (removido) {
             return ResponseEntity.noContent().build();
         }
@@ -46,6 +49,6 @@ public class ProdutoController {
 
     @GetMapping("/estoque")
     public ResponseEntity<?> estoque() {
-        return ResponseEntity.ok(produtoService.listarEstoque());
+        return ResponseEntity.ok(produtoService.listarEstoque(currentUserService.requireUser()));
     }
 }

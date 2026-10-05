@@ -1,12 +1,14 @@
 package es2.appDoacao.model;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.ToString;
 import java.time.LocalDate;
 
 @Data
 @Entity
-@Table(name = "entradas_doacao")
+@Table(name = "entradas_doacao", indexes = @Index(name = "idx_entradas_doacao_usuario_id", columnList = "usuario_id"))
 public class EntradaDoacao {
 
     @Id
@@ -27,5 +29,11 @@ public class EntradaDoacao {
 
     @Column
     private String observacao;
+
+    @JsonIgnore
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
 
 }

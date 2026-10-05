@@ -43,9 +43,7 @@ public class AuthService {
     }
 
     public boolean registrar(String login, String email, String senha) {
-        if (!emailValido(email) || !senhaValida(senha)) return false;
-        if (usuarioRepository.findByEmail(email).isPresent()) return false;
-        if (usuarioRepository.findByLogin(login).isPresent()) return false;
+        if (validarRegistro(login, email, senha) != null) return false;
 
         Usuario usuario = new Usuario();
         usuario.setLogin(login);
@@ -53,6 +51,25 @@ public class AuthService {
         usuario.setSenha(passwordEncoder.encode(senha));
         usuarioRepository.save(usuario);
         return true;
+    }
+
+    public String validarRegistro(String login, String email, String senha) {
+        if (login == null || login.isBlank() || email == null || email.isBlank() || senha == null || senha.isBlank()) {
+            return "Preencha todos os campos obrigatórios.";
+        }
+        if (!emailValido(email)) {
+            return "Informe um e-mail válido.";
+        }
+        if (!senhaValida(senha)) {
+            return "A senha deve ter pelo menos 6 caracteres, com maiúscula, minúscula, número e símbolo.";
+        }
+        if (usuarioRepository.findByEmail(email).isPresent()) {
+            return "Este e-mail já está cadastrado.";
+        }
+        if (usuarioRepository.findByLogin(login).isPresent()) {
+            return "Este usuário já está cadastrado.";
+        }
+        return null;
     }
 
     private boolean emailValido(String email) {

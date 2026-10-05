@@ -1,6 +1,7 @@
 package es2.appDoacao.service;
 
 import es2.appDoacao.model.Produto;
+import es2.appDoacao.model.Usuario;
 import es2.appDoacao.repository.DistribuicaoRepository;
 import es2.appDoacao.repository.EntradaDoacaoRepository;
 import es2.appDoacao.repository.ProdutoRepository;
@@ -29,8 +30,16 @@ public class ProdutoService {
         return produtoRepository.findAll();
     }
 
+    public List<Produto> listarTodos(Usuario usuario) {
+        return produtoRepository.findAllByUsuario_Id(usuario.getId());
+    }
+
     public Optional<Produto> buscarPorId(Long id) {
         return produtoRepository.findById(id);
+    }
+
+    public Optional<Produto> buscarPorId(Long id, Usuario usuario) {
+        return produtoRepository.findByIdAndUsuario_Id(id, usuario.getId());
     }
 
     public Optional<String> salvar(Produto produto) {
@@ -39,6 +48,23 @@ public class ProdutoService {
             return erro;
         }
 
+        produtoRepository.save(produto);
+        return Optional.empty();
+    }
+
+    public Optional<String> salvar(Produto produto, Usuario usuario) {
+        if (produto.getId() != null
+                && produtoRepository.existsById(produto.getId())
+                && produtoRepository.findByIdAndUsuario_Id(produto.getId(), usuario.getId()).isEmpty()) {
+            return Optional.of("Produto não encontrado");
+        }
+
+        Optional<String> erro = validar(produto);
+        if (erro.isPresent()) {
+            return erro;
+        }
+
+        produto.setUsuario(usuario);
         produtoRepository.save(produto);
         return Optional.empty();
     }
@@ -52,6 +78,16 @@ public class ProdutoService {
         return true;
     }
 
+    public boolean deletar(Long id, Usuario usuario) {
+        Optional<Produto> produto = produtoRepository.findByIdAndUsuario_Id(id, usuario.getId());
+        if (produto.isEmpty()) {
+            return false;
+        }
+
+        produtoRepository.delete(produto.get());
+        return true;
+    }
+
     public List<Map<String, Object>> listarEstoque() {
         List<Produto> produtos = produtoRepository.findAll();
 
@@ -62,6 +98,35 @@ public class ProdutoService {
                     .sum();
 
             int totalDistribuido = distribuicaoRepository.sumQuantidadeByProdutoId(produto.getId());
+
+            int saldo = totalEntradas - totalDistribuido;
+
+            return Map.<String, Object>of(
+                    "id", produto.getId(),
+                    "nome", produto.getNome(),
+                    "descricao", produto.getDescricao() != null ? produto.getDescricao() : "",
+                    "unidade", produto.getUnidade(),
+                    "quantidadeEstoque", produto.getQuantidadeEstoque(),
+                    "totalEntradas", totalEntradas,
+                    "totalDistribuido", totalDistribuido,
+                    "saldoCalculado", saldo
+            );
+        }).collect(Collectors.toList());
+    }
+
+    public List<Map<String, Object>> listarEstoque(Usuario usuario) {
+        List<Produto> produtos = produtoRepository.findAllByUsuario_Id(usuario.getId());
+        List<es2.appDoacao.model.EntradaDoacao> entradas = entradaDoacaoRepository
+                .findAllByUsuario_Id(usuario.getId());
+
+        return produtos.stream().map(produto -> {
+            int totalEntradas = entradas.stream()
+                    .filter(e -> produto.getNome().equalsIgnoreCase(e.getProduto()))
+                    .mapToInt(e -> e.getQuantidade() != null ? e.getQuantidade() : 0)
+                    .sum();
+
+            int totalDistribuido = distribuicaoRepository
+                    .sumQuantidadeByProdutoIdAndUsuarioId(produto.getId(), usuario.getId());
 
             int saldo = totalEntradas - totalDistribuido;
 

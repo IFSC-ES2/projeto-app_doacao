@@ -1,6 +1,7 @@
 package es2.appDoacao.controller;
 
 import es2.appDoacao.model.Entidade;
+import es2.appDoacao.security.CurrentUserService;
 import es2.appDoacao.service.EntidadeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,20 +13,22 @@ import java.util.Map;
 public class EntidadeController {
 
     private final EntidadeService entidadeService;
+    private final CurrentUserService currentUserService;
 
-    public EntidadeController(EntidadeService entidadeService) {
+    public EntidadeController(EntidadeService entidadeService, CurrentUserService currentUserService) {
         this.entidadeService = entidadeService;
+        this.currentUserService = currentUserService;
     }
 
     @GetMapping("/entidades")
     public ResponseEntity<?> listar() {
-        List<Entidade> entidades = entidadeService.listarTodas();
+        List<Entidade> entidades = entidadeService.listarTodas(currentUserService.requireUser());
         return ResponseEntity.ok(entidades);
     }
 
     @PostMapping("/entidades")
     public ResponseEntity<?> criar(@RequestBody Entidade entidade) {
-        var erro = entidadeService.salvar(entidade);
+        var erro = entidadeService.salvar(entidade, currentUserService.requireUser());
 
         if (erro.isEmpty()) {
             return ResponseEntity.ok(Map.of("mensagem", "Entidade cadastrada com sucesso"));
@@ -37,7 +40,7 @@ public class EntidadeController {
 
     @DeleteMapping("/entidades/{id}")
     public ResponseEntity<?> excluir(@PathVariable Long id) {
-        boolean removida = entidadeService.deletar(id);
+        boolean removida = entidadeService.deletar(id, currentUserService.requireUser());
         if (removida) {
             return ResponseEntity.noContent().build();
         }

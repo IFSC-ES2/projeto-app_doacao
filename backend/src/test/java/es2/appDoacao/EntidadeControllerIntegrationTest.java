@@ -3,6 +3,9 @@ package es2.appDoacao;
 import es2.appDoacao.model.Entidade;
 import es2.appDoacao.repository.DistribuicaoRepository;
 import es2.appDoacao.repository.EntidadeRepository;
+import es2.appDoacao.repository.UsuarioRepository;
+import es2.appDoacao.model.Usuario;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
 
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -22,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @WithMockUser(username = "test-user")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class EntidadeControllerIntegrationTest {
 
     @Autowired
@@ -33,10 +38,21 @@ class EntidadeControllerIntegrationTest {
     @Autowired
     private EntidadeRepository entidadeRepository;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    private Usuario usuarioTeste;
+
     @BeforeEach
     void limparBanco() {
         distribuicaoRepository.deleteAll();
         entidadeRepository.deleteAll();
+        usuarioRepository.deleteAll();
+        usuarioTeste = new Usuario();
+        usuarioTeste.setLogin("test-user");
+        usuarioTeste.setEmail("test-user@email.com");
+        usuarioTeste.setSenha(new BCryptPasswordEncoder().encode("Senha123!"));
+        usuarioTeste = usuarioRepository.save(usuarioTeste);
     }
 
     @Test
@@ -164,6 +180,7 @@ class EntidadeControllerIntegrationTest {
         entidade.setEndereco("Rua Central, 100");
         entidade.setTelefone("48999999999");
         entidade.setEmail("ongvida@email.com");
+        entidade.setUsuario(usuarioTeste);
         return entidade;
     }
     @Test

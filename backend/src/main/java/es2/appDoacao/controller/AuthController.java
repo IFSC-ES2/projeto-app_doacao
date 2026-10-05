@@ -58,6 +58,11 @@ public class AuthController {
                     .body(Map.of("mensagem", "Campos obrigatórios"));
         }
 
+        String erro = authService.validarRegistro(login, email, senha);
+        if (erro != null) {
+            return ResponseEntity.badRequest().body(Map.of("mensagem", erro));
+        }
+
         boolean criado = authService.registrar(login, email, senha);
 
         if (criado) {
