@@ -12,7 +12,7 @@
 | Frontend (acesso principal) | Vercel | https://projeto-app-doacao.vercel.app |
 | Backend (API) | Railway | https://projeto-appdoacao-production.up.railway.app |
 
-O banco de dados é H2 em memória: os dados são resetados quando o backend reinicia.
+O banco de dados usado pela aplicação é PostgreSQL persistente. Os dados permanecem após reinícios do backend.
 
 ### Credenciais de acesso
 
@@ -29,8 +29,32 @@ O banco de dados é H2 em memória: os dados são resetados quando o backend rei
 | Variável | Onde | Valor em produção |
 |----------|------|-------------------|
 | `VITE_API_URL` | Vercel | `https://projeto-appdoacao-production.up.railway.app` |
+| `SPRING_PROFILES_ACTIVE` | Railway | `postgres` |
+| `SPRING_DATASOURCE_URL` | Railway | URL JDBC do PostgreSQL provisionado |
+| `SPRING_DATASOURCE_USERNAME` | Railway | usuário do PostgreSQL |
+| `SPRING_DATASOURCE_PASSWORD` | Railway | senha do PostgreSQL |
 
-Localmente nenhuma variável é necessária. O frontend usa `http://localhost:8080` como fallback quando `VITE_API_URL` não está definida.
+Localmente, o `docker compose` fornece o PostgreSQL com os valores padrão usados pelo backend. O frontend usa `http://localhost:8080` como fallback quando `VITE_API_URL` não está definida.
+No Railway, adicione um serviço PostgreSQL ao mesmo projeto e copie dele os valores `PGHOST`, `PGPORT`, `PGDATABASE`, `PGUSER` e `PGPASSWORD` para as variáveis `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME` e `SPRING_DATASOURCE_PASSWORD` do backend. A URL deve seguir o formato `jdbc:postgresql://<host>:<porta>/<banco>`.
+
+### Usar o pooler do Supabase localmente
+
+O backend aceita o pooler compartilhado do Supabase pelas mesmas variáveis de ambiente. O exemplo seguro está em `backend/.env.example`; copie-o para um arquivo local não versionado e preencha a senha apenas na sua máquina:
+
+```bash
+cp backend/.env.example backend/.env.local
+```
+
+Carregue as variáveis antes de iniciar o backend (ajuste o comando conforme seu shell):
+
+```bash
+set -a
+. backend/.env.local
+set +a
+mvn spring-boot:run -f backend/pom.xml
+```
+
+Se a senha tiver caracteres especiais, prefira mantê-la em `SPRING_DATASOURCE_PASSWORD`; não é necessário incluí-la na URL JDBC nem fazer percent-encoding manual. Nunca commite `backend/.env.local`.
 
 ---
 
@@ -45,6 +69,8 @@ Localmente nenhuma variável é necessária. O frontend usa `http://localhost:80
 | Node.js | 20 | `node -version` |
 | npm | 10 | `npm -version` |
 | Git | qualquer | `git --version` |
+| Docker | 24+ | `docker --version` |
+| Docker Compose | 2+ | `docker compose version` |
 
 ---
 
@@ -55,13 +81,24 @@ git clone https://github.com/IFSC-ES2/projeto-app_doacao.git
 cd projeto-app_doacao
 ```
 
-### 2. Verificar o build do backend
+### 2. Subir o PostgreSQL
+
+Na raiz do projeto, iniciar o banco persistente:
+
+```bash
+docker compose up -d postgres
+docker compose ps
+```
+
+O compose cria o banco `doacao`, com usuário `doacao` e senha `doacao`, e mantém os dados no volume `doacao-postgres-data`.
+
+### 3. Verificar o build do backend
 
 ```bash
 mvn compile -f backend/pom.xml
 ```
 
-### 3. Subir o backend
+### 4. Subir o backend
 
 Rodar em um terminal dedicado:
 
@@ -70,12 +107,12 @@ mvn clean -f backend/pom.xml
 mvn spring-boot:run -f backend/pom.xml
 ```
 
-Aguardar a mensagem `Started AppDoacaoApplication`.  
+Aguardar a mensagem `Started AppDoacaoApplication`.
 API disponível em: `http://localhost:8080`
 
-Ao subir, o `DataLoader` cria automaticamente os usuários de teste. O banco H2 é recriado a cada inicialização.
+Ao subir pela primeira vez, o Hibernate cria/atualiza as tabelas no PostgreSQL e o `DataLoader` cria automaticamente os usuários de teste.
 
-### 4. Instalar dependências do frontend
+### 5. Instalar dependências do frontend
 
 Rodar em outro terminal:
 
@@ -84,13 +121,13 @@ cd frontend
 npm install
 ```
 
-### 5. Verificar o build do frontend
+### 6. Verificar o build do frontend
 
 ```bash
 npm run build
 ```
 
-### 6. Subir o frontend
+### 7. Subir o frontend
 
 ```bash
 npm run dev
@@ -131,13 +168,15 @@ curl -s -X POST http://localhost:8080/login \
 | POST | `/distribuicoes` | Registrar distribuição |
 | GET | `/estoque` | Consultar estoque |
 
-### Console H2 (banco de dados)
+### PostgreSQL (banco da aplicação)
 
-Acesse `http://localhost:8080/h2-console` com:
+O banco não possui console web habilitado. Para verificar se o container está saudável:
 
-- JDBC URL: `jdbc:h2:mem:doacao`
-- Usuário: `sa`
-- Senha: (deixar em branco)
+```bash
+docker compose exec postgres pg_isready -U doacao -d doacao
+```
+
+Em produção, use um PostgreSQL provisionado no Railway e informe as variáveis `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME` e `SPRING_DATASOURCE_PASSWORD`.
 
 ---
 
@@ -148,6 +187,8 @@ Acesse `http://localhost:8080/h2-console` com:
 ```bash
 mvn test -f backend/pom.xml
 ```
+
+O H2 é usado somente durante os testes automatizados; a execução normal usa PostgreSQL.
 
 ### Frontend
 

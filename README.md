@@ -21,6 +21,7 @@
 ## Como rodar o projeto
 
 Consulte [docs/DEPLOY.md](docs/DEPLOY.md) para pré-requisitos, execução e validação do ambiente.
+O backend usa PostgreSQL como banco padrão. O H2 fica restrito aos testes automatizados.
 
 ---
 

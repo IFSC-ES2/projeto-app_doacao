@@ -1,0 +1,27 @@
+# Segredos e variáveis locais
+.env
+.env.*
+!/.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Dependências
+node_modules/
+**/node_modules/
+
+# Builds e artefatos
+target/
+**/target/
+dist/
+**/dist/
+dist-ssr/
+*.class
+*.log
+
+# Ferramentas locais
+.idea/
+.vscode/
+.agents/
+skills-lock.json
+.DS_Store

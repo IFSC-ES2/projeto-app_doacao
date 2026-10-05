@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile("dev")
+@Profile("postgres")
 public class DataLoader implements CommandLineRunner {
 
     private final AuthService authService;
