@@ -6,6 +6,7 @@ import { emitAppDataSync } from '../utils/dataSync.js';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 const PAGE_SIZE = 6;
+const UNIT_OPTIONS = ['kg', 'g', 'mg', 'l', 'ml', 'unidade', 'caixa', 'pacote', 'saco', 'fardo', 'dúzia'];
 
 const initialForm = {
   nome: '',
@@ -230,31 +231,53 @@ export function Produtos() {
   return (
     <div className="app-grid">
       <section className="app-section">
-        <h2>Cadastro de produtos</h2>
+        <div className="app-section-header">
+          <div>
+            <p className="app-section-eyebrow">Catálogo</p>
+            <h2>Cadastro de produtos</h2>
+            <p className="app-muted">Cadastre o item, a medida e a origem da entrada para manter o estoque confiável.</p>
+          </div>
+          <span className="app-section-count">Nova entrada</span>
+        </div>
         <form className="app-form" onSubmit={handleSubmit}>
           <div className="app-form-row">
-            <input
-              className="app-input"
-              placeholder="Nome do produto"
-              value={form.nome}
-              onChange={handleChange('nome')}
-              required
-            />
-            <input
-              className="app-input"
-              placeholder="Unidade de medida"
-              value={form.unidade}
-              onChange={handleChange('unidade')}
-              required
-            />
+            <label className="page-field">
+              Nome do produto
+              <input
+                className="app-input"
+                placeholder="Nome do produto"
+                value={form.nome}
+                onChange={handleChange('nome')}
+                autoComplete="off"
+                required
+              />
+            </label>
+            <label className="page-field">
+              Unidade de medida
+              <input
+                className="app-input"
+                list="unidades-medida"
+                placeholder="Unidade de medida"
+                value={form.unidade}
+                onChange={handleChange('unidade')}
+                required
+              />
+              <datalist id="unidades-medida">
+                {UNIT_OPTIONS.map((unidade) => (
+                  <option key={unidade} value={unidade} />
+                ))}
+              </datalist>
+            </label>
           </div>
-          <input
-            className="app-input"
-            placeholder="Descrição"
-            value={form.descricao}
-            onChange={handleChange('descricao')}
-            required
-          />
+          <label className="page-field">
+            Descrição <span className="app-muted">(opcional)</span>
+            <input
+              className="app-input"
+              placeholder="Descrição"
+              value={form.descricao}
+              onChange={handleChange('descricao')}
+            />
+          </label>
           <div className="page-toggle-group" role="group" aria-label="Tipo de doador">
             <button
               type="button"
@@ -272,13 +295,16 @@ export function Produtos() {
             </button>
           </div>
           {form.doadorTipo === 'avulso' ? (
-            <input
+            <label className="page-field">
+              Nome do doador
+              <input
               className="app-input"
               placeholder="Nome do doador"
               value={form.doador}
               onChange={handleChange('doador')}
               required
-            />
+              />
+            </label>
           ) : (
             <label className="page-field">
               Entidade
@@ -297,15 +323,21 @@ export function Produtos() {
               </select>
             </label>
           )}
-          <input
-            className="app-input"
-            type="number"
-            placeholder="Quantidade inicial"
-            value={form.quantidadeEstoque}
-            onChange={handleChange('quantidadeEstoque')}
-            min="0"
-            required
-          />
+          <label className="page-field">
+            Quantidade inicial
+            <input
+              className="app-input"
+              type="number"
+              placeholder="Quantidade inicial"
+              value={form.quantidadeEstoque}
+              onChange={handleChange('quantidadeEstoque')}
+              min="0"
+              step="any"
+              inputMode="decimal"
+              required
+            />
+          </label>
+          <p className="app-helper">Use a mesma unidade escolhida acima. Ex.: 25 kg ou 12 caixas.</p>
           {status.message && (
             <p className={`page-feedback ${status.type}`}>{status.message}</p>
           )}
@@ -321,6 +353,7 @@ export function Produtos() {
             <h2>Produtos cadastrados</h2>
             <p className="app-muted">Lista atualizada de itens disponíveis.</p>
           </div>
+          <span className="app-section-count">{items.length} itens</span>
         </div>
         {loading ? (
           <p className="app-muted">Carregando produtos...</p>

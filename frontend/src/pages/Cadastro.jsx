@@ -134,6 +134,7 @@ export function Register() {
                 <input
                   id="senha-register"
                   type={showPassword ? 'text' : 'password'}
+                  autoComplete="new-password"
                   placeholder="********"
                   value={senha}
                   onChange={(e) => setSenha(e.target.value)}

@@ -99,7 +99,7 @@ export function Estoque() {
         ) : items.length === 0 ? (
           <p className="app-muted">Nenhum item em estoque no momento.</p>
         ) : filteredItems.length === 0 ? (
-          <p className="app-muted">Nenhum produto encontrado para essa busca.</p>
+          <div className="app-empty-state"><strong>Nenhum produto encontrado para essa busca.</strong><p className="app-muted">Ajuste o termo de busca e tente novamente.</p></div>
         ) : (
           <>
             <table className="app-table">
@@ -117,14 +117,15 @@ export function Estoque() {
                     item.saldoCalculado ?? item.quantidadeAtual ?? item.quantidadeEstoque ?? item.quantidade ?? 0
                   );
                   const zerado = quantidade <= 0;
+                  const baixo = quantidade > 0 && quantidade <= 5;
                   return (
                     <tr key={item.id ?? `${item.produto}-${item.unidade}`}>
                       <td>{item.produto || item.nome}</td>
                       <td>{item.unidade}</td>
                       <td>{quantidade}</td>
                       <td>
-                        <span className={`estoque-badge ${zerado ? 'estoque-zero' : 'estoque-ok'}`}>
-                          {zerado ? 'Zerado' : 'Disponível'}
+                        <span className={`estoque-badge ${zerado ? "estoque-zero" : baixo ? "estoque-baixo" : "estoque-ok"}`}>
+                          {zerado ? 'Zerado' : baixo ? 'Baixo' : 'Disponível'}
                         </span>
                       </td>
                     </tr>

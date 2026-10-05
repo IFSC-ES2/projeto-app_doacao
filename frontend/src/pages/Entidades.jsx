@@ -155,12 +155,20 @@ export function Entidades() {
   return (
     <div className="app-grid">
       <section className="app-section">
-        <h2>Cadastro de entidades</h2>
+        <div className="app-section-header">
+          <div>
+            <p className="app-section-eyebrow">Rede de apoio</p>
+            <h2>Cadastro de entidades</h2>
+            <p className="app-muted">Organize as instituições que recebem as doações e agilize os próximos registros.</p>
+          </div>
+          <span className="app-section-count">Nova entidade</span>
+        </div>
         <form className="app-form" onSubmit={handleSubmit}>
           <div className="app-form-row">
             <input
               className="app-input"
               placeholder="Nome da entidade"
+              autoComplete="organization"
               value={form.nome}
               onChange={handleChange('nome')}
               required
@@ -168,6 +176,7 @@ export function Entidades() {
             <input
               className="app-input"
               placeholder="CNPJ"
+              inputMode="numeric"
               value={form.cnpj}
               onChange={handleChange('cnpj')}
               required
@@ -177,6 +186,7 @@ export function Entidades() {
             <input
               className="app-input"
               placeholder="Endereço"
+              autoComplete="street-address"
               value={form.endereco}
               onChange={handleChange('endereco')}
               required
@@ -184,6 +194,9 @@ export function Entidades() {
             <input
               className="app-input"
               placeholder="Telefone"
+              type="tel"
+              inputMode="tel"
+              autoComplete="tel"
               value={form.telefone}
               onChange={handleChange('telefone')}
               required
@@ -192,6 +205,8 @@ export function Entidades() {
           <input
             className="app-input"
             placeholder="E-mail"
+            type="email"
+            autoComplete="email"
             value={form.email}
             onChange={handleChange('email')}
             required
@@ -204,11 +219,15 @@ export function Entidades() {
       </section>
 
       <section className="app-section">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h2>Entidades cadastradas</h2>
+        <div className="page-toolbar">
+          <div>
+            <h2>Entidades cadastradas</h2>
+            <p className="app-muted">Contatos disponíveis para receber distribuições.</p>
+          </div>
+          <span className="app-section-count">{items.length} entidades</span>
         </div>
         {items.length === 0 ? (
-          <p className="app-muted">Nenhuma entidade registrada ainda.</p>
+          <div className="app-empty-state"><strong>Nenhuma entidade registrada</strong><p className="app-muted">Cadastre uma entidade para começar as distribuições.</p></div>
         ) : (
           <>
             <table className="app-table">

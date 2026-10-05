@@ -76,7 +76,7 @@ export function Doacoes() {
         {loading ? (
           <p className="app-muted">Carregando doações...</p>
         ) : filteredItems.length === 0 ? (
-          <p className="app-muted">Nenhuma doação encontrada.</p>
+          <div className="app-empty-state"><strong>Nenhuma doação encontrada</strong><p className="app-muted">Tente buscar por outro produto ou doador.</p></div>
         ) : (
           <>
             <table className="app-table">

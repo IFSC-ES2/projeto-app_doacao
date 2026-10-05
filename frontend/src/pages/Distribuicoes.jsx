@@ -5,12 +5,13 @@ import { emitAppDataSync } from '../utils/dataSync.js';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 const PAGE_SIZE = 6;
+const today = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
 
 const initialForm = {
   produtoId: '',
   entidadeId: '',
   quantidade: '',
-  dataDistribuicao: '',
+  dataDistribuicao: today,
   observacao: '',
 };
 
@@ -106,6 +107,10 @@ export function Distribuicoes() {
     return new Map(entidades.map((entidade) => [String(entidade.id), entidade.nome]));
   }, [entidades]);
 
+  const selectedProduct = useMemo(() => {
+    return produtos.find((produto) => String(produto.id) === String(form.produtoId));
+  }, [produtos, form.produtoId]);
+
   const visibleItems = useMemo(() => {
     const start = (safeCurrentPage - 1) * PAGE_SIZE;
     return items.slice(start, start + PAGE_SIZE);
@@ -154,12 +159,20 @@ export function Distribuicoes() {
   return (
     <div className="app-grid">
       <section className="app-section">
-        <h2>Registro de distribuições</h2>
+        <div className="app-section-header">
+          <div>
+            <p className="app-section-eyebrow">Saída do estoque</p>
+            <h2>Registro de distribuições</h2>
+            <p className="app-muted">Registre para qual entidade o item foi entregue e mantenha o saldo atualizado.</p>
+          </div>
+          <span className="app-section-count">Nova saída</span>
+        </div>
         <form className="app-form" onSubmit={handleSubmit}>
           <div className="app-form-row">
-            <label className="page-field">
-              Produto
+            <div className="page-field">
+              <label htmlFor="distribution-product">Produto</label>
               <select
+                id="distribution-product"
                 className="app-input"
                 value={form.produtoId}
                 onChange={handleChange('produtoId')}
@@ -172,7 +185,8 @@ export function Distribuicoes() {
                   </option>
                 ))}
               </select>
-            </label>
+              <span className="app-helper">{selectedProduct ? `Saldo atual: ${selectedProduct.saldoCalculado ?? selectedProduct.quantidadeEstoque ?? selectedProduct.quantidadeAtual ?? 0} ${selectedProduct.unidade || "unid."}.` : "Selecione um produto para consultar o saldo."}</span>
+            </div>
             <label className="page-field">
               Entidade
               <select
@@ -198,7 +212,9 @@ export function Distribuicoes() {
                 type="number"
                 value={form.quantidade}
                 onChange={handleChange('quantidade')}
-                min="1"
+                min="0.01"
+                step="any"
+                inputMode="decimal"
                 required
               />
             </label>
@@ -237,6 +253,7 @@ export function Distribuicoes() {
             <h2>Últimas distribuições</h2>
             <p className="app-muted">Histórico das entregas mais recentes.</p>
           </div>
+          <span className="app-section-count">{items.length} registros</span>
         </div>
         {loading ? (
           <p className="app-muted">Carregando distribuições...</p>

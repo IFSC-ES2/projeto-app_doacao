@@ -121,15 +121,21 @@ export function Dashboard() {
       </section>
 
       <section className="app-section">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h2>Resumo operacional</h2>
+        <div className="app-section-header">
+          <div>
+            <p className="app-section-eyebrow">Acompanhamento</p>
+            <h2>Resumo operacional</h2>
+            <p className="app-muted">Uma leitura rápida do que entrou, está disponível e já foi distribuído.</p>
+          </div>
+          <span className="app-section-count">Atualizado agora</span>
         </div>
         {error && <p className="app-feedback">{error}</p>}
-        <div className="app-form-row" style={{ marginTop: 12 }}>
+        <div className="app-form-row dashboard-panels">
           <div className="app-section">
             <h2>Top produtos</h2>
+            <p className="app-muted">Itens com maior saldo disponível.</p>
             {topProdutos.length === 0 ? (
-              <p className="app-muted">Nenhum item registrado ainda.</p>
+              <div className="app-empty-state"><strong>Nenhum item registrado</strong><p className="app-muted">Cadastre produtos para acompanhar o saldo.</p></div>
             ) : (
               <table className="app-table">
                 <thead>
@@ -153,8 +159,9 @@ export function Dashboard() {
           </div>
           <div className="app-section">
             <h2>Doações recentes</h2>
+            <p className="app-muted">Últimas entradas registradas.</p>
             {recentes.length === 0 ? (
-              <p className="app-muted">Sem doações por enquanto.</p>
+              <div className="app-empty-state"><strong>Sem doações por enquanto</strong><p className="app-muted">As novas entradas aparecerão aqui.</p></div>
             ) : (
               <table className="app-table">
                 <thead>

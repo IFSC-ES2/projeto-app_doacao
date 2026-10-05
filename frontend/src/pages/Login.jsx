@@ -217,6 +217,7 @@ export function Login({ onSuccess }) {
                 <input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
+                  autoComplete={isLogin ? 'current-password' : 'new-password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="login-input"
@@ -244,6 +245,7 @@ export function Login({ onSuccess }) {
                   <input
                     id="confirmPassword"
                     type={showConfirmPassword ? 'text' : 'password'}
+                    autoComplete="new-password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     className="login-input"
