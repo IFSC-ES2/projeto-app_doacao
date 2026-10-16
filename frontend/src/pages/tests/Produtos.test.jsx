@@ -122,6 +122,7 @@ it('cadastra produto com doador avulso', async () => {
     descricao: 'Pacote 5kg',
     unidade: 'kg',
     quantidadeEstoque: 10,
+    limiteEstoqueBaixo: 5,
   });
 
   const doacaoPost = fetch.mock.calls.find(

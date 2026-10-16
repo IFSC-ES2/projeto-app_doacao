@@ -4,6 +4,7 @@ import es2.appDoacao.model.Entidade;
 import es2.appDoacao.repository.DistribuicaoRepository;
 import es2.appDoacao.repository.EntidadeRepository;
 import es2.appDoacao.repository.UsuarioRepository;
+import es2.appDoacao.repository.LogMovimentacaoRepository;
 import es2.appDoacao.model.Usuario;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,10 +42,14 @@ class EntidadeControllerIntegrationTest {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private LogMovimentacaoRepository logMovimentacaoRepository;
+
     private Usuario usuarioTeste;
 
     @BeforeEach
     void limparBanco() {
+        logMovimentacaoRepository.deleteAll();
         distribuicaoRepository.deleteAll();
         entidadeRepository.deleteAll();
         usuarioRepository.deleteAll();

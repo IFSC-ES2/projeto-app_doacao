@@ -2,6 +2,7 @@ package es2.appDoacao;
 
 import es2.appDoacao.model.Usuario;
 import es2.appDoacao.repository.UsuarioRepository;
+import es2.appDoacao.repository.LogMovimentacaoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,12 @@ class AuthControllerIntegrationTest {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private LogMovimentacaoRepository logMovimentacaoRepository;
+
     @BeforeEach
     void limparBanco() {
+        logMovimentacaoRepository.deleteAll();
         usuarioRepository.deleteAll();
     }
 
