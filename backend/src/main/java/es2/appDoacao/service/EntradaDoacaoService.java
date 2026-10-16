@@ -4,6 +4,8 @@ import es2.appDoacao.model.EntradaDoacao;
 import es2.appDoacao.model.Usuario;
 import es2.appDoacao.repository.EntradaDoacaoRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -13,9 +15,16 @@ import java.util.Optional;
 public class EntradaDoacaoService {
 
     private final EntradaDoacaoRepository entradaDoacaoRepository;
+    private final AuditoriaService auditoriaService;
+
+    @Autowired
+    public EntradaDoacaoService(EntradaDoacaoRepository entradaDoacaoRepository, AuditoriaService auditoriaService) {
+        this.entradaDoacaoRepository = entradaDoacaoRepository;
+        this.auditoriaService = auditoriaService;
+    }
 
     public EntradaDoacaoService(EntradaDoacaoRepository entradaDoacaoRepository) {
-        this.entradaDoacaoRepository = entradaDoacaoRepository;
+        this(entradaDoacaoRepository, null);
     }
 
     public List<EntradaDoacao> listarTodas() {
@@ -38,6 +47,7 @@ public class EntradaDoacaoService {
         return registrar(entrada, null);
     }
 
+    @Transactional
     public boolean registrar(EntradaDoacao entrada, Usuario usuario) {
         if (usuario != null && entrada.getId() != null
                 && entradaDoacaoRepository.existsById(entrada.getId())
@@ -54,7 +64,12 @@ public class EntradaDoacaoService {
         }
 
         entrada.setUsuario(usuario);
-        entradaDoacaoRepository.save(entrada);
+        EntradaDoacao salva = entradaDoacaoRepository.save(entrada);
+        if (auditoriaService != null) {
+            auditoriaService.registrar("ENTRADA_DOACAO",
+                    "Entrada de " + entrada.getQuantidade() + " unidade(s) de " + entrada.getProduto(),
+                    salva.getId(), usuario);
+        }
         return true;
     }
 

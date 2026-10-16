@@ -40,6 +40,7 @@ O banco de dados usado pela aplicação é PostgreSQL persistente. Os dados perm
 Localmente, o `docker compose` fornece o PostgreSQL com os valores padrão usados pelo backend. O frontend usa `http://localhost:8080` como fallback quando `VITE_API_URL` não está definida.
 
 O backend usa JWT: `/login` e `/register` são públicos; as demais rotas exigem o header `Authorization: Bearer <token>`. Em produção, configure obrigatoriamente `JWT_SECRET` e inclua a URL final do frontend em `APP_CORS_ALLOWED_ORIGINS`.
+O frontend da Vercel mantém os rewrites de SPA em `frontend/vercel.json`; `VITE_API_URL` deve apontar para a API de produção. O workflow do GitHub executa lint e build do frontend, testes e compilação do backend; o deploy de produção permanece integrado ao projeto Vercel.
 No Railway, adicione um serviço PostgreSQL ao mesmo projeto e copie dele os valores `PGHOST`, `PGPORT`, `PGDATABASE`, `PGUSER` e `PGPASSWORD` para as variáveis `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME` e `SPRING_DATASOURCE_PASSWORD` do backend. A URL deve seguir o formato `jdbc:postgresql://<host>:<porta>/<banco>`.
 
 Os produtos, entidades, doações e distribuições são salvos com o proprietário da conta autenticada. As listagens, exclusões e cálculos de estoque sempre usam esse proprietário; portanto, uma conta não visualiza os dados de outra. Ao atualizar um banco PostgreSQL existente, registros antigos sem proprietário permanecem ocultos até serem atribuídos manualmente a uma conta, evitando que continuem compartilhados.
@@ -174,6 +175,9 @@ curl -s -X POST http://localhost:8080/login \
 | GET | `/distribuicoes` | Listar distribuições |
 | POST | `/distribuicoes` | Registrar distribuição |
 | GET | `/estoque` | Consultar estoque |
+| GET | `/auditoria` | Consultar últimas movimentações da conta |
+| GET | `/relatorios/estoque.csv` | Exportar relatório de estoque |
+| GET | `/relatorios/distribuicoes.csv` | Exportar relatório de distribuições |
 
 ### PostgreSQL (banco da aplicação)
 

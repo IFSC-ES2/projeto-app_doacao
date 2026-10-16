@@ -8,6 +8,8 @@ import { Doacoes } from './pages/Doacoes.jsx';
 import { Produtos } from './pages/Produtos.jsx';
 import { Distribuicoes } from './pages/Distribuicoes.jsx';
 import { Estoque } from './pages/Estoque.jsx';
+import { Relatorios } from './pages/Relatorios.jsx';
+import { Auditoria } from './pages/Auditoria.jsx';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -21,6 +23,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="produtos" element={<Produtos />} />
           <Route path="distribuicoes" element={<Distribuicoes />} />
           <Route path="estoque" element={<Estoque />} />
+          <Route path="relatorios" element={<Relatorios />} />
+          <Route path="auditoria" element={<Auditoria />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
         <Route path="/cadastro" element={<App />} />

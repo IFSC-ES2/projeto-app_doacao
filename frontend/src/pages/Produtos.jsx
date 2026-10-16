@@ -14,6 +14,7 @@ const initialForm = {
   descricao: '',
   unidade: '',
   quantidadeEstoque: '',
+  limiteEstoqueBaixo: '5',
   doadorTipo: 'avulso',
   doador: '',
   entidadeId: '',
@@ -146,6 +147,7 @@ export function Produtos() {
           descricao: form.descricao,
           unidade: form.unidade,
           quantidadeEstoque: Number(form.quantidadeEstoque),
+          limiteEstoqueBaixo: Number(form.limiteEstoqueBaixo),
         }),
       });
       const data = await response.json();
@@ -338,6 +340,12 @@ export function Produtos() {
               required
             />
           </label>
+          <label className="page-field">
+            Alertar quando o saldo chegar a
+            <input className="app-input" type="number" min="0" step="1" value={form.limiteEstoqueBaixo}
+              onChange={handleChange('limiteEstoqueBaixo')} required />
+          </label>
+          <p className="app-helper">O dashboard avisará quando o saldo disponível for igual ou menor que este limite.</p>
           <p className="app-helper">Use a mesma unidade escolhida acima. Ex.: 25 kg ou 12 caixas.</p>
           {status.message && (
             <p className={`page-feedback ${status.type}`}>{status.message}</p>

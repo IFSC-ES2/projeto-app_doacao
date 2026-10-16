@@ -6,6 +6,7 @@ import es2.appDoacao.repository.DistribuicaoRepository;
 import es2.appDoacao.repository.EntidadeRepository;
 import es2.appDoacao.repository.ProdutoRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
@@ -16,13 +17,23 @@ public class DistribuicaoService {
     private final DistribuicaoRepository distribuicaoRepository;
     private final ProdutoRepository produtoRepository;
     private final EntidadeRepository entidadeRepository;
+    private final AuditoriaService auditoriaService;
+
+    @Autowired
+    public DistribuicaoService(DistribuicaoRepository distribuicaoRepository,
+                               ProdutoRepository produtoRepository,
+                               EntidadeRepository entidadeRepository,
+                               AuditoriaService auditoriaService) {
+        this.distribuicaoRepository = distribuicaoRepository;
+        this.produtoRepository = produtoRepository;
+        this.entidadeRepository = entidadeRepository;
+        this.auditoriaService = auditoriaService;
+    }
 
     public DistribuicaoService(DistribuicaoRepository distribuicaoRepository,
                                ProdutoRepository produtoRepository,
                                EntidadeRepository entidadeRepository) {
-        this.distribuicaoRepository = distribuicaoRepository;
-        this.produtoRepository = produtoRepository;
-        this.entidadeRepository = entidadeRepository;
+        this(distribuicaoRepository, produtoRepository, entidadeRepository, null);
     }
 
     public List<Distribuicao> listarTodas() {
@@ -88,7 +99,12 @@ public class DistribuicaoService {
         distribuicao.setProduto(produto);
         distribuicao.setEntidade(entidade);
         distribuicao.setUsuario(usuario);
-        distribuicaoRepository.save(distribuicao);
+        Distribuicao salva = distribuicaoRepository.save(distribuicao);
+        if (auditoriaService != null) {
+            auditoriaService.registrar("DISTRIBUICAO",
+                    "Distribuição de " + distribuicao.getQuantidade() + " unidade(s) de "
+                            + produto.getNome() + " para " + entidade.getNome(), salva.getId(), usuario);
+        }
         return Optional.empty();
     }
 

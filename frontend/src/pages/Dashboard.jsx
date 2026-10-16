@@ -71,6 +71,10 @@ export function Dashboard() {
   const totalDoacoes = doacoes.length;
   const totalEntidades = entidades.length;
   const doadoresUnicos = new Set(doacoes.map((item) => item.doador)).size;
+  const estoqueBaixo = estoque.filter((item) => {
+    const limite = Number(item.limiteEstoqueBaixo ?? 5);
+    return getStockQuantity(item) <= limite;
+  });
 
   const topProdutos = estoque
     .map((item) => [
@@ -131,6 +135,16 @@ export function Dashboard() {
           <span className="app-section-count">Atualizado agora</span>
         </div>
         {error && <p className="app-feedback">{error}</p>}
+        {estoqueBaixo.length > 0 && (
+          <div className="stock-alert" role="status" aria-live="polite">
+            <strong>Estoque baixo em {estoqueBaixo.length} {estoqueBaixo.length === 1 ? 'produto' : 'produtos'}</strong>
+            <ul>
+              {estoqueBaixo.map((item) => (
+                <li key={item.id}>{item.nome || item.produto}: {getStockQuantity(item)} {item.unidade || 'un.'} (limite: {item.limiteEstoqueBaixo ?? 5})</li>
+              ))}
+            </ul>
+          </div>
+        )}
         <div className="app-form-row dashboard-panels">
           <div className="app-section">
             <h2>Top produtos</h2>

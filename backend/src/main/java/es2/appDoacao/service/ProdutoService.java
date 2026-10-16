@@ -107,6 +107,7 @@ public class ProdutoService {
                     "descricao", produto.getDescricao() != null ? produto.getDescricao() : "",
                     "unidade", produto.getUnidade(),
                     "quantidadeEstoque", produto.getQuantidadeEstoque(),
+                    "limiteEstoqueBaixo", produto.getLimiteEstoqueBaixo() != null ? produto.getLimiteEstoqueBaixo() : 5,
                     "totalEntradas", totalEntradas,
                     "totalDistribuido", totalDistribuido,
                     "saldoCalculado", saldo
@@ -136,6 +137,7 @@ public class ProdutoService {
                     "descricao", produto.getDescricao() != null ? produto.getDescricao() : "",
                     "unidade", produto.getUnidade(),
                     "quantidadeEstoque", produto.getQuantidadeEstoque(),
+                    "limiteEstoqueBaixo", produto.getLimiteEstoqueBaixo() != null ? produto.getLimiteEstoqueBaixo() : 5,
                     "totalEntradas", totalEntradas,
                     "totalDistribuido", totalDistribuido,
                     "saldoCalculado", saldo
@@ -152,6 +154,10 @@ public class ProdutoService {
         }
         if (produto.getQuantidadeEstoque() == null || produto.getQuantidadeEstoque() < 0) {
             return Optional.of("Quantidade em estoque deve ser zero ou positiva");
+        }
+        if (produto.getLimiteEstoqueBaixo() == null) produto.setLimiteEstoqueBaixo(5);
+        if (produto.getLimiteEstoqueBaixo() < 0) {
+            return Optional.of("Limite de estoque baixo deve ser zero ou positivo");
         }
         return Optional.empty();
     }

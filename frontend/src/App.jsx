@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { NavLink, Outlet, Navigate, useLocation } from 'react-router-dom';
-import { FiActivity, FiHome, FiUsers, FiInbox, FiBox, FiShare2, FiArchive } from 'react-icons/fi';
+import { FiActivity, FiHome, FiUsers, FiInbox, FiBox, FiShare2, FiArchive, FiFileText, FiClipboard } from 'react-icons/fi';
 import './App.css';
 import { Login } from './pages/Login.jsx';
 import { Register } from './pages/Cadastro.jsx';
@@ -43,6 +43,8 @@ const NAV_ITEMS = [
     label: 'Estoque',
     icon: <FiArchive aria-hidden />,
   },
+  { id: 'relatorios', to: '/relatorios', label: 'Relatórios', icon: <FiFileText aria-hidden /> },
+  { id: 'auditoria', to: '/auditoria', label: 'Auditoria', icon: <FiClipboard aria-hidden /> },
 ];
 
 const HEADER_COPY = {
@@ -70,6 +72,8 @@ const HEADER_COPY = {
     eyebrow: 'Consulta de estoque',
     title: 'Status atualizado dos itens armazenados',
   },
+  '/relatorios': { eyebrow: 'Prestação de contas', title: 'Relatórios de estoque e distribuições' },
+  '/auditoria': { eyebrow: 'Rastreabilidade', title: 'Histórico de movimentações' },
 };
 
 export function App() {

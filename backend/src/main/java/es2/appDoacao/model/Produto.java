@@ -26,6 +26,9 @@ public class Produto {
     @Column(nullable = false)
     private Integer quantidadeEstoque;
 
+    @Column(name = "limite_estoque_baixo")
+    private Integer limiteEstoqueBaixo = 5;
+
     @JsonIgnore
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)

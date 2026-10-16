@@ -367,6 +367,43 @@
   color: #fca5a5;
 }
 
+.stock-alert {
+  margin: 0 0 18px;
+  padding: 14px 18px;
+  border: 1px solid rgba(251, 191, 36, 0.55);
+  border-left: 4px solid #fbbf24;
+  border-radius: 14px;
+  background: rgba(120, 53, 15, 0.25);
+  color: #fde68a;
+}
+
+.stock-alert ul {
+  margin: 8px 0 0;
+  padding-left: 20px;
+}
+
+.report-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.report-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.report-card p {
+  flex: 1;
+  margin: 0 0 12px;
+}
+
+.audit-table-wrap {
+  overflow-x: auto;
+}
+
 .app-muted {
   color: var(--app-muted);
   font-size: 14px;
